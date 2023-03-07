@@ -53,6 +53,11 @@ function validatePassword(password) {
 }
 
 //login screen
+app.get("/", function (req, res) {
+  res.redirect("/login");
+});
+
+//login screen
 app.get("/login", function (req, res) {
   res.render("login", { errorMessage:""});
 });
@@ -129,4 +134,4 @@ app.get('/:hash/profile', (req, res) => {
 });
 
 
-var server=app.listen(3000,function() {});
+var server=app.listen(8000,function() {});
