@@ -277,7 +277,7 @@ const storage = new Storage({
    projectId: 'registrylogintest',
    credentials: {
     type: "service_account",
-    private_key_id: process.env.PRIVATE_KEY_ID.split(String.raw`\n`).join('\n'),
+    private_key_id: process.env.PRIVATE_KEY_ID.replace(/\\n/g, '\n'),
     private_key: process.env.PRIVATE_KEY,
     client_email: process.env.CLIENT_EMAIL,
     client_id: "101253515431135704789",
