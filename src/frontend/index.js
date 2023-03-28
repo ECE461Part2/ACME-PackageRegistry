@@ -294,6 +294,7 @@ app.post('/upload', upload.single('file'), async (req, res) => {
   const file = req.file;
   const fileName = file.originalname;
   const fileSize = file.size;
+  console.log("Private key id: "+process.env.PRIVATE_KEY_ID)
 
   const options = {
     version: 'v4',
