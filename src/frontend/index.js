@@ -4,13 +4,16 @@ const crypto = require('crypto')
 const sqlite3 = require('sqlite3');
 const cookieParser = require('cookie-parser');
 const multer = require('multer');
+const axios = require('axios');
 const path = require('path');
+const { Storage } = require('@google-cloud/storage');
 
 var app=express();
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
- 
+
+
 
 //select database
 var pathToDatabase = "./data/database.sql"
@@ -21,20 +24,6 @@ const db = new sqlite3.Database(pathToDatabase, (err) => {
     console.log('Connected to the database ' + pathToDatabase);
   }
 });
-
-// Set storage engine
-const storage = multer.diskStorage({
-  destination: './public/packages',
-  filename: function(req, file, cb) {
-    cb(null, file.originalname);
-  }
-});
-
-// Init upload
-const upload = multer({
-  storage: storage,
-  limits: { fileSize: 1000000000 } // 1 GB size limit
-}).array('packageFiles');
 
 //create user database
 db.run(`
@@ -284,26 +273,48 @@ app.get('/upload', function(req, res) {
 });
 
 //upload package
-app.post('/upload', function(req, res) {
-  upload(req, res, function(err) {
-    if (err) {
-      console.log(err);
-      res.render('upload', { msg: err });
-    } else {
-      // Get package name from text box
-      const packageName = req.body.packageName;
+const storage = new Storage({
+   projectId: 'registrylogintest',
+   credentials: {
+    type: "service_account",
+    private_key_id: process.env.PRIVATE_KEY_ID,
+    private_key: process.env.PRIVATE_KEY,
+    client_email: process.env.CLIENT_EMAIL,
+    client_id: "101253515431135704789",
+    auth_uri: "https://accounts.google.com/o/oauth2/auth",
+    token_uri: "https://oauth2.googleapis.com/token",
+    auth_provider_x509_cert_url: "https://www.googleapis.com/oauth2/v1/certs",
+    client_x509_cert_url: "https://www.googleapis.com/robot/v1/metadata/x509/registry-test%40registrylogintest.iam.gserviceaccount.com"
+     }
+ });
+const bucketName = 'day-package-registry-test';
+const upload = multer();
 
-      // Get array of files from multer
-      const packageFiles = req.files;
+app.post('/upload', upload.single('file'), async (req, res) => {
+  const file = req.file;
+  const fileName = file.originalname;
+  const fileSize = file.size;
 
-      // Insert package info into database
-      // ...
+  const options = {
+    version: 'v4',
+    action: 'write',
+    expires: Date.now() + 15 * 60 * 1000, // 15 minutes
+  };
 
-      // Redirect to profile page
-      res.redirect('/profile');
-    }
-  });
+  const [url] = await storage.bucket(bucketName).file(fileName).getSignedUrl(options);
+
+  const config = {
+    headers: {
+      'Content-Type': 'application/octet-stream',
+      'Content-Length': fileSize,
+    },
+  };
+
+  await axios.put(url, file.buffer, config);
+
+  res.send('File uploaded successfully.');
 });
+ 
 
 
 var server=app.listen(8080,function() {});
