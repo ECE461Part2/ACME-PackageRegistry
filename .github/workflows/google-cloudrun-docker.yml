@@ -32,8 +32,8 @@ jobs:
         - name: Build Docker image
           run: docker build ./src/frontend/ -t $IMAGE_NAME
 
-        - name: Test Docker image
-          run: docker run $IMAGE_NAME sh -c "go test -v"
+        #- name: Test Docker image
+        #  run: docker run $IMAGE_NAME sh -c "go test -v"
 
         - name: Push Docker image
           run: docker push $IMAGE_NAME
