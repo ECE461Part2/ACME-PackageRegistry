@@ -275,7 +275,7 @@ app.get('/upload', function(req, res) {
 //upload package
 const storage = new Storage({
   projectId: 'registrylogintest',
-  credentials: process.env.GCP_CREDENTIALS
+  credentials: process.env.BUCKET_CREDENTIALS
 });
 const bucketName = 'day-package-registry-test';
 const upload = multer();
@@ -284,7 +284,7 @@ app.post('/upload', upload.single('file'), async (req, res) => {
   const file = req.file;
   const fileName = file.originalname;
   const fileSize = file.size;
-  console.log("Private key id: "+process.env.PRIVATE_KEY_ID)
+  // console.log("Json key: "+process.env.BUCKET_CREDENTIALS)
 
   const options = {
     version: 'v4',
