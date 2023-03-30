@@ -275,7 +275,7 @@ app.get('/upload', function(req, res) {
 //upload package
 const storage = new Storage({
   projectId: 'registrylogintest',
-  credentials: process.env.BUCKET_CREDENTIALS
+  credentials: JSON.parse(process.env.BUCKET_CREDENTIALS)
 });
 const bucketName = 'day-package-registry-test';
 const upload = multer();
