@@ -284,7 +284,7 @@ app.post('/upload', upload.single('file'), async (req, res) => {
   const file = req.file;
   const fileName = file.originalname;
   const fileSize = file.size;
-  // console.log("Json key: "+process.env.BUCKET_CREDENTIALS)
+  console.log("app name key: "+process.env.BUCKET_CREDENTIALS.length)
 
   const options = {
     version: 'v4',
