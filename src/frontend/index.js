@@ -280,11 +280,12 @@ const storage = new Storage({
 const bucketName = 'day-package-registry-test';
 const upload = multer();
 
+
 app.post('/upload', upload.single('file'), async (req, res) => {
   const file = req.file;
   const fileName = file.originalname;
   const fileSize = file.size;
-  console.log("app name key: "+process.env.BUCKET_CREDENTIALS.length)
+  console.log("key: "+process.env.BUCKET_CREDENTIALS)
 
   const options = {
     version: 'v4',
