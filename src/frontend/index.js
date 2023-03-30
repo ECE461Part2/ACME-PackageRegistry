@@ -273,8 +273,10 @@ app.get('/upload', function(req, res) {
 });
 
 //upload package
-const {Storage} = require('@google-cloud/storage');
-const storage = new Storage();
+const storage = new Storage({
+  projectId: 'registrylogintest',
+  credentials: process.env.GCP_CREDENTIALS
+});
 const bucketName = 'day-package-registry-test';
 const upload = multer();
 
