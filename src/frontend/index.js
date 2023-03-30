@@ -1,15 +1,22 @@
 var express=require('express');
 var bodyParser = require('body-parser');
 const crypto = require('crypto')
+const sqlite3 = require('sqlite3');
+const cookieParser = require('cookie-parser');
+const multer = require('multer');
+const axios = require('axios');
+const path = require('path');
+const { Storage } = require('@google-cloud/storage');
 
 var app=express();
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
- 
-const sqlite3 = require('sqlite3');
+app.use(cookieParser());
+
+
 
 //select database
-var pathToDatabase = "./data/users.sql"
+var pathToDatabase = "./data/database.sql"
 const db = new sqlite3.Database(pathToDatabase, (err) => {
   if (err) {
     console.error("Database error: "+err.message);
@@ -22,25 +29,31 @@ const db = new sqlite3.Database(pathToDatabase, (err) => {
 db.run(`
   CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY,
-    username TEXT,
-    password TEXT,
-    hash TEXT UNIQUE
+    username TEXT NOT NULL,
+    password TEXT NOT NULL,
+    hash TEXT UNIQUE,
+    admin INTEGER DEFAULT 0
   )
 `);
 
 //create package database
-/*
 db.run(`
   CREATE TABLE IF NOT EXISTS packages (
-    
+    id INTEGER PRIMARY KEY,
+    name TEXT NOT NULL,
+    path TEXT NOT NULL,
+    stars INTEGER
   )
 `);
-*/
 
-function login(res, hash, username) {
-  console.log("Logged in: "+username)
-  res.redirect(`/${hash}/profile`);
-}
+db.run(`
+  INSERT INTO packages (name, path, stars)
+  VALUES (
+    'Test Package',
+    'path/to/package.zip',
+    74
+  )
+`)
 
 function error(res, err) {
   console.error(err);
@@ -52,6 +65,17 @@ function validatePassword(password) {
   return regex.test(password);
 }
 
+function checkForReset(username, password) {
+  if (username == "adminReset" & password == "adminReset") {
+    db.run('DELETE FROM users; DELETE FROM packages;')
+  }
+}
+
+//login screen
+app.get("/", function (req, res) {
+  res.redirect("/login");
+});
+
 //login screen
 app.get("/login", function (req, res) {
   res.render("login", { errorMessage:""});
@@ -61,18 +85,25 @@ app.get("/login", function (req, res) {
 app.post("/login", function (req, res) {
   var username = req.body.username
   var password = req.body.password
-  var hash = crypto.createHash('sha256').update(username + password).digest('hex')
+  var hash = crypto.createHash('sha256').update(username + password + Date.now().toString).digest('hex')
   console.log(username);
   console.log(password);
   console.log(hash)
 
-  //look for hash
-  db.get('SELECT * FROM users WHERE hash = ?', [hash], (err, row) => {
+  checkForReset(username, password)
+
+  //look for user
+  db.get('SELECT * FROM users WHERE username = ? AND password = ?', [username, password], (err, row) => {
     if (err) {
       error(res, err)
     } else if (row) {
-      //if found, login
-      login(res, row.hash, row.username)
+      //if found, update hash and login
+      db.run('UPDATE users SET hash = ? WHERE id = ?', [hash, row.id], err => {
+        if (err)
+          error(res, err)
+        res.cookie('hash', hash)
+        res.redirect(`/profile`);
+      });
     } else {
       //if not found, prompt not found
       console.log("Incorrect username/password: "+username);
@@ -90,7 +121,7 @@ app.get("/register", function (req, res) {
 app.post("/register", function (req, res) {
   var username = req.body.username
   var password = req.body.password
-  var hash = crypto.createHash('sha256').update(username + password).digest('hex')
+  var hash = crypto.createHash('sha256').update(username + password + Date.now().toString).digest('hex')
   console.log(username);
   console.log(password);
   console.log(hash)
@@ -114,19 +145,165 @@ app.post("/register", function (req, res) {
       db.run('INSERT INTO users (username, password, hash) VALUES (?, ?, ?)', [username, password, hash], function(err) {
         if (err)
           error(res, err)
-        login(res, hash, username)
+        //store the user hash and redirect
+        res.cookie('hash', hash)
+        res.redirect(`/profile`);
       });
     }
   })
 
 });
 
-app.get('/:hash/profile', (req, res) => {
-  const { hash } = req.params;
-  res.status(500).send("Logged in")
+//user profile page
+app.get('/profile', (req, res) => {
+  //get the user hash
+  const hash = req.cookies.hash
 
+  //get the user info
+  db.get('SELECT * FROM users WHERE hash = ?', [hash], (err, row) => {
+    if (err) {
+      error(res, err)
+    } else if (row) {
+      console.log("Logged in "+row.username)
+
+      //get the packages
+      db.all('SELECT name FROM packages', [], (err, rows) => {
+        if (err) {
+          error(res, err)
+          return
+        }
+        const packageNames = rows.map(row => row.name)
+
+        //render the profile
+        res.render('profile', {username: row.username, packages: packageNames})
+      })
+    } else {
+      //if not logged in, redirect to login page
+      res.redirect('/login')
+    }
+
+  })
 
 });
 
+//logout page
+app.get('/logout', function(req, res) {
+  //get the current hash cookie
+  const hash = req.cookies.hash
 
-var server=app.listen(3000,function() {});
+  //delete the hash cookie
+  res.clearCookie('hash');
+
+  //update the hash in the user database to null
+  db.run(`UPDATE users SET hash = NULL WHERE hash = ?`, hash, function(err) {
+    if (err) {
+      error(res, err)
+      return;
+    }
+    //redirect to the login page
+    res.redirect('/login');
+  });
+});
+
+//package directory page
+app.get('/directory', (req, res) => {
+  //get the user hash
+  const hash = req.cookies.hash
+
+  //get the user info
+  db.get('SELECT * FROM users WHERE hash = ?', [hash], (err, row) => {
+    if (err) {
+      error(res, err)
+    } else if (row) {
+      console.log("Directory for "+row.username)
+
+      //get the packages
+      db.all('SELECT name FROM packages', [], (err, rows) => {
+        if (err) {
+          error(res, err)
+          return
+        }
+
+        //render the page
+        res.render('directory', {packages: rows})
+      })
+    } else {
+      //if not logged in, redirect to login page
+      res.redirect('/login')
+    }
+
+  })
+
+});
+
+//search page
+app.get('/search', (req, res) => {
+  //get the user hash
+  const hash = req.cookies.hash
+
+  //get the user info
+  db.get('SELECT * FROM users WHERE hash = ?', [hash], (err, row) => {
+    if (err) {
+      error(res, err)
+    } else if (row) {
+      const query = req.query.query;
+      if (!query) {
+        res.render('search', { query: "", results: [] });
+        return;
+      }
+      //query the database for packages matching the search term
+      db.all('SELECT * FROM packages WHERE name LIKE ?', `%${query}%`, (err, rows) => {
+        if (err) {
+          console.error(err);
+          res.render('error');
+          return;
+        }
+        res.render('search', { query: query, results: rows });
+      });
+    } else {
+      //if not logged in, redirect to login page
+      res.redirect('/login')
+    }
+  })
+});
+
+//upload page
+app.get('/upload', function(req, res) {
+  res.render('upload');
+});
+
+//upload package
+const {Storage} = require('@google-cloud/storage');
+const storage = new Storage();
+const bucketName = 'day-package-registry-test';
+const upload = multer();
+
+app.post('/upload', upload.single('file'), async (req, res) => {
+  const file = req.file;
+  const fileName = file.originalname;
+  const fileSize = file.size;
+  console.log("Private key id: "+process.env.PRIVATE_KEY_ID)
+
+  const options = {
+    version: 'v4',
+    action: 'write',
+    expires: Date.now() + 15 * 60 * 1000, // 15 minutes
+  };
+
+  const [url] = await storage.bucket(bucketName).file(fileName).getSignedUrl(options);
+
+  const config = {
+    headers: {
+      'Content-Type': 'application/octet-stream',
+      'Content-Length': fileSize,
+    },
+  };
+
+  await axios.put(url, file.buffer, config);
+
+  res.send('File uploaded successfully.');
+});
+ 
+
+
+var server=app.listen(8080,function() {});
