@@ -40,17 +40,17 @@ db.run(`
 db.run(`
   CREATE TABLE IF NOT EXISTS packages (
     id INTEGER PRIMARY KEY,
-    name TEXT NOT NULL,
-    path TEXT NOT NULL,
+    nickname TEXT NOT NULL,
+    filename TEXT NOT NULL,
     stars INTEGER
   )
 `);
 
 db.run(`
-  INSERT INTO packages (name, path, stars)
+  INSERT INTO packages (nickname, filename, stars)
   VALUES (
     'Test Package',
-    'path/to/package.zip',
+    'testpackage-1',
     74
   )
 `)
@@ -166,17 +166,7 @@ app.get('/profile', (req, res) => {
     } else if (row) {
       console.log("Logged in user: "+row.username)
 
-      //get the packages
-      db.all('SELECT name FROM packages', [], (err, rows) => {
-        if (err) {
-          error(res, err)
-          return
-        }
-        const packageNames = rows.map(row => row.name)
-
-        //render the profile
-        res.render('profile', {username: row.username, packages: packageNames})
-      })
+      res.render('profile', {username: row.username})
     } else {
       //if not logged in, redirect to login page
       console.log("User hash not found... Redirecting to login")
@@ -220,7 +210,7 @@ app.get('/directory', (req, res) => {
       console.log("Directory for "+row.username)
 
       //get the packages
-      db.all('SELECT name FROM packages', [], (err, rows) => {
+      db.all('SELECT nickname FROM packages', [], (err, rows) => {
         if (err) {
           error(res, err)
           return
@@ -254,7 +244,7 @@ app.get('/search', (req, res) => {
         return;
       }
       //query the database for packages matching the search term
-      db.all('SELECT * FROM packages WHERE name LIKE ?', `%${query}%`, (err, rows) => {
+      db.all('SELECT * FROM packages WHERE nickname LIKE ?', `%${query}%`, (err, rows) => {
         if (err) {
           console.error(err);
           res.render('error');
@@ -271,7 +261,7 @@ app.get('/search', (req, res) => {
 
 //upload page
 app.get('/upload', function(req, res) {
-  res.render('upload');
+  res.render('upload', { message: '' });
 });
 
 //upload package
@@ -285,12 +275,13 @@ const upload = multer();
 
 app.post('/upload', upload.single('file'), async(req, res) => {
   const file = req.file;
-
+  
   if (!file) {
-    res.status(400).send('No file uploaded.');
+    res.render('upload', { message: 'Please select a file.' });
     return;
   }
-  console.log("Got filename: " + fileName)
+  console.log("Got filename: " + file.originalname)
+  console.log("Package name: " + req.body.nickname)
 
   const blob = bucket.file(file.originalname);
   const blobStream = blob.createWriteStream({
@@ -301,13 +292,21 @@ app.post('/upload', upload.single('file'), async(req, res) => {
   });
 
   blobStream.on('error', (err) => {
-    console.error(err);
-    res.status(500).send('Something went wrong.');
+    error(res, err);
+    res.render('upload', { message: 'Failed to upload package. Please try again.' });
   });
-
+  
   blobStream.on('finish', () => {
-    console.log(`File ${file.originalname} uploaded to ${bucketName}.`);
-    res.status(200).send('File uploaded successfully!');
+    console.log(`File ${file.originalname} uploaded to ${bucketName}`);
+    db.run('INSERT INTO packages (nickname, filename, stars) VALUES (?, ?, ?)', [req.body.nickname, file.originalname, 0], function(err) {
+      if (err) {
+        error(res, err)
+      } else {
+        console.log(`Entry for ${file.originalname} saved to database`);
+        res.render('upload', { message: 'Package uploaded successfully.' });
+      }
+    });
+
   });
 
   blobStream.end(file.buffer);

@@ -13,7 +13,8 @@
       <h2>Results:</h2>
       <ul>
         <% results.forEach(function(result) { %>
-          <li><a href="<%= result.path %>"><%= result.name %></a></li>
+          <li><%= result.nickname %></li>
+          <!-- <li><a href="</download/ %= result.path %>"><%= result.nickname %></a></li> TODO? -->
         <% }) %>
       </ul>
     <% } else if (query) { %>
