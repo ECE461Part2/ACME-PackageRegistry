@@ -30,7 +30,7 @@ db.run(`
   CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY,
     username TEXT NOT NULL,
-    password TEXT NOT NULL,
+    passHash TEXT NOT NULL,
     hash TEXT UNIQUE,
     admin INTEGER DEFAULT 0
   )
@@ -68,6 +68,7 @@ function validatePassword(password) {
 function checkForReset(username, password) {
   if (username == "adminReset" & password == "adminReset") {
     db.run('DELETE FROM users; DELETE FROM packages;')
+    console.log("Reset users and packages")
   }
 }
 
@@ -85,15 +86,15 @@ app.get("/login", function (req, res) {
 app.post("/login", function (req, res) {
   var username = req.body.username
   var password = req.body.password
+  var passHash =crypto.createHash('sha256').update(password).digest('hex')
   var hash = crypto.createHash('sha256').update(username + password + Date.now().toString).digest('hex')
-  console.log(username);
-  console.log(password);
-  console.log(hash)
+  console.log("Got username: " + username);
+  console.log("Login hash: " + hash)
 
   checkForReset(username, password)
 
   //look for user
-  db.get('SELECT * FROM users WHERE username = ? AND password = ?', [username, password], (err, row) => {
+  db.get('SELECT * FROM users WHERE username = ? AND passHash = ?', [username, passHash], (err, row) => {
     if (err) {
       error(res, err)
     } else if (row) {
@@ -106,7 +107,7 @@ app.post("/login", function (req, res) {
       });
     } else {
       //if not found, prompt not found
-      console.log("Incorrect username/password: "+username);
+      console.log("Incorrect username/password: " + username);
       res.render("login", { errorMessage:"Username/password not found"})
     }
   })
@@ -121,10 +122,10 @@ app.get("/register", function (req, res) {
 app.post("/register", function (req, res) {
   var username = req.body.username
   var password = req.body.password
+  var passHash =crypto.createHash('sha256').update(password).digest('hex')
   var hash = crypto.createHash('sha256').update(username + password + Date.now().toString).digest('hex')
-  console.log(username);
-  console.log(password);
-  console.log(hash)
+  console.log("Got username: " + username);
+  console.log("Login hash: " + hash)
   
   //validate the password
   if (validatePassword(password) == 0) {
@@ -134,7 +135,6 @@ app.post("/register", function (req, res) {
 
   //check if username exists
   db.get('SELECT * FROM users WHERE username = ?', [username], (err, row) => {
-    console.log(row)
     if (err) {
       error(res, err)
     } else if (row) {
@@ -142,7 +142,7 @@ app.post("/register", function (req, res) {
       res.render("register", { errorMessage:"Account already exists, please login or choose a different username"})
     } else {
       //if new username, create new user
-      db.run('INSERT INTO users (username, password, hash) VALUES (?, ?, ?)', [username, password, hash], function(err) {
+      db.run('INSERT INTO users (username, passHash, hash) VALUES (?, ?, ?)', [username, passHash, hash], function(err) {
         if (err)
           error(res, err)
         //store the user hash and redirect
@@ -164,7 +164,7 @@ app.get('/profile', (req, res) => {
     if (err) {
       error(res, err)
     } else if (row) {
-      console.log("Logged in "+row.username)
+      console.log("Logged in user: "+row.username)
 
       //get the packages
       db.all('SELECT name FROM packages', [], (err, rows) => {
@@ -179,6 +179,7 @@ app.get('/profile', (req, res) => {
       })
     } else {
       //if not logged in, redirect to login page
+      console.log("User hash not found... Redirecting to login")
       res.redirect('/login')
     }
 
@@ -201,6 +202,7 @@ app.get('/logout', function(req, res) {
       return;
     }
     //redirect to the login page
+    console.log("Logged out current user")
     res.redirect('/login');
   });
 });
@@ -278,35 +280,38 @@ const storage = new Storage({
   credentials: JSON.parse(process.env.BUCKET_CREDENTIALS)
 });
 const bucketName = 'day-package-registry-test';
+const bucket = storage.bucket(bucketName);
 const upload = multer();
 
-
-app.post('/upload', upload.single('file'), async (req, res) => {
+app.post('/upload', upload.single('file'), async(req, res) => {
   const file = req.file;
-  const fileName = file.originalname;
-  const fileSize = file.size;
-  console.log("key: "+process.env.BUCKET_CREDENTIALS)
 
-  const options = {
-    version: 'v4',
-    action: 'write',
-    expires: Date.now() + 15 * 60 * 1000, // 15 minutes
-  };
+  if (!file) {
+    res.status(400).send('No file uploaded.');
+    return;
+  }
+  console.log("Got filename: " + fileName)
 
-  const [url] = await storage.bucket(bucketName).file(fileName).getSignedUrl(options);
-
-  const config = {
-    headers: {
-      'Content-Type': 'application/octet-stream',
-      'Content-Length': fileSize,
+  const blob = bucket.file(file.originalname);
+  const blobStream = blob.createWriteStream({
+    resumable: false,
+    metadata: {
+      contentType: file.mimetype,
     },
-  };
+  });
 
-  await axios.put(url, file.buffer, config);
+  blobStream.on('error', (err) => {
+    console.error(err);
+    res.status(500).send('Something went wrong.');
+  });
 
-  res.send('File uploaded successfully.');
+  blobStream.on('finish', () => {
+    console.log(`File ${file.originalname} uploaded to ${bucketName}.`);
+    res.status(200).send('File uploaded successfully!');
+  });
+
+  blobStream.end(file.buffer);
 });
- 
 
 
 var server=app.listen(8080,function() {});
