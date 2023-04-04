@@ -142,7 +142,7 @@ app.post("/register", function (req, res) {
       res.render("register", { errorMessage:"Account already exists, please login or choose a different username"})
     } else {
       //if new username, create new user
-      db.run('INSERT INTO users (username, passHash, hash) VALUES (?, ?, ?)', [username, password, hash], function(err) {
+      db.run('INSERT INTO users (username, passHash, hash) VALUES (?, ?, ?)', [username, passHash, hash], function(err) {
         if (err)
           error(res, err)
         //store the user hash and redirect
@@ -280,36 +280,38 @@ const storage = new Storage({
   credentials: JSON.parse(process.env.BUCKET_CREDENTIALS)
 });
 const bucketName = 'day-package-registry-test';
+const bucket = storage.bucket(bucketName);
 const upload = multer();
 
-
-app.post('/upload', upload.single('file'), async (req, res) => {
+app.post('/upload', upload.single('file'), async(req, res) => {
   const file = req.file;
-  const fileName = file.originalname;
-  const fileSize = file.size;
+
+  if (!file) {
+    res.status(400).send('No file uploaded.');
+    return;
+  }
   console.log("Got filename: " + fileName)
 
-  const options = {
-    version: 'v4',
-    action: 'write',
-    expires: Date.now() + 15 * 60 * 1000, // 15 minutes
-  };
-
-  const [url] = await storage.bucket(bucketName).file(fileName).getSignedUrl(options);
-
-  const config = {
-    headers: {
-      'Content-Type': 'application/octet-stream',
-      'Content-Length': fileSize,
+  const blob = bucket.file(file.originalname);
+  const blobStream = blob.createWriteStream({
+    resumable: false,
+    metadata: {
+      contentType: file.mimetype,
     },
-  };
+  });
 
-  await axios.put(url, file.buffer, config);
+  blobStream.on('error', (err) => {
+    console.error(err);
+    res.status(500).send('Something went wrong.');
+  });
 
-  res.send('File uploaded successfully.');
-  res.redirect(`/profile`);
+  blobStream.on('finish', () => {
+    console.log(`File ${file.originalname} uploaded to ${bucketName}.`);
+    res.status(200).send('File uploaded successfully!');
+  });
+
+  blobStream.end(file.buffer);
 });
- 
 
 
 var server=app.listen(8080,function() {});
