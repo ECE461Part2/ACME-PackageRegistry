@@ -1,0 +1,11 @@
+<h1>Download a package</h1>
+
+<ul>
+  <% packages.forEach(package => { %>
+    <li>
+      <a href="/download/<%= package.filename %>">
+        <%= package.nickname %>
+      </a>
+    </li>
+  <% }) %>
+</ul>

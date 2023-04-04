@@ -46,15 +46,6 @@ db.run(`
   )
 `);
 
-db.run(`
-  INSERT INTO packages (nickname, filename, stars)
-  VALUES (
-    'Test Package',
-    'testpackage-1',
-    74
-  )
-`)
-
 function error(res, err) {
   console.error(err);
   res.status(500).send("Internal error: "+err)
@@ -275,7 +266,7 @@ const upload = multer();
 
 app.post('/upload', upload.single('file'), async(req, res) => {
   const file = req.file;
-  
+
   if (!file) {
     res.render('upload', { message: 'Please select a file.' });
     return;
@@ -312,5 +303,29 @@ app.post('/upload', upload.single('file'), async(req, res) => {
   blobStream.end(file.buffer);
 });
 
+// download a package
+app.get('/download', async (req, res, next) => {
+  //get the packages
+  db.all('SELECT * FROM packages', [], (err, rows) => {
+    if (err) {
+      error(res, err)
+      return
+    }
+    //render the page
+    res.render('download', {packages: rows})
+  })
+});
+
+app.get('/download/:filename', (req, res) => {
+  const filename = req.params.filename;
+
+  // sownload file from GCP bucket and send to client
+  const file = storage.bucket(bucketName).file(filename);
+  const stream = file.createReadStream();
+  res.setHeader('Content-disposition', `attachment; filename="${filename}"`);
+  res.setHeader('Content-type', 'application/octet-stream');
+  stream.pipe(res);
+  console.log(`File ${filename} downloaded from ${bucketName}`);
+});
 
 var server=app.listen(8080,function() {});
