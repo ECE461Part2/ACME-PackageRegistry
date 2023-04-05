@@ -42,7 +42,8 @@ db.run(`
     id INTEGER PRIMARY KEY,
     nickname TEXT NOT NULL,
     filename TEXT NOT NULL,
-    stars INTEGER
+    stars INTEGER DEFAULT 0,
+    downloads INTEGER DEFAULT 0
   )
 `);
 
@@ -201,7 +202,7 @@ app.get('/directory', (req, res) => {
       console.log("Directory for "+row.username)
 
       //get the packages
-      db.all('SELECT nickname FROM packages', [], (err, rows) => {
+      db.all('SELECT * FROM packages', [], (err, rows) => {
         if (err) {
           error(res, err)
           return
@@ -278,51 +279,60 @@ const bucket = storage.bucket(bucketName);
 const upload = multer();
 
 app.post('/upload', upload.single('file'), async(req, res) => {
-  //get the user hash
   const hash = req.cookies.hash
 
-  //get the user info
   db.get('SELECT * FROM users WHERE hash = ?', [hash], (err, row) => {
     if (err) {
       error(res, err)
     } else if (row) {
 
-    const file = req.file;
+      const file = req.file;
 
-    if (!file) {
-      res.render('upload', { message: 'Please select a file.' });
-      return;
-    }
-    console.log("Got filename: " + file.originalname)
-    console.log("Package name: " + req.body.nickname)
+      if (!file) {
+        res.render('upload', { message: 'Please select a file.' });
+        return;
+      }
+      console.log("Got filename: " + file.originalname)
+      console.log("Package name: " + req.body.nickname)
 
-    const blob = bucket.file(file.originalname);
-    const blobStream = blob.createWriteStream({
-      resumable: false,
-      metadata: {
-        contentType: file.mimetype,
-      },
-    });
-
-    blobStream.on('error', (err) => {
-      error(res, err);
-      res.render('upload', { message: 'Failed to upload package. Please try again.' });
-    });
-    
-    blobStream.on('finish', () => {
-      console.log(`File ${file.originalname} uploaded to ${bucketName}`);
-      db.run('INSERT INTO packages (nickname, filename, stars) VALUES (?, ?, ?)', [req.body.nickname, file.originalname, 0], function(err) {
+      db.get('SELECT * FROM packages WHERE nickname = ?', [req.body.nickname], (err, row) => {
         if (err) {
-          error(res, err)
-        } else {
-          console.log(`Entry for ${file.originalname} saved to database`);
-          res.render('upload', { message: 'Package uploaded successfully.' });
+          console.error(err);
+          return;
         }
-      });
-    });
+        if (row) {
+          res.render('upload', { message: 'Please choose a unique package name.' });
+          return;
+        } else {
+        
+          const blob = bucket.file(file.originalname);
+          const blobStream = blob.createWriteStream({
+            resumable: false,
+            metadata: {
+              contentType: file.mimetype,
+            },
+          });
 
-    blobStream.end(file.buffer);
+          blobStream.on('error', (err) => {
+            error(res, err);
+            res.render('upload', { message: 'Failed to upload package. Please try again.' });
+          });
+          
+          blobStream.on('finish', () => {
+            console.log(`File ${file.originalname} uploaded to ${bucketName}`);
+            db.run('INSERT INTO packages (nickname, filename, stars) VALUES (?, ?, ?)', [req.body.nickname, file.originalname, 0], function(err) {
+              if (err) {
+                error(res, err)
+              } else {
+                console.log(`Entry for ${file.originalname} saved to database`);
+                res.render('upload', { message: 'Package uploaded successfully.' });
+              }
+            });
+          });
 
+          blobStream.end(file.buffer);
+        }
+      })
     } else {
       //if not logged in, redirect to login page
       res.redirect('/login')
@@ -332,37 +342,32 @@ app.post('/upload', upload.single('file'), async(req, res) => {
 
 // download a package
 app.get('/download', async (req, res, next) => {
-  //get the user hash
   const hash = req.cookies.hash
 
-  //get the user info
   db.get('SELECT * FROM users WHERE hash = ?', [hash], (err, row) => {
     if (err) {
       error(res, err)
     } else if (row) {
 
-    //get the packages
-    db.all('SELECT * FROM packages', [], (err, rows) => {
-      if (err) {
-        error(res, err)
-        return
-      }
-      //render the page
-      res.render('download', {packages: rows})
-    })
-    
-  } else {
-    //if not logged in, redirect to login page
-    res.redirect('/login')
-  }
-})
+      //get the packages
+      db.all('SELECT * FROM packages', [], (err, rows) => {
+        if (err) {
+          error(res, err)
+          return
+        }
+        //render the page
+        res.render('download', {packages: rows})
+      })
+      
+    } else {
+      //if not logged in, redirect to login page
+      res.redirect('/login')
+    }
+  })
 });
 
 app.get('/download/:filename', (req, res) => {
-  //get the user hash
   const hash = req.cookies.hash
-
-  //get the user info
   db.get('SELECT * FROM users WHERE hash = ?', [hash], (err, row) => {
     if (err) {
       error(res, err)
@@ -370,19 +375,117 @@ app.get('/download/:filename', (req, res) => {
 
     const filename = req.params.filename;
 
-    // sownload file from GCP bucket and send to client
-    const file = storage.bucket(bucketName).file(filename);
-    const stream = file.createReadStream();
-    res.setHeader('Content-disposition', `attachment; filename="${filename}"`);
-    res.setHeader('Content-type', 'application/octet-stream');
-    stream.pipe(res);
-    console.log(`File ${filename} downloaded from ${bucketName}`);
-  
-  } else {
-    //if not logged in, redirect to login page
-    res.redirect('/login')
-  }
+    db.get('UPDATE packages SET downloads = downloads + 1 WHERE filename = ?', [filename], (err, rows) => {
+      if (err) {
+        error(res, err)
+        return
+      }
+
+      // download file from GCP bucket and send to client
+      const file = storage.bucket(bucketName).file(filename);
+      const stream = file.createReadStream();
+      res.setHeader('Content-disposition', `attachment; filename="${filename}"`);
+      res.setHeader('Content-type', 'application/octet-stream');
+      stream.pipe(res);
+      console.log(`File ${filename} downloaded from ${bucketName}`);
+    
+    })
+
+    } else {
+      //if not logged in, redirect to login page
+      res.redirect('/login')
+    }
   })
+});
+
+// update page
+app.get('/update', (req, res) => {
+  const hash = req.cookies.hash
+  db.get('SELECT * FROM users WHERE hash = ?', [hash], (err, row) => {
+    if (err) {
+      error(res, err)
+    } else if (row) {
+
+      // Get all packages from the database
+      db.all('SELECT nickname FROM packages ORDER BY nickname ASC', [], (err, rows) => {
+        if (err) {
+          console.error(err.message);
+          res.sendStatus(500);
+          return;
+        }
+
+        // Render the update page with the list of packages
+        res.render('update', { packages: rows , message: ''});
+      });
+
+    } else {
+      //if not logged in, redirect to login page
+      res.redirect('/login')
+    }
+  })
+});
+
+app.post('/update', upload.single('file'), (req, res, next) => {
+  const hash = req.cookies.hash
+  db.get('SELECT * FROM users WHERE hash = ?', [hash], (err, row) => {
+    if (err) {
+      error(res, err)
+    } else if (row) {
+      const packageName = req.body.package;
+      db.get('SELECT filename FROM packages WHERE nickname = ?', [packageName], (err, row) => {
+        if (err) {
+          console.error(err);
+          return;
+        }
+
+        // get the package name from the URL parameter
+        const file = req.file;
+        const oldFilename = row.filename
+        console.log("OG FILE: "+oldFilename)
+        storage.bucket(bucketName).file(oldFilename).delete();
+        console.log(`Deleted file ${oldFilename}`);
+
+        const blob = bucket.file(file.originalname);
+        const blobStream = blob.createWriteStream({
+          resumable: false,
+          metadata: {
+            contentType: file.mimetype,
+          },
+        });
+
+        blobStream.on('error', (err) => {
+          error(res, err);
+          res.render('update', { packages: rows , message: 'Package update error.' });
+        });
+        
+        blobStream.on('finish', () => {
+          console.log(`File ${file.originalname} uploaded to ${bucketName}`);
+          db.get('UPDATE packages SET filename = ? WHERE filename = ?', [file.originalname, oldFilename], (err, _) => {
+            if (err) {
+              error(res, err)
+            } else {
+              db.all('SELECT nickname FROM packages ORDER BY nickname ASC', [], (err, rows) => {
+                if (err) {
+                  error(res, err);
+                  return;
+                }
+            
+                console.log(`Entry for ${file.originalname} saved to database`);
+                res.render('update', { packages: rows , message: 'Package updated successfully.' });
+              });
+            }
+          });
+        });
+
+        blobStream.end(file.buffer);
+
+      });
+    } else {
+      //if not logged in, redirect to login page
+      res.redirect('/login')
+    }
+  })
+
 });
 
 var server=app.listen(8080,function() {});

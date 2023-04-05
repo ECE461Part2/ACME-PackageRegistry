@@ -11,15 +11,32 @@
     </form>
     <% if (results.length > 0) { %>
       <h2>Results:</h2>
-      <ul>
-        <% results.forEach(function(result) { %>
-          <li><%= result.nickname %></li>
-          <!-- <li><a href="</download/ %= result.path %>"><%= result.nickname %></a></li> TODO? -->
-        <% }) %>
-      </ul>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Package Name</th>
+              <th>File Name</th>
+              <th>Stars</th>
+              <th>Downloads</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% results.forEach(function(result) { %>
+              <tr>
+                <td><a href="/download/<%= result.filename %>"><%= result.nickname %></a></td>
+                <td><%= result.filename %></td>
+                <td><%= result.stars %></td>
+                <td><%= result.downloads %></td>
+              </tr>
+            <% }); %>
+          </tbody>
+        </table>
+
     <% } else if (query) { %>
       <p>No results found for "<%= query %>".</p>
     <% } %>
   </body>
-  <a href="/profile">Back</a>
+<br>
+<a href="/profile">Home</a>
 </html>
