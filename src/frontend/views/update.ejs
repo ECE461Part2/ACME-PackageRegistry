@@ -1,0 +1,26 @@
+<!-- update.ejs -->
+
+<title>Update</title>
+
+<h1>Update Package</h1>
+
+<% if (message) { %>
+<p><%= message %></p>
+<% } %>
+<form action="/update" method="post" enctype="multipart/form-data">
+  <label for="package">Select a package:</label>
+  <select name="package" id="package">
+    <% packages.forEach(function(package) { %>
+      <option value="<%= package.nickname %>"><%= package.nickname %></option>
+    <% }); %>
+  </select>
+  <br>
+
+  <label for="file">Upload a new file:</label>
+  <input type="file" name="file" id="file">
+  <br>
+
+  <input type="submit" value="Update">
+  <br>
+  <a href="/profile">Home</a>
+</form>
