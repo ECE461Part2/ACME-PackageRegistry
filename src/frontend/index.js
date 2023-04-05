@@ -195,7 +195,7 @@ const bucketName = 'day-package-registry-test';
 const bucket = storage.bucket(bucketName);
 const upload = multer();
 
-app.post('/upload', auth, upload.single('file'), async(req, res) => {
+app.post('/upload', auth, upload.single('file'), (req, res) => {
   const file = req.file;
 
   if (!file) {
@@ -246,7 +246,7 @@ app.post('/upload', auth, upload.single('file'), async(req, res) => {
 });
 
 // download a package
-app.get('/download', auth, async (req, res, next) => {
+app.get('/download', auth, (req, res) => {
   //get the packages
   db.all('SELECT * FROM packages', [], (err, rows) => {
     if (err) {
