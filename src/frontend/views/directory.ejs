@@ -1,10 +1,29 @@
 <h1>Directory</h1>
 
-<ul>
-  <% packages.forEach(function(package) { %>
-    <li><%= package.nickname %></li>
-  <% }); %>
-</ul>
+<!-- directory.ejs -->
+<title>Directory</title>
 
-<a href="/profile">Back</a>
+<table>
+  <thead>
+    <tr>
+      <th>Package Name</th>
+      <th>File Name</th>
+      <th>Stars</th>
+      <th>Downloads</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% packages.forEach(function(package) { %>
+      <tr>
+        <td><a href="/download/<%= package.filename %>"><%= package.nickname %></a></td>
+        <td><%= package.filename %></td>
+        <td><%= package.stars %></td>
+        <td><%= package.downloads %></td>
+      </tr>
+    <% }); %>
+  </tbody>
+</table>
+<br>
+
+<a href="/profile">Home</a>
 
