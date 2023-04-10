@@ -3,6 +3,8 @@ name: CI
 on:
     push:
         branches: [ main ]
+    pull-request:
+        branches: [ main ]
         
     
 jobs:
@@ -24,7 +26,4 @@ jobs:
                 node-version: ${{ matrix.node-version }}
           - run: |
                 cd ./src/frontend
-                npm install
-          - run: |
-                cd ./src/frontend
-                npm start
+                npm sudostart

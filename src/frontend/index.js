@@ -6,6 +6,21 @@ const multer = require('multer');
 const setupDatabase = require('./scripts/databaseSetup')
 const auth = require('./scripts/auth')
 const { Storage } = require('@google-cloud/storage');
+console.log(process.env.BUCKET_CREDENTIALS)
+if (process.env.BUCKET_CREDENTIALS == undefined) {
+  console.log("Getting BUCKET_CREDENTIALS")
+  require('dotenv').config({path:__dirname+'/./../../../../../.env'})
+}
+console.log(process.env.BUCKET_CREDENTIALS)
+
+const storage = new Storage({
+  projectId: 'registrylogintest',
+  credentials: JSON.parse(process.env.BUCKET_CREDENTIALS)
+});
+const bucketName = 'day-package-registry-test';
+const bucket = storage.bucket(bucketName);
+const upload = multer();
+
 
 var app=express();
 app.set("view engine", "ejs");
@@ -187,14 +202,6 @@ app.get('/upload', auth, function(req, res) {
 });
 
 //upload package
-const storage = new Storage({
-  projectId: 'registrylogintest',
-  credentials: JSON.parse(process.env.BUCKET_CREDENTIALS)
-});
-const bucketName = 'day-package-registry-test';
-const bucket = storage.bucket(bucketName);
-const upload = multer();
-
 app.post('/upload', auth, upload.single('file'), (req, res) => {
   const file = req.file;
 
@@ -344,4 +351,4 @@ app.post('/update', auth, upload.single('file'), (req, res, next) => {
   });
 });
 
-var server=app.listen(8080,function() {});
+var server=app.listen(80,function() {});
