@@ -36,14 +36,13 @@ jobs:
                 cd ./src/frontend
                 npm run sudostart
             continue-on-error: true
+        
+          - name: Check deploy
+            id: check
+            run: |
+                sudo lsof -i :80 | grep node || echo ::set-output name=status::failure
                 
           - name: Checking deployment
             id: serverkill
-            if: steps.deploy.outcome != 'success'
-            run: sudo pkill apache2
-        
-          - name: Attempt redeploy
-            if: steps.serverkill.outcome == 'success'
-            run: |
-                cd ./src/frontend
-                npm run sudostart
+            if: steps.deploy.outcome == 'failure'
+            run: exit 1
