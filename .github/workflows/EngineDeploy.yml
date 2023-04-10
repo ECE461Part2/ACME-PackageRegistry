@@ -26,4 +26,4 @@ jobs:
                 node-version: ${{ matrix.node-version }}
           - run: |
                 cd ./src/frontend
-                npm sudostart
+                npm run sudostart
