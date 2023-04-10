@@ -6,11 +6,12 @@ const multer = require('multer');
 const setupDatabase = require('./scripts/databaseSetup')
 const auth = require('./scripts/auth')
 const { Storage } = require('@google-cloud/storage');
-
-require('dotenv').config({path:__dirname+'/./../../../../../.env'})
-if (process.env.BUCKET_CREDENTIALS) {
+console.log(process.env.BUCKET_CREDENTIALS)
+if (process.env.BUCKET_CREDENTIALS == undefined) {
+  console.log("Getting BUCKET_CREDENTIALS")
   require('dotenv').config({path:__dirname+'/./../../../../../.env'})
 }
+console.log(process.env.BUCKET_CREDENTIALS)
 
 const storage = new Storage({
   projectId: 'registrylogintest',
