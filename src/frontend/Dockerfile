@@ -16,9 +16,9 @@ RUN npm install
 # Note: files & folders inside .dockerignore will not be copied.
 COPY . .
 
-# The app binds to port 8080, so exposing port 8080 to be used by the docker network
-EXPOSE 8080
-ENV PORT=8080
+# The app binds to port 80, so exposing port 80 to be used by the docker network
+EXPOSE 80
+ENV PORT=80
 # Runtime command to be executed when the container is launched
 #CMD ["node", "/home/hugoday_dc/Prelab10/index.js"]
 CMD [ "npm", "start" ]
