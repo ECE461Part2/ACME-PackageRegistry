@@ -15,10 +15,16 @@ jobs:
             
         steps:
           - uses: actions/checkout@v2
+            with:
+                fetch-depth: 0
+                ref: main
           - name: Use Node.js ${{ matrix.node-version }}
             uses: actions/setup-node@v1
             with:
                 node-version: ${{ matrix.node-version }}
-          - run: cd ./src/frontend
-          - run: npm install
-          - run: npm start
+          - run: 
+                cd ./src/frontend
+                npm install
+          - run:
+                cd ./src/frontend
+                npm start
