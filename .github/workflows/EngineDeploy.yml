@@ -24,6 +24,26 @@ jobs:
             uses: actions/setup-node@v1
             with:
                 node-version: ${{ matrix.node-version }}
-          - run: |
+          - name: Clean and install npm_modules
+            run: |
+                cd ./src/frontend
+                rm -rf ./node_modules/
+                npm install
+        
+          - name: Deploy site
+            id: deploy
+            run: |
+                cd ./src/frontend
+                npm run sudostart
+            continue-on-error: true
+                
+          - name: Checking deployment
+            id: serverkill
+            if: steps.deploy.outcome != 'success'
+            run: sudo pkill apache2
+        
+          - name: Attempt redeploy
+            if: steps.serverkill.outcome == 'success'
+            run: |
                 cd ./src/frontend
                 npm run sudostart
