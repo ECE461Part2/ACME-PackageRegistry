@@ -42,7 +42,7 @@ jobs:
           - name: Check deploy
             id: check
             run: |
-                sudo lsof -i :80 | grep node || echo ::set-output name=status::failure
+                sudo lsof -i :80 | grep node | echo ::set-output name=status::failure
                 
           - name: Checking deployment
             id: serverkill
