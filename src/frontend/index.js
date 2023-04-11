@@ -351,4 +351,4 @@ app.post('/update', auth, upload.single('file'), (req, res, next) => {
   });
 });
 
-// var server=app.listen(80,function() {});
+var server=app.listen(80,function() {});
