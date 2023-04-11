@@ -43,9 +43,4 @@ jobs:
           - name: Check deploy
             id: check
             run: |
-                sudo lsof -i :80 | grep node || exit 1
-                
-          - name: Checking deployment
-            id: serverkill
-            if: steps.check.outcome == 'failure'
-            run: exit 1
+                sleep 5; sudo lsof -i :80 | grep node || exit 1
