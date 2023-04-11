@@ -36,13 +36,14 @@ jobs:
             id: deploy
             run: |
                 cd ./src/frontend
+                sudo forever stopall
                 sudo forever start index.js
             continue-on-error: true
 
           - name: Check deploy
             id: check
             run: |
-                sudo lsof -i :80 | grep node | echo ::set-output name=status::failure
+                sudo lsof -i :80 | grep node | exit 1
                 
           - name: Checking deployment
             id: serverkill
