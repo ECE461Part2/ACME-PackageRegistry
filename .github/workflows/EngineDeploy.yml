@@ -25,18 +25,20 @@ jobs:
             with:
                 node-version: ${{ matrix.node-version }}
           - name: Clean and install npm_modules
+            id: clean
             run: |
                 cd ./src/frontend
                 rm -rf ./node_modules/
                 npm install
+                sudo npm install forever -g
         
           - name: Deploy site
             id: deploy
             run: |
                 cd ./src/frontend
-                npm run sudostart
+                sudo forever start index.js
             continue-on-error: true
-        
+
           - name: Check deploy
             id: check
             run: |
@@ -44,5 +46,5 @@ jobs:
                 
           - name: Checking deployment
             id: serverkill
-            if: steps.deploy.outcome == 'failure'
+            if: steps.check.outcome == 'failure'
             run: exit 1
