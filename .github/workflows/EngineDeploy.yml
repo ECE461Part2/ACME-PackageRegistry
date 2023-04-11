@@ -17,7 +17,7 @@ jobs:
             
         steps:
           - name: Reset working directory
-            run: pwd
+            run: rm -rf *
             
           - uses: actions/checkout@v2
             with:
