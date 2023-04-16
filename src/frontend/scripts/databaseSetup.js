@@ -28,10 +28,13 @@ function setupDatabase() {
       CREATE TABLE IF NOT EXISTS packages (
         key INTEGER PRIMARY KEY,
         id TEXT NOT NULL,
-        name TEXT NOT NULL,
+        packageName TEXT NOT NULL,
         version TEXT NOT NULL,
+        url TEXT,
         stars INTEGER DEFAULT 0,
-        downloads INTEGER DEFAULT 0
+        rating INTEGER DEFAULT 0,
+        downloads INTEGER DEFAULT 0,
+        JSProgram TEXT
       )
     `), function(err) {
 
@@ -42,8 +45,8 @@ function setupDatabase() {
         );
     
     };
-    db.run('INSERT INTO packages (id, name, version, stars) VALUES (?, ?, ?, ?)', ["underscore", "Underscore", "1.6.9", 0])
-    db.run('INSERT INTO packages (id, name, version, stars) VALUES (?, ?, ?, ?)', ["lodash", "Lodash", "1.1.0", 0])
+    db.run('INSERT INTO packages (id, packageName, version, url, stars, rating, downloads, JSProgram) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', ["underscore", "Underscore", "1.6.9", '', 0, 0, 0, " "])
+    db.run('INSERT INTO packages (id, packageName, version, url, stars, rating, downloads, JSProgram) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', ["lodash", "Lodash", "1.1.0", '', 0, 0, 0, " "])
 
     
     return db

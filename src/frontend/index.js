@@ -3,9 +3,17 @@ var bodyParser = require('body-parser');
 const crypto = require('crypto')
 const cookieParser = require('cookie-parser');
 const multer = require('multer');
+const AdmZip = require("adm-zip");
+const cmd = require('node-cmd');
+const path = require('path');
+const shell = require('shelljs')
+const fs = require('fs');
 const setupDatabase = require('./scripts/databaseSetup')
 const auth = require('./scripts/auth')
 const { Storage } = require('@google-cloud/storage');
+const { constants } = require('fs/promises');
+const { zip } = require('compressing');
+const { OutgoingMessage } = require('http');
 console.log(process.env.BUCKET_CREDENTIALS)
 if (process.env.BUCKET_CREDENTIALS == undefined) {
   console.log("Getting BUCKET_CREDENTIALS")
@@ -26,7 +34,8 @@ var app=express();
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(express.json({type:'application/json'}));
+app.use(express.json({type:'application/json', limit:'50mb'}));
+app.use(express.urlencoded({limit: '50mb', extended:true, paramaterLimit:50000}));
 app.use(function(req, res, next) {
   res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
   res.setHeader('Pragma', 'no-cache');
@@ -87,7 +96,7 @@ app.post("/authenticate", function (req, res) {
   var username = req.body.username
   var password = req.body.password
   var passHash =crypto.createHash('sha256').update(password).digest('hex')
-  var hash = crypto.createHash('sha256').update(username + password + Date.now().toString).digest('hex')
+  var hash = crypto.createHash('sha256').update(username + password + Date.now().toString()).digest('hex')
   console.log("Got username: " + username);
   console.log("Login hash: " + hash)
 
@@ -278,96 +287,6 @@ app.get('/search', auth, (req, res) => {
     res.render('search', { query: query, results: rows });
   });
 });
-
-//upload page
-app.get('/upload', auth, function(req, res) {
-    res.render('upload', { message: '' });
-});
-
-//upload package
-app.post('/upload', auth, upload.single('file'), (req, res) => {
-  const file = req.file;
-
-  if (!file) {
-    res.render('upload', { message: 'Please select a file.' });
-    return;
-  }
-  console.log("Got filename: " + file.originalname)
-  console.log("Package name: " + req.body.nickname)
-
-  db.get('SELECT * FROM packages WHERE nickname = ?', [req.body.nickname], (err, row) => {
-    if (err) {
-      console.error(err);
-      return;
-    }
-    if (row) {
-      res.render('upload', { message: 'Please choose a unique package name.' });
-      return;
-    } else {
-    
-      const blob = bucket.file(file.originalname);
-      const blobStream = blob.createWriteStream({
-        resumable: false,
-        metadata: {
-          contentType: file.mimetype,
-        },
-      });
-
-      blobStream.on('error', (err) => {
-        error(res, err);
-        res.render('upload', { message: 'Failed to upload package. Please try again.' });
-      });
-      
-      blobStream.on('finish', () => {
-        console.log(`File ${file.originalname} uploaded to ${bucketName}`);
-        db.run('INSERT INTO packages (nickname, filename, stars) VALUES (?, ?, ?)', [req.body.nickname, file.originalname, 0], function(err) {
-          if (err) {
-            error(res, err)
-          } else {
-            console.log(`Entry for ${file.originalname} saved to database`);
-            res.render('upload', { message: 'Package uploaded successfully.' });
-          }
-        });
-      });
-
-      blobStream.end(file.buffer);
-    }
-  })
-});
-
-// download a package
-app.get('/download', auth, (req, res) => {
-  //get the packages
-  db.all('SELECT * FROM packages', [], (err, rows) => {
-    if (err) {
-      error(res, err)
-      return
-    }
-    //render the page
-    res.render('download', {packages: rows})
-  })
-});
-
-app.get('/download/:filename', auth, (req, res) => {
-  const filename = req.params.filename;
-
-  db.get('UPDATE packages SET downloads = downloads + 1 WHERE filename = ?', [filename], (err, rows) => {
-    if (err) {
-      error(res, err)
-      return
-    }
-
-    // download file from GCP bucket and send to client
-    const file = storage.bucket(bucketName).file(filename);
-    const stream = file.createReadStream();
-    res.setHeader('Content-disposition', `attachment; filename="${filename}"`);
-    res.setHeader('Content-type', 'application/octet-stream');
-    stream.pipe(res);
-    console.log(`File ${filename} downloaded from ${bucketName}`);
-  
-  })
-});
-
 // update page
 app.get('/update', auth, (req, res) => {
   // Get all packages from the database
@@ -433,5 +352,339 @@ app.post('/update', auth, upload.single('file'), (req, res, next) => {
 
   });
 });
+
+//upload page
+app.get('/upload', auth, function(req, res) {
+    res.render('upload', { message: '' });
+});
+
+
+//_________________________ BJ _ FINISHED
+// DELETE A PACKAGE
+app.delete('/package/:id', auth, (req, res) => {
+  console.log("\nPackage Deletion Request")
+
+  // get id of package to be deleted
+  const id = req.params.id
+  if (id == undefined){
+    res.status(400).json("There is missing field(s) in the PackageID/AuthenticationToken or it is formed improperly, or the AuthenticationToken is invalid.")
+  } else{
+    console.log("Package ID: " + id)
+
+    // get filename of zip to be deleted
+    const fileName = id + '.zip'
+    console.log("Package Zip File: " + fileName)
+
+    // Check if package id is in the database
+    const sql1 = 'SELECT * FROM packages WHERE id = ?'
+    db.get(sql1, id, function(err, row) {
+      // if error, return 400
+      if (err) {
+        console.error(err)
+        res.status(400).json("There is missing field(s) in the PackageID/AuthenticationToken or it is formed improperly, or the AuthenticationToken is invalid.")
+      // if exists, delete from database and bucket
+      } else if (row) {
+        console.log('Package with ID: ' + id +', exists in the database.')
+        
+        // delete package from database
+        const sql = 'DELETE FROM packages WHERE id = ?'
+
+        // Execute the deletion query
+        db.run(sql, id, (err) => {
+          // if error, return 400
+          if (err) {
+            console.error(err)
+            res.status(400).json("There is missing field(s) in the PackageID/AuthenticationToken or it is formed improperly, or the AuthenticationToken is invalid.")
+
+          // else delete package from bucket
+          } else {
+            console.log('Package with id: ' + id + ', deleted successfully.')
+
+            // file in bucket
+            const file = bucket.file(fileName)
+
+            // Delete the file
+            file.delete((err) => {
+              // if error return 400
+              if (err) {
+                console.error(err)
+                res.status(400).json("There is missing field(s) in the PackageID/AuthenticationToken or it is formed improperly, or the AuthenticationToken is invalid.")
+                // if successful return 200
+              } else {
+                console.log('Bucket Object: '+ fileName +' deleted successfully.')
+                res.status(200).json("Package is deleted.")
+              }
+            })
+          }
+        })
+      // if file does not exist, return 404
+      } else {
+        console.log('Package with ID: ' + id + ', does not exist in the database.')
+        res.status(404).json("Package does not exist.")
+      }
+    })
+  } 
+})
+
+// DOWNLOAD A PACKAGE
+app.get('/package/:id', auth, (req, res) => {
+  console.log("\nPackage Download Request")
+
+  // get package id
+  const id = req.params.id
+  console.log("File ID: ", id)
+
+  // get fileName of package
+  const fileName = id + '.zip'
+
+  //check to see if package id is defined
+  if (id == undefined) {
+    res.status(400).json("There is missing field(s) in the PackageID/AuthenticationToken or it is formed improperly, or the AuthenticationToken is invalid.")
+    // Check if package id is in the database
+  } else{
+    const sqlSelect = 'SELECT * FROM packages WHERE id = ?'
+    db.get(sqlSelect, id, function(err, row) {
+      // if error, return 400
+      if (err) {
+        console.error(err)
+        res.status(400).json("There is missing field(s) in the PackageID/AuthenticationToken or it is formed improperly, or the AuthenticationToken is invalid.")
+      // get package json from database
+      } else if (row) {
+        console.log(JSON.stringify(row))
+
+        // get file from bucket and download to zips folder
+        const file = bucket.file(fileName)
+        file.download({ destination: './zips/' + fileName }, function(err) {
+          // if error, return 400
+          if (err) {
+            console.error(err)
+            res.status(400).json("There is missing field(s) in the PackageID/AuthenticationToken or it is formed improperly, or the AuthenticationToken is invalid.")
+          // convert file to base 64 encoded version and send as body in response
+          } else {
+            console.log('Bucket Object: '+ fileName + ', downloaded to zips folder')
+            const zipBuff = fs.readFileSync('./zips/' + fileName)
+            const base64Content = zipBuff.toString('base64')
+            //console.log(base64Content)
+            
+            //delete zip files
+            fs.rmSync('./zips/' + fileName, {recursive: true, force: true})
+            
+            //output
+            const packageName = row.packageName
+            const version = row.version
+            const packageID = row.id
+            const url = row.url
+            const jsprogram = row.JSProgram
+            if (url == ""){
+              console.log("Package initially uploaded as Content: Sending Response.")
+              res.status(200).json({metadata:{Name: packageName, Version: version, ID: packageID}, data:{Content:base64Content, JSProgram: jsprogram}})
+            } else {
+              console.log("Package initially uploaded as URL: Sending Response.")
+              res.status(200).json({metadata:{Name: packageName, Version: version, ID: packageID}, data:{Content:base64Content, URL: row.url,  JSProgram: jsprogram}})
+            }
+          }})
+      // if package does not exist return 404
+      }else{
+        console.log('Package with ID: ' + id + ', does not exist in the database.')
+        res.status(404).json("Package does not exist.")
+      }
+    })
+  }
+
+})
+
+//_________________________ BJ _ CURRENTLY WORKING ON
+// Update a package
+app.put('/package/:id', (req, res) => {
+  const id = req.params.id;
+  
+  console.log("ID: ", id)
+  console.log("Metadata: ", req.body.metadata)
+  console.log("Name: ", req.body.metadata.Name)
+  console.log("Version: ", req.body.metadata.Version)
+  console.log("ID: ", req.body.metadata.ID)
+  console.log("\n")
+  const ID = req.body.metadata.ID;
+  console.log("Data: ", req.body.data)
+  console.log("Content: ", req.body.data.Content)
+  console.log("URL: ", req.body.data.URL)
+  console.log("JSPROGRAM: ", req.body.data.JSPROGRAM)
+
+
+
+
+  if (id == undefined) {
+    res.status(400).json()
+  }
+  if (id != ID) {
+    res.status(404).json("Package does not exist.")
+  }
+
+  res.status(200).json("Version updated")
+})
+
+// UPLOAD A PACKAGE
+app.post('/package', (req, res) => {
+  console.log("\nPackage Upload Request")
+
+  // create a unique id for the current package
+  const id = crypto.createHash('sha256').update(Date.now().toString()).digest('hex')
+
+  // get the data from the body of the request
+  const data = req.body.data
+
+  // if data is undefined throw an error
+  if (data == undefined){
+    res.status(400).json("There is missing field(s) in the PackageData/AuthenticationToken or it is formed improperly (e.g. Content and URL are both set), or the AuthenticationToken is invalid.")
+  } else {
+    // from data get the URL or content
+    var url = data.URL
+    const content = data.Content
+    const jsprogram = data.JSProgram
+    if ((jsprogram == undefined) || (jsprogram == "")){
+      jsprogram = " "
+    }
+
+    // Current Directory is where files will be extracted
+    const currentDir = "./zips/" + id 
+
+    // Output File is the file that is zipped and uploaded
+    const outputFile = './zips/' + id +'.zip'
+
+    if (content == undefined){
+      if (url == undefined){
+        res.status(400).json("There is missing field(s) in the PackageData/AuthenticationToken or it is formed improperly (e.g. Content and URL are both set), or the AuthenticationToken is invalid.")
+      }
+    } else if ((content != undefined) && (url != undefined)){
+      res.status(400).json("There is missing field(s) in the PackageData/AuthenticationToken or it is formed improperly (e.g. Content and URL are both set), or the AuthenticationToken is invalid.")
+    } else {
+      // if the content method is filled out, perform content extraction
+      if (content != undefined){  
+        // temporary zip to get zip from content
+        tempFile = outputFile
+
+        // gets content into a buffer
+        let buff = Buffer.from(content, 'base64')
+
+        // writes content to a zip file
+        try {
+          fs.writeFileSync(tempFile, buff);   
+          console.log("File written successfully");
+        } catch(err) {
+          res.status(400).json("There is missing field(s) in the PackageData/AuthenticationToken or it is formed improperly (e.g. Content and URL are both set), or the AuthenticationToken is invalid.")
+          console.error(err);
+        }
+
+        // unzip the zip file
+        const zip = new AdmZip(tempFile);
+        zip.extractAllTo(currentDir, /*overwrite*/ true);
+        console.log('Zip extraction complete.');
+
+        // remove the zip file
+        fs.rmSync(tempFile, {recursive: true, force: true})
+    } else {
+        // clone url somewhere on file system
+        if (!fs.existsSync(currentDir)){
+          fs.mkdirSync(currentDir)
+        }
+
+        try {
+          // clone repository
+          shell.exec('git clone ' + url + " " + currentDir + '/temp/')
+          console.log("Repository cloned")
+        } catch (err){
+          console.error(err);
+          res.status(400).json("There is missing field(s) in the PackageData/AuthenticationToken or it is formed improperly (e.g. Content and URL are both set), or the AuthenticationToken is invalid.")
+        }
+    }
+
+      // check if package.json exists
+      if (content != ""){
+        var subfolders = []
+        try {
+          const files = fs.readdirSync(currentDir, { withFileTypes: true });
+          subfolders = files.filter((file) => file.isDirectory()).map((file) => file.name);
+          console.log(subfolders);
+        } catch (err) {
+          console.log(err);
+        }
+        packJSONLocation = currentDir + '/'+ subfolders[0] +'/'
+      } else {
+        packJSONLocation = currentDir + '/temp/'
+      }
+
+      try {
+        // remove .git
+        fs.rmSync(packJSONLocation + ".git", {recursive: true, force: true})
+        console.log('Removed .git');
+        fs.accessSync(packJSONLocation + 'package.json', );
+        console.log('File can be read');
+      } catch (err) {
+        console.error('No Read access');
+      }
+
+      // find url, find name, find version # 
+      json = JSON.parse(fs.readFileSync(packJSONLocation + 'package.json', 'utf8'))
+      version = json.version
+      packageName = json.name
+      if (url == ""){
+        url = json.repository.url;
+      }
+      console.log("URL: ", url);
+      console.log("Version: ", version);
+      console.log("Package Name: ", packageName);
+
+      // check to see if package already exists
+
+      // zip package
+      const zip2 = new AdmZip();
+      const files = fs.readdirSync(currentDir);
+      console.log("Zipping package");
+
+      files.forEach((file) => {
+        const filePath = path.join(currentDir, file);
+        const fileStats = fs.statSync(filePath);
+      
+        if (fileStats.isFile()) {
+          const fileData = fs.readFileSync(filePath);
+          const relativePath = path.relative(currentDir, filePath);
+          zip2.addFile(relativePath, fileData);
+        } else if (fileStats.isDirectory()) {
+          const relativePath = path.relative(currentDir, filePath);
+          zip2.addLocalFolder(filePath, relativePath);
+        }
+      });
+
+      zip2.writeZip(outputFile);
+      console.log("Zip created ");
+
+      //run rating algorithm
+      //rating = rate(id, url, version) 
+      rating = 0
+
+      if (content != ""){
+        packageUrl = ''
+      } else{
+        packageUrl = url
+      }
+      //insert package into databased
+      db.run('INSERT INTO packages (id, packageName, version, url, stars, rating, downloads, JSProgram) VALUES (?, ?, ?, ?, ? ,?, ?, ?)', [id, packageName, version, packageUrl, 0, rating, 0, " "], function(err) {})
+
+      //upload zip file into bucket storage
+      bucket.upload(outputFile, {contentType: 'application/x-zip-compressed'}, function(err, file){
+        if (err) {
+          console.error(err);
+        }
+        
+        //delete zip files
+        fs.rmSync(outputFile, {recursive: true, force: true})
+      })
+
+      fs.rmSync(currentDir, {recursive: true, force: true})
+
+      // return status code
+      res.status(200).json({id})
+  }}
+})
 
 var server=app.listen(80,function() {});
