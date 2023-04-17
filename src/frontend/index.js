@@ -79,7 +79,7 @@ app.get("/", function (req, res) {
 
 //login screen
 app.get("/authenticate", function (req, res) {
-  res.render("login", { errorMessage:""});
+  res.render("authenticate");
 });
 
 //handle user login
@@ -124,8 +124,9 @@ app.put("/authenticate", function (req, res) {
   console.log("Got password: " + password);
   console.log("Got admin: " + isAdmin);
   console.log("Login hash: " + hash)
-  if (username == undefined || password == undefined) {
-    res.status(400).json()
+  if (username == undefined || username == "" || password == undefined || password == "") {
+    res.status(400).json("Please provide a username and password")
+    return;
   }
 
   value = "bearer " + hash
@@ -139,9 +140,10 @@ app.put("/authenticate", function (req, res) {
       db.run('UPDATE users SET hash = ? WHERE id = ?', [hash, row.id], err => {
         if (err)
           error(res, err)
-       res.status(200).json({
-        value
-       })
+        console.log("Authentication success " + username);
+        res.status(200).json({
+          value
+        })
       });
     } else {
       //if not found, prompt not found
@@ -153,6 +155,55 @@ app.put("/authenticate", function (req, res) {
   res.status(501).json
 });
 
+app.put("/register", auth, function (req, res) {
+  console.log("body: " + JSON.stringify(req.body))
+  var username = req.body.User.name
+  var password = req.body.Secret.password
+  var isAdmin  = req.body.User.isAdmin
+  var passHash =crypto.createHash('sha256').update(password).digest('hex')
+  var hash = crypto.createHash('sha256').update(username + password + Date.now().toString()).digest('hex')
+  console.log("Got username: " + username);
+  console.log("Got password: " + password);
+  console.log("Got admin: " + isAdmin);
+  console.log("Login hash: " + hash)
+  if (req.isAdmin != true) {
+    res.status(403).json("Must be admin to complete this action")
+    return;
+  }
+
+  if (username == undefined || username == "" || password == undefined || password == "") {
+    res.status(400).json("Please provide a username and password")
+    return;
+  }
+  
+  //validate the password
+  if (validatePassword(password) == 0) {
+    res.status(400).json("Password must be minimum 8 characters with upper and lower case, and at least one number and special character")
+    return;
+  }
+
+  value = "bearer " + hash
+  //check if username exists
+  db.get('SELECT * FROM users WHERE username = ?', [username], (err, row) => {
+    if (err) {
+      error(res, err)
+    } else if (row) {
+      //if exists, promp login or different username
+      res.status(400).json("Account already exists, please login or choose a different username")
+    } else {
+      //if new username, create new user
+      db.run('INSERT INTO users (username, passHash, hash, admin) VALUES (?, ?, ?, ?)', [username, passHash, hash, isAdmin], function(err) {
+        if (err)
+          error(res, err)
+        res.status(200).json({
+          value
+        })
+      });
+    }
+  })
+
+});
+
 app.delete("/reset", auth, function (req, res) {
   console.log("body: " + JSON.stringify(req.body))
   var username = req.username
@@ -160,8 +211,9 @@ app.delete("/reset", auth, function (req, res) {
   if (username == undefined) {
     res.status(400).json()
   }
-  if (req.isAdmin == false) {
-    res.status(401).json()
+  if (req.isAdmin != true) {
+    res.status(401).json("You do not have permission to reset the registry.")
+    return;
   }
 
   db.run('DELETE FROM users; DELETE FROM packages;')
@@ -218,7 +270,7 @@ app.post("/register", function (req, res) {
 });
 
 //user profile page
-app.get('/profile', auth, (req, res) => {
+app.get('/profile', (req, res) => {
   console.log("Logged in user: "+req.username)
   res.render('profile', {username: req.username})
 });

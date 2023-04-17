@@ -35,13 +35,14 @@ function setupDatabase() {
       )
     `), function(err) {
 
-        var passHash =crypto.createHash('sha256').update('correcthorsebatterystaple123(!__+@**(A’”`;DROP TABLE packages;').digest('hex')
-    
-        db.run('INSERT INTO users (username, admin, passHash) VALUES (?, ?, ?)', 
-        ['ece461defaultadminuser', true, passHash]
-        );
-    
+        
     };
+    var passHash =crypto.createHash('sha256').update('correcthorsebatterystaple123(!__+@**(A’”`;DROP TABLE packages;').digest('hex')
+
+    db.run('INSERT INTO users (username, admin, passHash) VALUES (?, ?, ?)', 
+    ['ece461defaultadminuser', true, passHash]
+    );
+
     db.run('INSERT INTO packages (id, name, version, stars) VALUES (?, ?, ?, ?)', ["underscore", "Underscore", "1.6.9", 0])
     db.run('INSERT INTO packages (id, name, version, stars) VALUES (?, ?, ?, ?)', ["lodash", "Lodash", "1.1.0", 0])
 

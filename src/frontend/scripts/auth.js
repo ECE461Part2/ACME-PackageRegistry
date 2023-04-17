@@ -9,9 +9,10 @@ function auth(req, res, next) {
     // console.log("authHeader: "+authHeader)
     console.log("hash: " + hash)
 
-    // Check if user hash is present in cookies
     if (!hash) {
-        return res.redirect('/login');
+        res.send(400).json()
+        return
+        // return res.redirect('/authenticate');
     }
 
     // Retrieve user from database based on user hash
