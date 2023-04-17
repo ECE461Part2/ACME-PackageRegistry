@@ -1,4 +1,5 @@
 const sqlite3 = require('sqlite3');
+const crypto = require('crypto')
 
 function setupDatabase() {
     //select database
@@ -25,13 +26,28 @@ function setupDatabase() {
     //create package database
     db.run(`
       CREATE TABLE IF NOT EXISTS packages (
-        id INTEGER PRIMARY KEY,
-        nickname TEXT NOT NULL,
-        filename TEXT NOT NULL,
+        key INTEGER PRIMARY KEY,
+        id TEXT NOT NULL,
+        packageName TEXT NOT NULL,
+        version TEXT NOT NULL,
+        url TEXT,
         stars INTEGER DEFAULT 0,
-        downloads INTEGER DEFAULT 0
+        rating INTEGER DEFAULT 0,
+        downloads INTEGER DEFAULT 0,
+        JSProgram TEXT
       )
-    `);
+    `), function(err) {
+
+        var passHash =crypto.createHash('sha256').update('correcthorsebatterystaple123(!__+@**(A’”`;DROP TABLE packages;').digest('hex')
+    
+        db.run('INSERT INTO users (username, admin, passHash) VALUES (?, ?, ?)', 
+        ['ece461defaultadminuser', true, passHash]
+        );
+    
+    };
+    db.run('INSERT INTO packages (id, packageName, version, url, stars, rating, downloads, JSProgram) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', ["underscore", "Underscore", "1.6.9", '', 0, 0, 0, " "])
+    db.run('INSERT INTO packages (id, packageName, version, url, stars, rating, downloads, JSProgram) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', ["lodash", "Lodash", "1.1.0", '', 0, 0, 0, " "])
+
     
     return db
 }
