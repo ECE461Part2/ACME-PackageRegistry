@@ -14,7 +14,6 @@ const { Storage } = require('@google-cloud/storage');
 const { constants } = require('fs/promises');
 const { zip } = require('compressing');
 const { OutgoingMessage } = require('http');
-const { send } = require('process');
 console.log(process.env.BUCKET_CREDENTIALS)
 if (process.env.BUCKET_CREDENTIALS == undefined) {
   console.log("Getting BUCKET_CREDENTIALS")
