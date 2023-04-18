@@ -34,13 +34,35 @@
           }
         })
       })
-      .then(response => response.json())
-      .then(data => {
-        // store the bearer token in localStorage
-        localStorage.setItem('bearerToken', data.token);
-
-        // redirect to profile page
-        window.location.href = '/profile';
+      .then(response => {
+        if (response.status === 200) {
+          return response.text();
+        } else {
+          throw new Error('Invalid credentials');
+        }
+      })
+      .then(token => {
+        // Store the token in local storage or a cookie
+        console.log('Bearer token:', JSON.parse(token).authorization);
+        
+        // Redirect to the profile page with token in header
+        // window.location.href = '/profile';
+        const headers = new Headers();
+        headers.append("authorization", JSON.parse(token).authorization);
+        window.localStorage.setItem('token', token);
+        const options = {
+          method: 'GET',
+          headers: headers,
+        };
+        fetch('/profile', options)
+        .then(response => {
+          if (response.status === 200) {
+            var token = window.localStorage.getItem('token');
+            window.location.href = '/profile';
+          } else {
+            throw new Error('Failed to retrieve user profile');
+          }
+        });
       })
       .catch(error => console.error(error));
     }

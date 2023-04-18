@@ -53,8 +53,6 @@ app.post('/packages', auth, (req, res) => {
   
   const packageQuery = req.body
   console.log("package query: " + JSON.stringify(packageQuery))
-  console.log("package query: " + JSON.stringify(packageQuery.map(pkg => pkg.Name)))
-  console.log(`SELECT * FROM packages WHERE name IN (${packageQuery.map(() => '?').join(', ')})`)
 
   db.all(`SELECT DISTINCT version, name, id FROM packages WHERE name IN (${packageQuery.map(() => '?').join(', ')})`, packageQuery.map(pkg => pkg.Name), (err, rows) => {
     if (err) {
@@ -72,9 +70,42 @@ app.post('/packages', auth, (req, res) => {
 
 });
 
+app.get('/package/:id', auth, (req, res) => {
+  // const packageQuery = req.body
+  // console.log("package query: " + JSON.stringify(packageQuery))
+
+  res.status(200).json({"you get":"downloaded your package bro"})
+
+});
+
+app.put('/package/:id', auth, (req, res) => {
+  // const packageQuery = req.body
+  // console.log("package query: " + JSON.stringify(packageQuery))
+
+  res.status(200).json({"you get":"updated your package bro"})
+
+});
+
+app.delete('/package/:id', auth, (req, res) => {
+  // const packageQuery = req.body
+  // console.log("package query: " + JSON.stringify(packageQuery))
+
+  res.status(200).json({"you get":"deleted your package bro"})
+
+});
+
+app.get('/package/:id/rate', auth, (req, res) => {
+  // const packageQuery = req.body
+  // console.log("package query: " + JSON.stringify(packageQuery))
+
+  res.status(200).json({"you get":"rated your package bro"})
+
+});
+
+
 //login screen
 app.get("/", function (req, res) {
-  res.redirect("/login");
+  res.redirect("/authenticate");
 });
 
 //login screen
@@ -129,7 +160,7 @@ app.put("/authenticate", function (req, res) {
     return;
   }
 
-  value = "bearer " + hash
+  authorization = "bearer " + hash
 
   //look for user
   db.get('SELECT * FROM users WHERE username = ? AND passHash = ?', [username, passHash], (err, row) => {
@@ -142,7 +173,7 @@ app.put("/authenticate", function (req, res) {
           error(res, err)
         console.log("Authentication success " + username);
         res.status(200).json({
-          value
+          authorization
         })
       });
     } else {
@@ -272,7 +303,7 @@ app.post("/register", function (req, res) {
 //user profile page
 app.get('/profile', (req, res) => {
   console.log("Logged in user: "+req.username)
-  res.render('profile', {username: req.username})
+  return res.render('profile', {username: req.username})
 });
 
 //logout page
