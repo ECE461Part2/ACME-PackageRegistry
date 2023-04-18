@@ -14,6 +14,7 @@ const { Storage } = require('@google-cloud/storage');
 const { constants } = require('fs/promises');
 const { zip } = require('compressing');
 const { OutgoingMessage } = require('http');
+const { send } = require('process');
 console.log(process.env.BUCKET_CREDENTIALS)
 if (process.env.BUCKET_CREDENTIALS == undefined) {
   console.log("Getting BUCKET_CREDENTIALS")
@@ -358,6 +359,10 @@ app.get('/upload', auth, function(req, res) {
     res.render('upload', { message: '' });
 });
 
+function send400(res, err) {
+  console.error(err)
+  res.status(400).json("There is missing field(s) in the PackageID/AuthenticationToken or it is formed improperly, or the AuthenticationToken is invalid.")
+}
 
 //_________________________ BJ _ FINISHED
 // DELETE A PACKAGE
@@ -367,7 +372,7 @@ app.delete('/package/:id', auth, (req, res) => {
   // get id of package to be deleted
   const id = req.params.id
   if (id == undefined){
-    res.status(400).json("There is missing field(s) in the PackageID/AuthenticationToken or it is formed improperly, or the AuthenticationToken is invalid.")
+    send400(res, "ID undefined")
   } else{
     console.log("Package ID: " + id)
 
@@ -376,40 +381,29 @@ app.delete('/package/:id', auth, (req, res) => {
     console.log("Package Zip File: " + fileName)
 
     // Check if package id is in the database
-    const sql1 = 'SELECT * FROM packages WHERE id = ?'
-    db.get(sql1, id, function(err, row) {
+    db.get('SELECT * FROM packages WHERE id = ?', id, function(err, row) {
       // if error, return 400
       if (err) {
-        console.error(err)
-        res.status(400).json("There is missing field(s) in the PackageID/AuthenticationToken or it is formed improperly, or the AuthenticationToken is invalid.")
-      // if exists, delete from database and bucket
+        send400(res, err)
       } else if (row) {
+        // if exists, delete from database and bucket
         console.log('Package with ID: ' + id +', exists in the database.')
-        
-        // delete package from database
-        const sql = 'DELETE FROM packages WHERE id = ?'
-
         // Execute the deletion query
-        db.run(sql, id, (err) => {
+        db.run('DELETE FROM packages WHERE id = ?', id, (err) => {
           // if error, return 400
           if (err) {
-            console.error(err)
-            res.status(400).json("There is missing field(s) in the PackageID/AuthenticationToken or it is formed improperly, or the AuthenticationToken is invalid.")
-
+            send400(res, err)
           // else delete package from bucket
           } else {
             console.log('Package with id: ' + id + ', deleted successfully.')
 
-            // file in bucket
-            const file = bucket.file(fileName)
-
             // Delete the file
+            const file = bucket.file(fileName)
             file.delete((err) => {
               // if error return 400
               if (err) {
-                console.error(err)
-                res.status(400).json("There is missing field(s) in the PackageID/AuthenticationToken or it is formed improperly, or the AuthenticationToken is invalid.")
-                // if successful return 200
+                send400(res, err)
+              // if successful return 200
               } else {
                 console.log('Bucket Object: '+ fileName +' deleted successfully.')
                 res.status(200).json("Package is deleted.")
@@ -439,15 +433,13 @@ app.get('/package/:id', auth, (req, res) => {
 
   //check to see if package id is defined
   if (id == undefined) {
-    res.status(400).json("There is missing field(s) in the PackageID/AuthenticationToken or it is formed improperly, or the AuthenticationToken is invalid.")
+    send400(res, "ID undefined")
     // Check if package id is in the database
   } else{
-    const sqlSelect = 'SELECT * FROM packages WHERE id = ?'
-    db.get(sqlSelect, id, function(err, row) {
+    db.get('SELECT * FROM packages WHERE id = ?', id, function(err, row) {
       // if error, return 400
       if (err) {
-        console.error(err)
-        res.status(400).json("There is missing field(s) in the PackageID/AuthenticationToken or it is formed improperly, or the AuthenticationToken is invalid.")
+        send400(res, err)
       // get package json from database
       } else if (row) {
         console.log(JSON.stringify(row))
@@ -457,8 +449,7 @@ app.get('/package/:id', auth, (req, res) => {
         file.download({ destination: './zips/' + fileName }, function(err) {
           // if error, return 400
           if (err) {
-            console.error(err)
-            res.status(400).json("There is missing field(s) in the PackageID/AuthenticationToken or it is formed improperly, or the AuthenticationToken is invalid.")
+            send400(res, err)
           // convert file to base 64 encoded version and send as body in response
           } else {
             console.log('Bucket Object: '+ fileName + ', downloaded to zips folder')
@@ -514,7 +505,7 @@ app.put('/package/:id', (req, res) => {
 
 
   if (id == undefined) {
-    res.status(400).json()
+    send400(res, "ID undefined")
   }
   if (id != ID) {
     res.status(404).json("Package does not exist.")
@@ -535,7 +526,7 @@ app.post('/package', (req, res) => {
 
   // if data is undefined throw an error
   if (data == undefined){
-    res.status(400).json("There is missing field(s) in the PackageData/AuthenticationToken or it is formed improperly (e.g. Content and URL are both set), or the AuthenticationToken is invalid.")
+    send400(res, "Data undefined")
   } else {
     // from data get the URL or content
     var url = data.URL
@@ -551,12 +542,10 @@ app.post('/package', (req, res) => {
     // Output File is the file that is zipped and uploaded
     const outputFile = './zips/' + id +'.zip'
 
-    if (content == undefined){
-      if (url == undefined){
-        res.status(400).json("There is missing field(s) in the PackageData/AuthenticationToken or it is formed improperly (e.g. Content and URL are both set), or the AuthenticationToken is invalid.")
-      }
+    if ((content == undefined) && (url == undefined)){
+      send400(res, "Content and URL undefined")
     } else if ((content != undefined) && (url != undefined)){
-      res.status(400).json("There is missing field(s) in the PackageData/AuthenticationToken or it is formed improperly (e.g. Content and URL are both set), or the AuthenticationToken is invalid.")
+      send400(res, "Content and URL present")
     } else {
       // if the content method is filled out, perform content extraction
       if (content != undefined){  
@@ -571,8 +560,7 @@ app.post('/package', (req, res) => {
           fs.writeFileSync(tempFile, buff);   
           console.log("File written successfully");
         } catch(err) {
-          res.status(400).json("There is missing field(s) in the PackageData/AuthenticationToken or it is formed improperly (e.g. Content and URL are both set), or the AuthenticationToken is invalid.")
-          console.error(err);
+          send400(res, err)
         }
 
         // unzip the zip file
@@ -582,7 +570,7 @@ app.post('/package', (req, res) => {
 
         // remove the zip file
         fs.rmSync(tempFile, {recursive: true, force: true})
-    } else {
+      } else {
         // clone url somewhere on file system
         if (!fs.existsSync(currentDir)){
           fs.mkdirSync(currentDir)
@@ -593,10 +581,9 @@ app.post('/package', (req, res) => {
           shell.exec('git clone ' + url + " " + currentDir + '/temp/')
           console.log("Repository cloned")
         } catch (err){
-          console.error(err);
-          res.status(400).json("There is missing field(s) in the PackageData/AuthenticationToken or it is formed improperly (e.g. Content and URL are both set), or the AuthenticationToken is invalid.")
+          send400(res, err)
         }
-    }
+      }
 
       // check if package.json exists
       if (content != ""){
@@ -684,7 +671,8 @@ app.post('/package', (req, res) => {
 
       // return status code
       res.status(200).json({id})
-  }}
+    }
+  }
 })
 
 var server=app.listen(80,function() {});
