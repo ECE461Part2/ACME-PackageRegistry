@@ -29,8 +29,7 @@ function auth(req, res, next) {
         } else {
             //if not logged in, redirect to login page
             console.log("User hash not found... Redirecting to login")
-            res.send(400).json("Not authorized")
-            // res.redirect('/authenticate')
+            res.status(400).send(JSON.stringify("Not authenticated"))
         }
     })
 }

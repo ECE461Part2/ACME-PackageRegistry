@@ -313,34 +313,122 @@
       const options = {
         method: 'POST',
         headers: headers,
-        body: JSON.stringify(regex)
+        body: JSON.stringify({regex:regex})
       };
 
-      fetch(`/packages?offset=${offset}`, options)
+      fetch(`/package/byRegEx`, options)
       .then((response) => response.json())
       .then((data) => {
-        const responseBox = document.getElementById("packagesResponse");
+        const responseBox = document.getElementById("regexResponse");
         responseBox.innerText = JSON.stringify(data, null, 2);
       })
       .catch((error) => {
-        const responseBox = document.getElementById("packagesResponse");
+        const responseBox = document.getElementById("regexResponse");
         responseBox.innerText = "Error: " + error.message;
       });
     }
 
     function registerUser() {
-      // Placeholder code for sending API request to register a user
       console.log("Sending API request to register user");
+
+      const name = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+      const isAdmin = document.getElementById("isadmin").value;
+
+      const headers = new Headers();
+      const token = localStorage.getItem("token");
+      console.log('Bearer token:', JSON.parse(token).authorization);
+      headers.append("authorization", JSON.parse(token).authorization);
+      headers.append("Content-Type", "application/json")
+
+      const options = {
+        method: 'PUT',
+        headers: headers,
+        body: JSON.stringify({
+          User: {
+            name,
+            isAdmin
+          },
+          Secret: {
+            password
+          }
+        })
+      };
+
+      fetch("/register", options)
+      .then((response) => response.json())
+      .then((data) => {
+        const responseBox = document.getElementById("registerResponse");
+        responseBox.innerText = JSON.stringify(data, null, 2);
+      })
+      .catch((error) => {
+        const responseBox = document.getElementById("registerResponse");
+        responseBox.innerText = "Error: " + error.message;
+      });
     }
 
     function deleteUser() {
-      // Placeholder code for sending API request to delete a user
       console.log("Sending API request to delete user");
+
+      const name = document.getElementById("deleteuser").value;
+
+      const headers = new Headers();
+      const token = localStorage.getItem("token");
+      console.log('Bearer token:', JSON.parse(token).authorization);
+      headers.append("authorization", JSON.parse(token).authorization);
+      headers.append("Content-Type", "application/json")
+
+      const options = {
+        method: 'DELETE',
+        headers: headers,
+        body: JSON.stringify({
+          User: {
+            name
+          }
+        })
+      };
+
+      fetch("/register", options)
+      .then((response) => response.json())
+      .then((data) => {
+        const responseBox = document.getElementById("deleteUserResponse");
+        responseBox.innerText = JSON.stringify(data, null, 2);
+      })
+      .catch((error) => {
+        const responseBox = document.getElementById("deleteUserResponse");
+        responseBox.innerText = "Error: " + error.message;
+      });
     }
 
     function resetSite() {
-      // Placeholder code for sending API request to reset the site
       console.log("Sending API request to reset the site");
+
+      const headers = new Headers();
+      const token = localStorage.getItem("token");
+      console.log('Bearer token:', JSON.parse(token).authorization);
+      headers.append("authorization", JSON.parse(token).authorization);
+      // headers.append("Content-Type", "application/json")
+
+      const options = {
+        method: 'DELETE',
+        headers: headers,
+        body: JSON.stringify({
+          User: {
+            name
+          }
+        })
+      };
+
+      fetch("/reset", options)
+      .then((response) => response.json())
+      .then((data) => {
+        const responseBox = document.getElementById("resetResponse");
+        responseBox.innerText = JSON.stringify(data, null, 2);
+      })
+      .catch((error) => {
+        const responseBox = document.getElementById("resetResponse");
+        responseBox.innerText = "Error: " + error.message;
+      });
     }
   </script>
 
