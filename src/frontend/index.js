@@ -259,6 +259,24 @@ app.delete("/reset", auth, function (req, res) {
 
 });
 
+//search page
+app.post('/package/byRegEx', auth, (req, res) => {
+  const query = req.body.RegEx
+  //query the database for packages matching the search term
+  db.all('SELECT DISTINCT version, id, name FROM packages WHERE name REGEXP ?', `%${query}%`, (err, rows) => {
+    if (err) {
+      console.error(err);
+      res.render('error');
+      return;
+    } if (rows) {
+      res.status(200).json(rows)
+    } else {
+      res.status(404).json()
+    }
+  });
+});
+
+
 //register screen
 app.get("/register", function (req, res) {
   res.render("register", { errorMessage:""});
