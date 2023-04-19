@@ -21,7 +21,6 @@ const bucketName = 'day-package-registry-test';
 const bucket = storage.bucket(bucketName);
 const upload = multer();
 
-x
 var app=express();
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
