@@ -1,0 +1,1320 @@
+Command Successful:    Tue Apr 11 14:07:30 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 116
+Function: loggerMain in cli.cpp being called on 128
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+Command Successful:    Tue Apr 11 14:08:33 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 116
+Function: loggerMain in cli.cpp being called on 128
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+-------------------------------------
+For URL: https://github.com/cloudinary/cloudinary_npm
+Function: getEndpoint called on score.go at line 173
+Function: metrics.Correctness called on score.go at line 228
+Function: metrics.BusFactor called on score.go at line 233
+Function: metrics.RampUp called on score.go at line 238
+Function: metrics.ResponsiveMaintainer called on score.go at line 243
+Function: metrics.License called on score.go at line 248
+Function: metrics.versionPinning called on score.go at line 255
+Function: metrics.codeReviews called on score.go at line 260
+Function: metrics.NetScore called on score.go at line 265
+Function: ratom.Analyze called on main.go at line 150
+Function: SliceStable called on main.go at line 163
+
+Output:
+{https://github.com/cloudinary/cloudinary_npm 0.5828837 0.1 0.4745348 0.8 0.385 1 0.81 true}
+
+
+Command Successful:    Tue Apr 11 14:09:06 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 116
+Function: loggerMain in cli.cpp being called on 128
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+Command Successful:    Tue Apr 11 14:19:18 2023
+Command ran was:       ./run install
+
+________________Debugging Information________________
+Function: main in cli.cpp 'install' command called on line 23
+Function: loggerMain being called on 41
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+Command Successful:    Tue Apr 11 14:19:25 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 116
+Function: loggerMain in cli.cpp being called on 128
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+Command Successful:    Tue Apr 11 14:22:54 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 116
+Function: loggerMain in cli.cpp being called on 128
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+Command Successful:    Tue Apr 11 14:26:07 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 116
+Function: loggerMain in cli.cpp being called on 128
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+Command Successful:    Tue Apr 11 14:27:25 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 116
+Function: loggerMain in cli.cpp being called on 128
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+Command Successful:    Tue Apr 11 14:27:37 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 116
+Function: loggerMain in cli.cpp being called on 128
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+Command Successful:    Tue Apr 11 14:32:10 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 116
+Function: loggerMain in cli.cpp being called on 128
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+-------------------------------------
+For URL: https://github.com/cloudinary/cloudinary_npm
+Function: getEndpoint called on score.go at line 173
+Function: metrics.Correctness called on score.go at line 228
+Function: metrics.BusFactor called on score.go at line 233
+Function: metrics.RampUp called on score.go at line 238
+Function: metrics.ResponsiveMaintainer called on score.go at line 243
+Function: metrics.License called on score.go at line 248
+Function: metrics.versionPinning called on score.go at line 255
+Function: metrics.codeReviews called on score.go at line 260
+Function: metrics.NetScore called on score.go at line 265
+Function: ratom.Analyze called on main.go at line 150
+Function: SliceStable called on main.go at line 163
+
+Output:
+{https://github.com/cloudinary/cloudinary_npm 0.5828837 0.1 0.4745348 0.8 0.385 1 0.81 true}
+
+
+Command Successful:    Tue Apr 11 14:33:02 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 116
+Function: loggerMain in cli.cpp being called on 128
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+-------------------------------------
+For URL: https://github.com/lodash/lodash
+Function: getEndpoint called on score.go at line 173
+Function: metrics.Correctness called on score.go at line 228
+Function: metrics.BusFactor called on score.go at line 233
+Function: metrics.RampUp called on score.go at line 238
+Function: metrics.ResponsiveMaintainer called on score.go at line 243
+Function: metrics.License called on score.go at line 248
+Function: metrics.versionPinning called on score.go at line 255
+Function: metrics.codeReviews called on score.go at line 260
+Function: metrics.NetScore called on score.go at line 265
+Function: ratom.Analyze called on main.go at line 150
+Function: SliceStable called on main.go at line 163
+
+Output:
+{https://github.com/lodash/lodash 0.6459302 0.475 0.6607206 0.8 0.71999997 1 0.21 true}
+
+
+Command Successful:    Tue Apr 11 14:34:12 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 116
+Function: loggerMain in cli.cpp being called on 128
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+-------------------------------------
+For URL: https://www.npmjs.com/package/linalg.js
+Module is not hosted on GitHub or link cannot be found on line 71
+Can't find valid endpoint for input: https://www.npmjs.com/package/linalg.js
+Function: ratom.Analyze called on main.go at line 150
+Function: SliceStable called on main.go at line 163
+
+Output:
+{https://www.npmjs.com/package/linalg.js -1 -1 -1 -1 -1 -1 -1 false}
+
+
+Command Successful:    Tue Apr 11 14:39:57 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 116
+Function: loggerMain in cli.cpp being called on 128
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+-------------------------------------
+For URL: https://github.com/nullivex/nodist
+Function: getEndpoint called on score.go at line 173
+Function: metrics.Correctness called on score.go at line 228
+Function: metrics.BusFactor called on score.go at line 233
+Function: metrics.RampUp called on score.go at line 238
+Function: metrics.ResponsiveMaintainer called on score.go at line 243
+Function: metrics.License called on score.go at line 248
+Function: metrics.versionPinning called on score.go at line 255
+Function: metrics.codeReviews called on score.go at line 260
+Function: metrics.NetScore called on score.go at line 265
+Function: ratom.Analyze called on main.go at line 150
+Function: SliceStable called on main.go at line 163
+
+Output:
+{https://github.com/nullivex/nodist 0.4356607 0.1 0.41068614 0.8 0.417 0.8181818 0.084745765 true}
+
+
+Command Successful:    Tue Apr 11 14:42:41 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 116
+Function: loggerMain in cli.cpp being called on 128
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+-------------------------------------
+For URL: https://github.com/nullivex/nodist
+Function: getEndpoint called on score.go at line 173
+Function: metrics.Correctness called on score.go at line 228
+Function: metrics.BusFactor called on score.go at line 233
+Function: metrics.RampUp called on score.go at line 238
+Function: metrics.ResponsiveMaintainer called on score.go at line 243
+Function: metrics.License called on score.go at line 248
+Function: metrics.versionPinning called on score.go at line 255
+Function: metrics.codeReviews called on score.go at line 260
+Function: metrics.NetScore called on score.go at line 265
+Function: ratom.Analyze called on main.go at line 150
+Function: SliceStable called on main.go at line 163
+
+Output:
+{https://github.com/nullivex/nodist 0.4356607 0.1 0.41068614 0.8 0.417 0.8181818 0.084745765 true}
+
+
+Command Successful:    Tue Apr 11 14:43:59 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 116
+Function: loggerMain in cli.cpp being called on 128
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+-------------------------------------
+For URL: https://github.com/nullivex/nodist
+Function: getEndpoint called on score.go at line 173
+Function: metrics.Correctness called on score.go at line 228
+Function: metrics.BusFactor called on score.go at line 233
+Function: metrics.RampUp called on score.go at line 238
+Function: metrics.ResponsiveMaintainer called on score.go at line 243
+Function: metrics.License called on score.go at line 248
+Function: metrics.versionPinning called on score.go at line 255
+Function: metrics.codeReviews called on score.go at line 260
+Function: metrics.NetScore called on score.go at line 265
+Function: ratom.Analyze called on main.go at line 150
+Function: SliceStable called on main.go at line 163
+
+Output:
+{https://github.com/nullivex/nodist 0.4356607 0.1 0.41068614 0.8 0.417 0.8181818 0.084745765 true}
+
+
+Command Successful:    Tue Apr 11 14:45:28 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 116
+Function: loggerMain in cli.cpp being called on 128
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+-------------------------------------
+For URL: https://github.com/nullivex/nodist
+Function: getEndpoint called on score.go at line 173
+Function: metrics.Correctness called on score.go at line 228
+Function: metrics.BusFactor called on score.go at line 233
+Function: metrics.RampUp called on score.go at line 238
+Function: metrics.ResponsiveMaintainer called on score.go at line 243
+Function: metrics.License called on score.go at line 248
+Function: metrics.versionPinning called on score.go at line 255
+Function: metrics.codeReviews called on score.go at line 260
+Function: metrics.NetScore called on score.go at line 265
+Function: ratom.Analyze called on main.go at line 150
+Function: SliceStable called on main.go at line 163
+
+Output:
+{https://github.com/nullivex/nodist 0.4356607 0.1 0.41068614 0.8 0.417 0.8181818 0.084745765 true}
+
+
+Command Successful:    Tue Apr 11 14:45:50 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 116
+Function: loggerMain in cli.cpp being called on 128
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+Command Successful:    Tue Apr 11 14:46:51 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 116
+Function: loggerMain in cli.cpp being called on 128
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+-------------------------------------
+For URL: https://github.com/nullivex/nodist
+Function: getEndpoint called on score.go at line 173
+Function: metrics.Correctness called on score.go at line 228
+Function: metrics.BusFactor called on score.go at line 233
+Function: metrics.RampUp called on score.go at line 238
+Function: metrics.ResponsiveMaintainer called on score.go at line 243
+Function: metrics.License called on score.go at line 248
+Function: metrics.versionPinning called on score.go at line 255
+Function: metrics.codeReviews called on score.go at line 260
+Function: metrics.NetScore called on score.go at line 265
+Function: ratom.Analyze called on main.go at line 150
+Function: SliceStable called on main.go at line 163
+
+Output:
+{https://github.com/nullivex/nodist 0.4356607 0.1 0.41068614 0.8 0.417 0.8181818 0.084745765 true}
+
+
+Command Successful:    Tue Apr 11 14:47:19 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 116
+Function: loggerMain in cli.cpp being called on 128
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+-------------------------------------
+For URL: https://github.com/nullivex/nodist
+Function: getEndpoint called on score.go at line 173
+Function: metrics.Correctness called on score.go at line 228
+Function: metrics.BusFactor called on score.go at line 233
+Function: metrics.RampUp called on score.go at line 238
+Function: metrics.ResponsiveMaintainer called on score.go at line 243
+Function: metrics.License called on score.go at line 248
+Function: metrics.versionPinning called on score.go at line 255
+Function: metrics.codeReviews called on score.go at line 260
+Function: metrics.NetScore called on score.go at line 265
+Function: ratom.Analyze called on main.go at line 150
+Function: SliceStable called on main.go at line 163
+
+Output:
+{https://github.com/nullivex/nodist 0.3538425 0.1 0.41068614 0.8 0.417 0.27272728 0.084745765 true}
+
+
+Command Successful:    Tue Apr 11 14:50:24 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 116
+Function: loggerMain in cli.cpp being called on 128
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+-------------------------------------
+For URL: https://github.com/nullivex/nodist
+Function: getEndpoint called on score.go at line 173
+Function: metrics.Correctness called on score.go at line 228
+Function: metrics.BusFactor called on score.go at line 233
+Function: metrics.RampUp called on score.go at line 238
+Function: metrics.ResponsiveMaintainer called on score.go at line 243
+Function: metrics.License called on score.go at line 248
+Function: metrics.versionPinning called on score.go at line 255
+Function: metrics.codeReviews called on score.go at line 260
+Function: metrics.NetScore called on score.go at line 265
+Function: ratom.Analyze called on main.go at line 150
+Function: SliceStable called on main.go at line 163
+
+Output:
+{https://github.com/nullivex/nodist 0.42202434 0.1 0.41068614 0.8 0.417 0.72727275 0.084745765 true}
+
+
+Command Successful:    Tue Apr 11 14:51:25 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 116
+Function: loggerMain in cli.cpp being called on 128
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+-------------------------------------
+For URL: https://github.com/nullivex/nodist
+Function: getEndpoint called on score.go at line 173
+Function: metrics.Correctness called on score.go at line 228
+Function: metrics.BusFactor called on score.go at line 233
+Function: metrics.RampUp called on score.go at line 238
+Function: metrics.ResponsiveMaintainer called on score.go at line 243
+Function: metrics.License called on score.go at line 248
+Function: metrics.versionPinning called on score.go at line 255
+Function: metrics.codeReviews called on score.go at line 260
+Function: metrics.NetScore called on score.go at line 265
+Function: ratom.Analyze called on main.go at line 150
+Function: SliceStable called on main.go at line 163
+
+Output:
+{https://github.com/nullivex/nodist 0.42202434 0.1 0.41068614 0.8 0.417 0.72727275 0.084745765 true}
+
+
+Command Successful:    Tue Apr 11 14:52:51 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 116
+Function: loggerMain in cli.cpp being called on 128
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+-------------------------------------
+For URL: https://github.com/nullivex/nodist
+Function: getEndpoint called on score.go at line 173
+Function: metrics.Correctness called on score.go at line 228
+Function: metrics.BusFactor called on score.go at line 233
+Function: metrics.RampUp called on score.go at line 238
+Function: metrics.ResponsiveMaintainer called on score.go at line 243
+Function: metrics.License called on score.go at line 248
+Function: metrics.versionPinning called on score.go at line 255
+Function: metrics.codeReviews called on score.go at line 260
+Function: metrics.NetScore called on score.go at line 265
+Function: ratom.Analyze called on main.go at line 150
+Function: SliceStable called on main.go at line 163
+
+Output:
+{https://github.com/nullivex/nodist 0.42202434 0.1 0.41068614 0.8 0.417 0.72727275 0.084745765 true}
+
+
+Command Successful:    Tue Apr 11 14:53:08 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 116
+Function: loggerMain in cli.cpp being called on 128
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+-------------------------------------
+For URL: https://github.com/nullivex/nodist
+Function: getEndpoint called on score.go at line 173
+Function: metrics.Correctness called on score.go at line 228
+Function: metrics.BusFactor called on score.go at line 233
+Function: metrics.RampUp called on score.go at line 238
+Function: metrics.ResponsiveMaintainer called on score.go at line 243
+Function: metrics.License called on score.go at line 248
+Function: metrics.versionPinning called on score.go at line 255
+Function: metrics.codeReviews called on score.go at line 260
+Function: metrics.NetScore called on score.go at line 265
+Function: ratom.Analyze called on main.go at line 150
+Function: SliceStable called on main.go at line 163
+
+Output:
+{https://github.com/nullivex/nodist 0.42202434 0.1 0.41068614 0.8 0.417 0.72727275 0.084745765 true}
+
+
+Command Successful:    Tue Apr 11 14:54:05 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 116
+Function: loggerMain in cli.cpp being called on 128
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+-------------------------------------
+For URL: https://github.com/nullivex/nodist
+Function: getEndpoint called on score.go at line 173
+Function: metrics.Correctness called on score.go at line 228
+Function: metrics.BusFactor called on score.go at line 233
+Function: metrics.RampUp called on score.go at line 238
+Function: metrics.ResponsiveMaintainer called on score.go at line 243
+Function: metrics.License called on score.go at line 248
+Function: metrics.versionPinning called on score.go at line 255
+Function: metrics.codeReviews called on score.go at line 260
+Function: metrics.NetScore called on score.go at line 265
+Function: ratom.Analyze called on main.go at line 150
+Function: SliceStable called on main.go at line 163
+
+Output:
+{https://github.com/nullivex/nodist 0.42831805 0.1 0.41068614 0.8 0.417 0.7692308 0.084745765 true}
+
+
+Command Successful:    Tue Apr 11 14:55:04 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 116
+Function: loggerMain in cli.cpp being called on 128
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+-------------------------------------
+For URL: https://github.com/nullivex/nodist
+Function: getEndpoint called on score.go at line 173
+Function: metrics.Correctness called on score.go at line 228
+Function: metrics.BusFactor called on score.go at line 233
+Function: metrics.RampUp called on score.go at line 238
+Function: metrics.ResponsiveMaintainer called on score.go at line 243
+Function: metrics.License called on score.go at line 248
+Function: metrics.versionPinning called on score.go at line 255
+Function: metrics.codeReviews called on score.go at line 260
+Function: metrics.NetScore called on score.go at line 265
+Function: ratom.Analyze called on main.go at line 150
+Function: SliceStable called on main.go at line 163
+
+Output:
+{https://github.com/nullivex/nodist 0.41677958 0.1 0.41068614 0.8 0.417 0.6923077 0.084745765 true}
+
+
+Command Successful:    Tue Apr 11 14:55:37 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 116
+Function: loggerMain in cli.cpp being called on 128
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+-------------------------------------
+For URL: https://github.com/nullivex/nodist
+Function: getEndpoint called on score.go at line 173
+Function: metrics.Correctness called on score.go at line 228
+Function: metrics.BusFactor called on score.go at line 233
+Function: metrics.RampUp called on score.go at line 238
+Function: metrics.ResponsiveMaintainer called on score.go at line 243
+Function: metrics.License called on score.go at line 248
+Function: metrics.versionPinning called on score.go at line 255
+Function: metrics.codeReviews called on score.go at line 260
+Function: metrics.NetScore called on score.go at line 265
+Function: ratom.Analyze called on main.go at line 150
+Function: SliceStable called on main.go at line 163
+
+Output:
+{https://github.com/nullivex/nodist 0.42831805 0.1 0.41068614 0.8 0.417 0.7692308 0.084745765 true}
+
+
+Command Successful:    Tue Apr 11 14:56:05 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 116
+Function: loggerMain in cli.cpp being called on 128
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+-------------------------------------
+For URL: https://github.com/nullivex/nodist
+Function: getEndpoint called on score.go at line 173
+Function: metrics.Correctness called on score.go at line 228
+Function: metrics.BusFactor called on score.go at line 233
+Function: metrics.RampUp called on score.go at line 238
+Function: metrics.ResponsiveMaintainer called on score.go at line 243
+Function: metrics.License called on score.go at line 248
+Function: metrics.versionPinning called on score.go at line 255
+Function: metrics.codeReviews called on score.go at line 260
+Function: metrics.NetScore called on score.go at line 265
+Function: ratom.Analyze called on main.go at line 150
+Function: SliceStable called on main.go at line 163
+
+Output:
+{https://github.com/nullivex/nodist 0.42543343 0.1 0.41068614 0.8 0.417 0.75 0.084745765 true}
+
+
+Command Successful:    Tue Apr 11 14:56:31 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 116
+Function: loggerMain in cli.cpp being called on 128
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+-------------------------------------
+For URL: https://github.com/nullivex/nodist
+Function: getEndpoint called on score.go at line 173
+Function: metrics.Correctness called on score.go at line 228
+Function: metrics.BusFactor called on score.go at line 233
+Function: metrics.RampUp called on score.go at line 238
+Function: metrics.ResponsiveMaintainer called on score.go at line 243
+Function: metrics.License called on score.go at line 248
+Function: metrics.versionPinning called on score.go at line 255
+Function: metrics.codeReviews called on score.go at line 260
+Function: metrics.NetScore called on score.go at line 265
+Function: ratom.Analyze called on main.go at line 150
+Function: SliceStable called on main.go at line 163
+
+Output:
+{https://github.com/nullivex/nodist 0.42543343 0.1 0.41068614 0.8 0.417 0.75 0.084745765 true}
+
+
+Command Successful:    Tue Apr 11 14:57:17 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 116
+Function: loggerMain in cli.cpp being called on 128
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+-------------------------------------
+For URL: https://www.npmjs.com/package/linalg.js
+Module is not hosted on GitHub or link cannot be found on line 71
+Can't find valid endpoint for input: https://www.npmjs.com/package/linalg.js
+Function: ratom.Analyze called on main.go at line 150
+Function: SliceStable called on main.go at line 163
+
+Output:
+{https://www.npmjs.com/package/linalg.js -1 -1 -1 -1 -1 -1 -1 false}
+
+
+Command Successful:    Tue Apr 11 15:02:39 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 116
+Function: loggerMain in cli.cpp being called on 128
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+-------------------------------------
+For URL: https://github.com/nullivex/nodist
+Function: getEndpoint called on score.go at line 174
+Function: metrics.Correctness called on score.go at line 229
+Function: metrics.BusFactor called on score.go at line 234
+Function: metrics.RampUp called on score.go at line 239
+Function: metrics.ResponsiveMaintainer called on score.go at line 244
+Function: metrics.License called on score.go at line 249
+Function: metrics.versionPinning called on score.go at line 256
+Function: metrics.codeReviews called on score.go at line 261
+Function: metrics.NetScore called on score.go at line 266
+Function: ratom.Analyze called on main.go at line 150
+Function: SliceStable called on main.go at line 163
+
+Output:
+{https://github.com/nullivex/nodist 0.45276186 0.1 0.52 0.8 0.417 0.75 0.084745765 true}
+
+
+Command Successful:    Tue Apr 11 15:06:39 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 116
+Function: loggerMain in cli.cpp being called on 128
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+-------------------------------------
+For URL: https://www.npmjs.com/package/linalg.js
+Module is not hosted on GitHub or link cannot be found on line 71
+Can't find valid endpoint for input: https://www.npmjs.com/package/linalg.js
+Function: ratom.Analyze called on main.go at line 59
+Function: SliceStable called on main.go at line 72
+
+Output:
+{https://www.npmjs.com/package/linalg.js -1 -1 -1 -1 -1 -1 -1 false}
+
+
+Command Successful:    Tue Apr 11 15:08:36 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 116
+Function: loggerMain in cli.cpp being called on 128
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+-------------------------------------
+For URL: https://www.npmjs.com/package/linalg.js
+Module is not hosted on GitHub or link cannot be found on line 71
+Can't find valid endpoint for input: https://www.npmjs.com/package/linalg.js
+Function: ratom.Analyze called on main.go at line 57
+Function: SliceStable called on main.go at line 70
+
+Output:
+{https://www.npmjs.com/package/linalg.js -1 -1 -1 -1 -1 -1 -1 false}
+
+
+Command Successful:    Tue Apr 11 15:09:15 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 116
+Function: loggerMain in cli.cpp being called on 128
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+-------------------------------------
+For URL: https://www.npmjs.com/package/linalg.js
+Module is not hosted on GitHub or link cannot be found on line 71
+Can't find valid endpoint for input: https://www.npmjs.com/package/linalg.js
+Function: ratom.Analyze called on main.go at line 57
+Function: SliceStable called on main.go at line 70
+
+Output:
+{https://www.npmjs.com/package/linalg.js -1 -1 -1 -1 -1 -1 -1 false}
+
+
+Command Successful:    Tue Apr 11 15:10:44 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 116
+Function: loggerMain in cli.cpp being called on 128
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+-------------------------------------
+For URL: https://www.npmjs.com/package/linalg.js
+Module is not hosted on GitHub or link cannot be found on line 72
+Can't find valid endpoint for input: https://www.npmjs.com/package/linalg.js
+Function: ratom.Analyze called on main.go at line 57
+Function: SliceStable called on main.go at line 70
+
+Output:
+{https://www.npmjs.com/package/linalg.js -1 -1 -1 -1 -1 -1 -1 false}
+
+
+Command Successful:    Tue Apr 11 15:11:07 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 116
+Function: loggerMain in cli.cpp being called on 128
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+-------------------------------------
+For URL: https://www.npmjs.com/package/linalg.js
+Module is not hosted on GitHub or link cannot be found on line 72
+Can't find valid endpoint for input: https://www.npmjs.com/package/linalg.js
+Function: ratom.Analyze called on main.go at line 57
+Function: SliceStable called on main.go at line 70
+
+Output:
+{https://www.npmjs.com/package/linalg.js -1 -1 -1 -1 -1 -1 -1 false}
+
+
+Command Successful:    Tue Apr 11 17:52:46 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 116
+Function: loggerMain in cli.cpp being called on 128
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+-------------------------------------
+For URL: https://www.npmjs.com/package/linalg.js
+Module is not hosted on GitHub or link cannot be found on line 71
+Can't find valid endpoint for input: https://www.npmjs.com/package/linalg.js
+Function: ratom.Analyze called on main.go at line 57
+Function: SliceStable called on main.go at line 70
+
+Output:
+{https://www.npmjs.com/package/linalg.js -1 -1 -1 -1 -1 -1 -1 false}
+
+
+Command Successful:    Tue Apr 11 17:53:43 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 116
+Function: loggerMain in cli.cpp being called on 128
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+-------------------------------------
+For URL: https://www.npmjs.com/package/browserify
+Function: getEndpoint called on score.go at line 176
+Function: metrics.Correctness called on score.go at line 231
+Function: metrics.BusFactor called on score.go at line 236
+Function: metrics.RampUp called on score.go at line 241
+Function: metrics.ResponsiveMaintainer called on score.go at line 246
+Function: metrics.License called on score.go at line 251
+Function: metrics.versionPinning called on score.go at line 258
+Function: metrics.codeReviews called on score.go at line 263
+Function: metrics.NetScore called on score.go at line 268
+Function: ratom.Analyze called on main.go at line 57
+Function: SliceStable called on main.go at line 70
+
+Output:
+{https://www.npmjs.com/package/browserify 0.624 0.35 0.75 0.8 0.71999997 0.75 0.29 true}
+
+
+Command Successful:    Tue Apr 11 17:54:17 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 116
+Function: loggerMain in cli.cpp being called on 128
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+-------------------------------------
+For URL: https://www.npmjs.com/package/express
+Function: getEndpoint called on score.go at line 176
+Function: metrics.Correctness called on score.go at line 231
+Function: metrics.BusFactor called on score.go at line 236
+Function: metrics.RampUp called on score.go at line 241
+Function: metrics.ResponsiveMaintainer called on score.go at line 246
+Function: metrics.License called on score.go at line 251
+Function: metrics.versionPinning called on score.go at line 258
+Function: metrics.codeReviews called on score.go at line 263
+Function: metrics.NetScore called on score.go at line 268
+Function: ratom.Analyze called on main.go at line 57
+Function: SliceStable called on main.go at line 70
+
+Output:
+{https://www.npmjs.com/package/express 0.58415 0.72499996 0.8 0.8 0.526 0 0.51 true}
+
+
+Command Successful:    Tue Apr 11 17:56:39 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 116
+Function: loggerMain in cli.cpp being called on 128
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+-------------------------------------
+For URL: https://www.npmjs.com/package/express
+Function: getEndpoint called on score.go at line 152
+Function: metrics.Correctness called on score.go at line 206
+Function: metrics.BusFactor called on score.go at line 210
+Function: metrics.RampUp called on score.go at line 214
+Function: metrics.ResponsiveMaintainer called on score.go at line 218
+Function: metrics.License called on score.go at line 222
+Function: metrics.versionPinning called on score.go at line 228
+Function: metrics.codeReviews called on score.go at line 232
+Function: metrics.NetScore called on score.go at line 236
+Function: ratom.Analyze called on main.go at line 57
+Function: SliceStable called on main.go at line 70
+
+Output:
+{https://www.npmjs.com/package/express 0.58415 0.72499996 0.8 0.8 0.526 0 0.51 true}
+
+
+Command Successful:    Tue Apr 11 17:57:26 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 116
+Function: loggerMain in cli.cpp being called on 128
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+Command Successful:    Tue Apr 11 17:57:39 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 116
+Function: loggerMain in cli.cpp being called on 128
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+-------------------------------------
+For URL: https://www.npmjs.com/package/express
+Function: getEndpoint called on score.go at line 151
+Function: metrics.Correctness called on score.go at line 205
+Function: metrics.BusFactor called on score.go at line 209
+Function: metrics.RampUp called on score.go at line 213
+Function: metrics.ResponsiveMaintainer called on score.go at line 217
+Function: metrics.License called on score.go at line 221
+Function: metrics.versionPinning called on score.go at line 227
+Function: metrics.codeReviews called on score.go at line 231
+Function: metrics.NetScore called on score.go at line 235
+Function: ratom.Analyze called on main.go at line 57
+Function: SliceStable called on main.go at line 70
+
+Output:
+{https://www.npmjs.com/package/express 0.58415 0.72499996 0.8 0.8 0.526 0 0.51 true}
+
+
+Command Successful:    Wed Apr 12 17:18:16 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 116
+Function: loggerMain in cli.cpp being called on 128
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+-------------------------------------
+For URL: https://www.npmjs.com/package/express
+Function: getEndpoint called on score.go at line 151
+Function: metrics.Correctness called on score.go at line 205
+Function: metrics.BusFactor called on score.go at line 209
+Function: metrics.RampUp called on score.go at line 213
+Function: metrics.ResponsiveMaintainer called on score.go at line 217
+Function: metrics.License called on score.go at line 221
+Function: metrics.versionPinning called on score.go at line 227
+Function: metrics.codeReviews called on score.go at line 231
+Function: metrics.NetScore called on score.go at line 235
+Function: ratom.Analyze called on main.go at line 53
+Function: SliceStable called on main.go at line 66
+
+Output:
+{https://www.npmjs.com/package/express 0.58415 0.72499996 0.8 0.8 0.526 0 0.51 true}
+
+
+Command Successful:    Sun Apr 16 19:43:22 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 116
+Function: loggerMain in cli.cpp being called on 128
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+-------------------------------------
+For URL: https://www.npmjs.com/package/express
+Function: getEndpoint called on score.go at line 151
+Function: metrics.Correctness called on score.go at line 205
+Function: metrics.BusFactor called on score.go at line 209
+Function: metrics.RampUp called on score.go at line 213
+Function: metrics.ResponsiveMaintainer called on score.go at line 217
+Function: metrics.License called on score.go at line 221
+Function: metrics.versionPinning called on score.go at line 227
+Function: metrics.codeReviews called on score.go at line 231
+Function: metrics.NetScore called on score.go at line 235
+Function: ratom.Analyze called on main.go at line 53
+Function: SliceStable called on main.go at line 66
+
+Output:
+{https://www.npmjs.com/package/express 0.60365003 0.72499996 0.8 0.8 0.656 0 0.51 true}
+
+
+Command Successful:    Sun Apr 16 19:45:40 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 116
+Function: loggerMain in cli.cpp being called on 128
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+Command Successful:    Sun Apr 16 19:46:00 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 116
+Function: loggerMain in cli.cpp being called on 128
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+Command Successful:    Sun Apr 16 19:46:27 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 116
+Function: loggerMain in cli.cpp being called on 128
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+Command Successful:    Sun Apr 16 19:49:25 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 116
+Function: loggerMain in cli.cpp being called on 128
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+-------------------------------------
+For URL: https://www.npmjs.com/package/express
+Function: getEndpoint called on score.go at line 151
+Function: metrics.Correctness called on score.go at line 205
+Function: metrics.BusFactor called on score.go at line 209
+Function: metrics.RampUp called on score.go at line 213
+Function: metrics.ResponsiveMaintainer called on score.go at line 217
+Function: metrics.License called on score.go at line 221
+Function: metrics.versionPinning called on score.go at line 227
+Function: metrics.codeReviews called on score.go at line 231
+Function: metrics.NetScore called on score.go at line 235
+Function: ratom.Analyze called on main.go at line 53
+Function: SliceStable called on main.go at line 66
+
+Output:
+{https://www.npmjs.com/package/express 0.60365003 0.72499996 0.8 0.8 0.656 0 0.51 true}
+
+
+Command Successful:    Mon Apr 17 17:11:38 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 116
+Function: loggerMain in cli.cpp being called on 128
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+-------------------------------------
+For URL: https://www.npmjs.com/package/express
+Function: getEndpoint called on score.go at line 151
+Function: metrics.Correctness called on score.go at line 205
+Function: metrics.BusFactor called on score.go at line 209
+Function: metrics.RampUp called on score.go at line 213
+Function: metrics.ResponsiveMaintainer called on score.go at line 217
+Function: metrics.License called on score.go at line 221
+Function: metrics.versionPinning called on score.go at line 227
+Function: metrics.codeReviews called on score.go at line 231
+Function: metrics.NetScore called on score.go at line 235
+Function: ratom.Analyze called on main.go at line 53
+Function: SliceStable called on main.go at line 66
+
+Output:
+{https://www.npmjs.com/package/express 0.60365003 0.72499996 0.8 0.8 0.656 0 0.51 true}
+
+
+-------------------------------------
+For URL: https://github.com/expressjs/express
+Function: getEndpoint called on score.go at line 151
+Function: metrics.Correctness called on score.go at line 205
+Function: metrics.BusFactor called on score.go at line 209
+Function: metrics.RampUp called on score.go at line 213
+Function: metrics.ResponsiveMaintainer called on score.go at line 217
+Function: metrics.License called on score.go at line 221
+Function: metrics.versionPinning called on score.go at line 227
+Function: metrics.codeReviews called on score.go at line 231
+Function: metrics.NetScore called on score.go at line 235
+Function: ratom.Analyze called on main.go at line 53
+Function: SliceStable called on main.go at line 66
+
+Output:
+{https://github.com/expressjs/express 0.60365003 0.72499996 0.8 0.8 0.656 0 0.51 true}
+
+
+Command Successful:    Tue Apr 18 12:54:03 2023
+Command ran was:       ./run build
+
+________________Debugging Information________________
+Function: main in cli.cpp 'build' command called on line 47
+Function: loggerMain being called on 65
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+-------------------------------------
+For URL: https://github.com/expressjs/express
+Function: getEndpoint called on score.go at line 151
+Function: metrics.Correctness called on score.go at line 205
+Function: metrics.BusFactor called on score.go at line 209
+Function: metrics.RampUp called on score.go at line 213
+Function: metrics.ResponsiveMaintainer called on score.go at line 217
+Function: metrics.License called on score.go at line 221
+Function: metrics.versionPinning called on score.go at line 227
+Function: metrics.codeReviews called on score.go at line 231
+Function: metrics.NetScore called on score.go at line 235
+Function: ratom.Analyze called on main.go at line 53
+Function: SliceStable called on main.go at line 66
+
+Output:
+{https://github.com/expressjs/express 0.60365003 0.72499996 0.8 0.8 0.656 0 0.51 true}
+
+
+Command Successful:    Tue Apr 18 13:46:27 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 99
+Function: loggerMain in cli.cpp being called on 111
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+Command Successful:    Tue Apr 18 13:46:40 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 99
+Function: loggerMain in cli.cpp being called on 111
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+Command Successful:    Tue Apr 18 13:47:35 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 99
+Function: loggerMain in cli.cpp being called on 111
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+Command Successful:    Tue Apr 18 13:48:56 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 99
+Function: loggerMain in cli.cpp being called on 111
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+-------------------------------------
+For URL: https://github.com/expressjs/express
+Function: getEndpoint called on score.go at line 151
+Function: metrics.Correctness called on score.go at line 205
+Function: metrics.BusFactor called on score.go at line 209
+Function: metrics.RampUp called on score.go at line 213
+Function: metrics.ResponsiveMaintainer called on score.go at line 217
+Function: metrics.License called on score.go at line 221
+Function: metrics.versionPinning called on score.go at line 227
+Function: metrics.codeReviews called on score.go at line 231
+Function: metrics.NetScore called on score.go at line 235
+Function: ratom.Analyze called on main.go at line 54
+Function: SliceStable called on main.go at line 67
+
+Output:
+{https://github.com/expressjs/express 0.60365003 0.72499996 0.8 0.8 0.656 0 0.51 true}
+
+
+Command Successful:    Tue Apr 18 13:50:24 2023
+Command ran was:       ./run build
+
+________________Debugging Information________________
+Function: main in cli.cpp 'build' command called on line 47
+Function: loggerMain being called on 65
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+Command Successful:    Tue Apr 18 13:51:00 2023
+Command ran was:       ./run build
+
+________________Debugging Information________________
+Function: main in cli.cpp 'build' command called on line 47
+Function: loggerMain being called on 65
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+Command Successful:    Tue Apr 18 13:52:26 2023
+Command ran was:       ./run build
+
+________________Debugging Information________________
+Function: main in cli.cpp 'build' command called on line 47
+Function: loggerMain being called on 65
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+Command Successful:    Tue Apr 18 13:52:33 2023
+Command ran was:       ./run build
+
+________________Debugging Information________________
+Function: main in cli.cpp 'build' command called on line 47
+Function: loggerMain being called on 65
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+Command Successful:    Tue Apr 18 13:52:57 2023
+Command ran was:       ./run build
+
+________________Debugging Information________________
+Function: main in cli.cpp 'build' command called on line 47
+Function: loggerMain being called on 65
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+Command Successful:    Tue Apr 18 13:53:03 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 99
+Function: loggerMain in cli.cpp being called on 111
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+-------------------------------------
+For URL: https://github.com/expressjs/express
+Function: getEndpoint called on score.go at line 151
+Function: metrics.Correctness called on score.go at line 205
+Function: metrics.BusFactor called on score.go at line 209
+Function: metrics.RampUp called on score.go at line 213
+Function: metrics.ResponsiveMaintainer called on score.go at line 217
+Error while trying to find ReadMe in temp/express
+Function: metrics.License called on score.go at line 221
+Function: metrics.versionPinning called on score.go at line 227
+Function: metrics.codeReviews called on score.go at line 231
+Function: metrics.NetScore called on score.go at line 235
+Function: ratom.Analyze called on main.go at line 54
+Function: SliceStable called on main.go at line 67
+
+Output:
+{https://github.com/expressjs/express 0.60365003 0.72499996 0.8 0.8 0.656 0 0.51 false}
+
+
+Command Successful:    Tue Apr 18 13:54:01 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 99
+Function: loggerMain in cli.cpp being called on 111
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+-------------------------------------
+For URL: https://github.com/expressjs/express
+Function: getEndpoint called on score.go at line 151
+Function: metrics.Correctness called on score.go at line 205
+Function: metrics.BusFactor called on score.go at line 209
+Function: metrics.RampUp called on score.go at line 213
+Function: metrics.ResponsiveMaintainer called on score.go at line 217
+Error while trying to find ReadMe in temp/express
+Function: metrics.License called on score.go at line 221
+Function: metrics.versionPinning called on score.go at line 227
+Function: metrics.codeReviews called on score.go at line 231
+Function: metrics.NetScore called on score.go at line 235
+Function: ratom.Analyze called on main.go at line 54
+Function: SliceStable called on main.go at line 67
+
+Output:
+{https://github.com/expressjs/express 0.60365003 0.72499996 0.8 0.8 0.656 0 0.51 false}
+
+
+Command Successful:    Tue Apr 18 13:54:34 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 99
+Function: loggerMain in cli.cpp being called on 111
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+-------------------------------------
+For URL: https://github.com/expressjs/express
+Function: getEndpoint called on score.go at line 151
+Function: metrics.Correctness called on score.go at line 205
+Function: metrics.BusFactor called on score.go at line 209
+Function: metrics.RampUp called on score.go at line 213
+Function: metrics.ResponsiveMaintainer called on score.go at line 217
+Function: metrics.License called on score.go at line 221
+Function: metrics.versionPinning called on score.go at line 227
+Function: metrics.codeReviews called on score.go at line 231
+Function: metrics.NetScore called on score.go at line 235
+Function: ratom.Analyze called on main.go at line 54
+Function: SliceStable called on main.go at line 67
+
+Output:
+{https://github.com/expressjs/express 0.60365003 0.72499996 0.8 0.8 0.656 0 0.51 true}
+
+
+Command Successful:    Tue Apr 18 13:56:17 2023
+Command ran was:       ./run build
+
+________________Debugging Information________________
+Function: main in cli.cpp 'build' command called on line 47
+Function: loggerMain being called on 65
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+Command Successful:    Tue Apr 18 13:56:21 2023
+Command ran was:       ./run install
+
+________________Debugging Information________________
+Function: main in cli.cpp 'install' command called on line 23
+Function: loggerMain being called on 41
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+Command Successful:    Tue Apr 18 13:56:23 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 99
+Function: loggerMain in cli.cpp being called on 111
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+-------------------------------------
+For URL: https://github.com/expressjs/express
+Function: getEndpoint called on score.go at line 151
+Function: metrics.Correctness called on score.go at line 205
+Function: metrics.BusFactor called on score.go at line 209
+Function: metrics.RampUp called on score.go at line 213
+Function: metrics.ResponsiveMaintainer called on score.go at line 217
+Function: metrics.License called on score.go at line 221
+Function: metrics.versionPinning called on score.go at line 227
+Function: metrics.codeReviews called on score.go at line 231
+Function: metrics.NetScore called on score.go at line 235
+Function: ratom.Analyze called on main.go at line 54
+Function: SliceStable called on main.go at line 67
+
+Output:
+{https://github.com/expressjs/express 0.60365003 0.72499996 0.8 0.8 0.656 0 0.51 true}
+
+
+Command Successful:    Tue Apr 18 13:57:01 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 99
+Function: loggerMain in cli.cpp being called on 111
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+-------------------------------------
+For URL: https://github.com/expressjs/express
+Function: getEndpoint called on score.go at line 151
+Function: metrics.Correctness called on score.go at line 205
+Function: metrics.BusFactor called on score.go at line 209
+Function: metrics.RampUp called on score.go at line 213
+Function: metrics.ResponsiveMaintainer called on score.go at line 217
+Function: metrics.License called on score.go at line 221
+Function: metrics.versionPinning called on score.go at line 227
+Function: metrics.codeReviews called on score.go at line 231
+Function: metrics.NetScore called on score.go at line 235
+Function: ratom.Analyze called on main.go at line 54
+Function: SliceStable called on main.go at line 67
+
+Output:
+{https://github.com/expressjs/express 0.60365003 0.72499996 0.8 0.8 0.656 0 0.51 true}
+
+
+Command Successful:    Tue Apr 18 13:57:47 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 99
+Function: loggerMain in cli.cpp being called on 111
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+-------------------------------------
+For URL: https://github.com/expressjs/express
+Function: getEndpoint called on score.go at line 151
+Function: metrics.Correctness called on score.go at line 205
+Function: metrics.BusFactor called on score.go at line 209
+Function: metrics.RampUp called on score.go at line 213
+Function: metrics.ResponsiveMaintainer called on score.go at line 217
+Function: metrics.License called on score.go at line 221
+Function: metrics.versionPinning called on score.go at line 227
+Function: metrics.codeReviews called on score.go at line 231
+Function: metrics.NetScore called on score.go at line 235
+Function: ratom.Analyze called on main.go at line 54
+Function: SliceStable called on main.go at line 67
+
+Output:
+{https://github.com/expressjs/express 0.60365003 0.72499996 0.8 0.8 0.656 0 0.51 true}
+
+
+-------------------------------------
+For URL: https://github.com/expressjs/express
+Function: getEndpoint called on score.go at line 151
+Function: metrics.Correctness called on score.go at line 205
+Function: metrics.BusFactor called on score.go at line 209
+Function: metrics.RampUp called on score.go at line 213
+Function: metrics.ResponsiveMaintainer called on score.go at line 217
+Function: metrics.License called on score.go at line 221
+Function: metrics.versionPinning called on score.go at line 227
+Function: metrics.codeReviews called on score.go at line 231
+Function: metrics.NetScore called on score.go at line 235
+Function: ratom.Analyze called on main.go at line 54
+Function: SliceStable called on main.go at line 67
+
+Output:
+{https://github.com/expressjs/express 0.52715003 0.72499996 0.8 0.8 0.656 0 0 true}
+
+
+-------------------------------------
+For URL: https://github.com/expressjs/express
+Function: getEndpoint called on score.go at line 151
+Function: metrics.Correctness called on score.go at line 205
+Function: metrics.BusFactor called on score.go at line 209
+Function: metrics.RampUp called on score.go at line 213
+Function: metrics.ResponsiveMaintainer called on score.go at line 217
+Function: metrics.License called on score.go at line 221
+Function: metrics.versionPinning called on score.go at line 227
+Function: metrics.codeReviews called on score.go at line 231
+Function: metrics.NetScore called on score.go at line 235
+Function: ratom.Analyze called on main.go at line 54
+Function: SliceStable called on main.go at line 67
+
+Output:
+{https://github.com/expressjs/express 0.60365003 0.72499996 0.8 0.8 0.656 0 0.51 true}
+
+
+-------------------------------------
+For URL: https://github.com/expressjs/express
+Function: getEndpoint called on score.go at line 151
+Function: metrics.Correctness called on score.go at line 205
+Function: metrics.BusFactor called on score.go at line 209
+Function: metrics.RampUp called on score.go at line 213
+Function: metrics.ResponsiveMaintainer called on score.go at line 217
+Function: metrics.License called on score.go at line 221
+Function: metrics.versionPinning called on score.go at line 227
+Function: metrics.codeReviews called on score.go at line 231
+Function: metrics.NetScore called on score.go at line 235
+Function: ratom.Analyze called on main.go at line 54
+Function: SliceStable called on main.go at line 67
+
+Output:
+{https://github.com/expressjs/express 0.60365003 0.72499996 0.8 0.8 0.656 0 0.51 true}
+
+
