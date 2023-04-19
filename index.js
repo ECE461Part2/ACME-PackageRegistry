@@ -51,8 +51,6 @@ app.post('/packages', auth, (req, res) => {
   
   const packageQuery = req.body
   console.log("package query: " + JSON.stringify(packageQuery))
-  console.log("package query: " + JSON.stringify(packageQuery.map(pkg => pkg.Name)))
-  console.log(`SELECT * FROM packages WHERE name IN (${packageQuery.map(() => '?').join(', ')})`)
 
   db.all(`SELECT DISTINCT version, name, id FROM packages WHERE name IN (${packageQuery.map(() => '?').join(', ')})`, packageQuery.map(pkg => pkg.Name), (err, rows) => {
     if (err) {
@@ -70,9 +68,42 @@ app.post('/packages', auth, (req, res) => {
 
 });
 
+app.get('/package/:id', auth, (req, res) => {
+  // const packageQuery = req.body
+  // console.log("package query: " + JSON.stringify(packageQuery))
+
+  res.status(200).json({"you get":"downloaded your package bro"})
+
+});
+
+app.put('/package/:id', auth, (req, res) => {
+  // const packageQuery = req.body
+  // console.log("package query: " + JSON.stringify(packageQuery))
+
+  res.status(200).json({"you get":"updated your package bro"})
+
+});
+
+app.delete('/package/:id', auth, (req, res) => {
+  // const packageQuery = req.body
+  // console.log("package query: " + JSON.stringify(packageQuery))
+
+  res.status(200).json({"you get":"deleted your package bro"})
+
+});
+
+app.get('/package/:id/rate', auth, (req, res) => {
+  // const packageQuery = req.body
+  // console.log("package query: " + JSON.stringify(packageQuery))
+
+  res.status(200).json({"you get":"rated your package bro"})
+
+});
+
+
 //login screen
 app.get("/", function (req, res) {
-  res.redirect("/login");
+  res.redirect("/authenticate");
 });
 
 //login screen
@@ -126,7 +157,7 @@ app.put("/authenticate", function (req, res) {
     return;
   }
 
-  value = "bearer " + hash
+  authorization = "bearer " + hash
 
   //look for user
   db.get('SELECT * FROM users WHERE username = ? AND passHash = ?', [username, passHash], (err, row) => {
@@ -139,7 +170,7 @@ app.put("/authenticate", function (req, res) {
           error(res, err)
         console.log("Authentication success " + username);
         res.status(200).json({
-          value
+          authorization
         })
       });
     } else {
@@ -164,7 +195,7 @@ app.put("/register", auth, function (req, res) {
   console.log("Got admin: " + isAdmin);
   console.log("Login hash: " + hash)
   if (req.isAdmin != true) {
-    res.status(403).json("Must be admin to complete this action")
+    res.status(401).json("Must be admin to complete this action")
     return;
   }
 
@@ -201,6 +232,40 @@ app.put("/register", auth, function (req, res) {
 
 });
 
+app.delete("/register", auth, function (req, res) {
+  console.log("body: " + JSON.stringify(req.body))
+  var username = req.body.User.name
+  console.log("Got username: " + username);
+  if (req.isAdmin != true && req.username != username) {
+    res.status(401).json("Must be admin or this user to complete this action")
+    return;
+  }
+
+  if (username == undefined || username == "") {
+    res.status(400).json("Please provide a username")
+    return;
+  }
+
+  //check if username exists
+  db.get('SELECT * FROM users WHERE username = ?', [username], (err, row) => {
+    if (err) {
+      error(res, err)
+    } else if (row) {
+      //if exists, promp login or different username
+      db.run('DELETE FROM users WHERE username = ?', [username], function(err) {
+        if (err) {
+          error(res, err)
+        } else {
+          res.status(200).json("Deleted user")
+        }
+      });
+    } else {
+      res.status(400).json("Account does not exist, please choose a different username")
+    }
+  })
+
+});
+
 app.delete("/reset", auth, function (req, res) {
   console.log("body: " + JSON.stringify(req.body))
   var username = req.username
@@ -213,22 +278,32 @@ app.delete("/reset", auth, function (req, res) {
     return;
   }
 
-  db.run('DELETE FROM users; DELETE FROM packages;')
-  console.log("Reset users and packages")
-
-  var passHash =crypto.createHash('sha256').update('correcthorsebatterystaple123(!__+@**(A’”`;DROP TABLE packages;').digest('hex')
-
-  db.run('INSERT INTO users (username, admin, passHash) VALUES (?, ?, ?)', 
-  ['ece461defaultadminuser', true, passHash]
-  );
-  res.send(200).json()
+  db.run('DELETE FROM users; DELETE FROM packages;', function(err) {
+    if (err) {
+      error(res, err)
+    } else {
+      console.log("Reset users and packages")
+    
+      var passHash =crypto.createHash('sha256').update('correcthorsebatterystaple123(!__+@**(A’”`;DROP TABLE packages;').digest('hex')
+    
+      db.run('INSERT INTO users (username, admin, passHash) VALUES (?, ?, ?)', ['ece461defaultadminuser', true, passHash], function(err) {
+        if (err) {
+          error(res, err)
+        } else {
+          res.status(200).send(JSON.stringify({ message: "Reset users and packages" }));
+        }
+      });
+    }
+  })
 
 });
 
 //search page
 app.post('/package/byRegEx', auth, (req, res) => {
+  console.log("body: " + JSON.stringify(req.body))
   const query = req.body.RegEx
   //query the database for packages matching the search term
+  //TODO: get regexp working
   db.all('SELECT DISTINCT version, id, name FROM packages WHERE name REGEXP ?', `%${query}%`, (err, rows) => {
     if (err) {
       console.error(err);
@@ -286,7 +361,7 @@ app.post("/register", function (req, res) {
 //user profile page
 app.get('/profile', (req, res) => {
   console.log("Logged in user: "+req.username)
-  res.render('profile', {username: req.username})
+  return res.render('profile', {username: req.username})
 });
 
 //logout page
