@@ -13,13 +13,13 @@ if (process.env.BUCKET_CREDENTIALS == undefined) {
 console.log("BUCKET_CREDENTIALS: ", process.env.BUCKET_CREDENTIALS)
 console.log("GITHUB_TOKEN: ", process.env.GITHUB_TOKEN)
 
-// const storage = new Storage({
-//   projectId: 'registrylogintest',
-//   credentials: JSON.parse(process.env.BUCKET_CREDENTIALS)
-// });
-// const bucketName = 'day-package-registry-test';
-// const bucket = storage.bucket(bucketName);
-// const upload = multer();
+const storage = new Storage({
+  projectId: 'registrylogintest',
+  credentials: JSON.parse(process.env.BUCKET_CREDENTIALS)
+});
+const bucketName = 'day-package-registry-test';
+const bucket = storage.bucket(bucketName);
+const upload = multer();
 
 var app=express();
 app.set("view engine", "ejs");
