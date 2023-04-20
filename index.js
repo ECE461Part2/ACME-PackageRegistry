@@ -80,8 +80,69 @@ app.put('/package/:id', auth, (req, res) => {
   // const packageQuery = req.body
   // console.log("package query: " + JSON.stringify(packageQuery))
 
-  res.status(200).json({"you get":"updated your package bro"})
+    console.log("\nPackage Download Request")
 
+  // get package id
+  const id = req.params.id
+  console.log("File ID: ", id)
+
+  // get fileName of package
+  const fileName = id + '.zip'
+
+  //check to see if package id is defined
+  if (id == undefined) {
+    res.status(400).json("There is missing field(s) in the PackageID/AuthenticationToken or it is formed improperly, or the AuthenticationToken is invalid.")
+    // Check if package id is in the database
+  } else{
+    const sqlSelect = 'SELECT * FROM packages WHERE id = ?'
+    db.get(sqlSelect, id, function(err, row) {
+      // if error, return 400
+      if (err) {
+        console.error(err)
+        res.status(400).json("There is missing field(s) in the PackageID/AuthenticationToken or it is formed improperly, or the AuthenticationToken is invalid.")
+      // get package json from database
+      } else if (row) {
+        db.run('UPDATE packages SET downloads = downloads + 1 WHERE id = ?', [id], function(err) {})
+        console.log(JSON.stringify(row))
+
+        // get file from bucket and download to zips folder
+        const file = bucket.file(fileName)
+        file.download({ destination: './rating/' + fileName }, function(err) {
+          // if error, return 400
+          if (err) {
+            console.error(err)
+            res.status(400).json("There is missing field(s) in the PackageID/AuthenticationToken or it is formed improperly, or the AuthenticationToken is invalid.")
+          // convert file to base 64 encoded version and send as body in response
+          } else {
+            console.log('Bucket Object: '+ fileName + ', downloaded to zips folder')
+            const zipBuff = fs.readFileSync('./rating/' + fileName)
+            const base64Content = zipBuff.toString('base64')
+            //console.log(base64Content)
+            
+            //delete zip files
+            fs.rmSync('./rating/' + fileName, {recursive: true, force: true})
+            
+            //output
+            const packageName = row.name
+            const version = row.version
+            const packageID = row.id
+            const url = row.url
+            const jsprogram = row.JSProgram
+            if (url == ""){
+              console.log("Package initially uploaded as Content: Sending Response.")
+              res.status(200).send({metadata:{Name: packageName, Version: version, ID: packageID}, data:{Content:base64Content, JSProgram: jsprogram}});
+            } else {
+              console.log("Package initially uploaded as URL: Sending Response.")
+              res.status(200).send(JSON.stringify({metadata:{Name: packageName, Version: version, ID: packageID}, data:{Content:base64Content, URL: row.url,  JSProgram: jsprogram}}));
+            }
+          }})
+      // if package does not exist return 404
+      }else{
+        console.log('Package with ID: ' + id + ', does not exist in the database.')
+        res.status(404).json("Package does not exist.")
+      }
+    })
+  }
 });
 
 app.delete('/package/:id', auth, (req, res) => {
