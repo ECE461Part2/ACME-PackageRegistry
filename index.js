@@ -274,7 +274,7 @@ app.post('/package/byRegEx', auth, (req, res) => {
   const query = req.body.regex
   console.log(query)
   
-  // const regex = new re2(query)
+  const regex = new re2(query)
 
   // Get all package names
   db.all("SELECT DISTINCT name FROM packages", (err, rows) => {
