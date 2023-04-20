@@ -5,12 +5,13 @@ const multer = require('multer');
 const setupDatabase = require('./scripts/databaseSetup')
 const auth = require('./scripts/auth')
 const { Storage } = require('@google-cloud/storage');
-console.log(process.env.BUCKET_CREDENTIALS)
+const re2 = require('re2');
 if (process.env.BUCKET_CREDENTIALS == undefined) {
   console.log("Getting BUCKET_CREDENTIALS")
   require('dotenv').config({path:__dirname+'/./../../../.env'})
 }
-console.log(process.env.BUCKET_CREDENTIALS)
+console.log("BUCKET_CREDENTIALS: ", process.env.BUCKET_CREDENTIALS)
+console.log("GITHUB_TOKEN: ", process.env.GITHUB_TOKEN)
 
 const storage = new Storage({
   projectId: 'registrylogintest',
@@ -19,7 +20,6 @@ const storage = new Storage({
 const bucketName = 'day-package-registry-test';
 const bucket = storage.bucket(bucketName);
 const upload = multer();
-
 
 var app=express();
 app.set("view engine", "ejs");
@@ -101,17 +101,17 @@ app.get('/package/:id/rate', auth, (req, res) => {
 });
 
 //login screen
-app.get("/", function (req, res) {
+app.get("/", (req, res) => {
   res.redirect("/authenticate");
 });
 
 //login screen
-app.get("/authenticate", function (req, res) {
+app.get("/authenticate", (req, res) => {
   res.render("authenticate");
 });
 
 //handle user login
-app.put("/authenticate", function (req, res) {
+app.put("/authenticate", (req, res) => {
   console.log("body: " + JSON.stringify(req.body))
   var username = req.body.User.name
   var password = req.body.Secret.password
@@ -153,7 +153,7 @@ app.put("/authenticate", function (req, res) {
   res.status(501).json
 });
 
-app.put("/register", auth, function (req, res) {
+app.put("/register", auth, (req, res) => {
   console.log("body: " + JSON.stringify(req.body))
   var username = req.body.User.name
   var password = req.body.Secret.password
@@ -202,7 +202,7 @@ app.put("/register", auth, function (req, res) {
 
 });
 
-app.delete("/register", auth, function (req, res) {
+app.delete("/register", auth, (req, res) => {
   console.log("body: " + JSON.stringify(req.body))
   var username = req.body.User.name
   console.log("Got username: " + username);
@@ -236,7 +236,7 @@ app.delete("/register", auth, function (req, res) {
 
 });
 
-app.delete("/reset", auth, function (req, res) {
+app.delete("/reset", auth, (req, res) => {
   console.log("body: " + JSON.stringify(req.body))
   var username = req.username
   console.log("Got username: " + username);
@@ -271,20 +271,33 @@ app.delete("/reset", auth, function (req, res) {
 //search page
 app.post('/package/byRegEx', auth, (req, res) => {
   console.log("body: " + JSON.stringify(req.body))
-  const query = req.body.RegEx
-  //query the database for packages matching the search term
-  //TODO: get regexp working
-  db.all('SELECT DISTINCT version, id, name FROM packages WHERE name REGEXP ?', `%${query}%`, (err, rows) => {
+  const query = req.body.regex
+  console.log(query)
+  
+  // const regex = new re2(query)
+
+  // Get all package names
+  db.all("SELECT DISTINCT name FROM packages", (err, rows) => {
     if (err) {
-      console.error(err);
-      res.render('error');
-      return;
-    } if (rows) {
-      res.status(200).json(rows)
-    } else {
-      res.status(404).json()
+      console.error(err.message)
+      return
     }
-  });
+
+    // Filter package names by regex
+    console.log(rows)
+    const matchedNames = rows.filter(row => regex.test(row.name)).map(row => row.name)
+    console.log(matchedNames)
+
+    // Get package details for matched names
+    db.all(`SELECT DISTINCT name, version FROM Packages WHERE Name IN (${matchedNames.map(() => '?').join(',')})`, matchedNames, (err, rows) => {
+      if (err) {
+        error(res, err)
+        return
+      }
+      res.status(200).send(JSON.stringify(rows))
+    })
+  })
+
 });
 
 //user profile page
