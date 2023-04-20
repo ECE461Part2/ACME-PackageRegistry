@@ -10,7 +10,6 @@ import (
 	"ece461-project-cli/ratom"
 	"ece461-project-cli/ratom/metrics"
 	"golang.org/x/oauth2"
-	
 )
 
 func main() {
@@ -47,15 +46,15 @@ func main() {
 
 	// Read file line by line
 	// for scanner.Scan() {
-		// url := scanner.Text()
-		metrics.Functions = append(metrics.Functions, "-------------------------------------")
-		metrics.Functions = append(metrics.Functions, "For URL: "+inputString_url)
-		module := ratom.Analyze(inputString_url, httpClient, dir)
-		lineNumb := metrics.File_line()
-		metrics.Functions = append(metrics.Functions, "Function: ratom.Analyze called on main.go at line "+lineNumb)
+	// url := scanner.Text()
+	metrics.Functions = append(metrics.Functions, "-------------------------------------")
+	metrics.Functions = append(metrics.Functions, "For URL: "+inputString_url)
+	module := ratom.Analyze(inputString_url, httpClient, dir)
+	lineNumb := metrics.File_line()
+	metrics.Functions = append(metrics.Functions, "Function: ratom.Analyze called on main.go at line "+lineNumb)
 
-		modules = append(modules, module)
-		//urls = append(urls, url)
+	modules = append(modules, module)
+	//urls = append(urls, url)
 	// }
 
 	// os.RemoveAll("temp")
@@ -72,7 +71,7 @@ func main() {
 		if modules[a].License {
 			b = 1
 		}
-		fmt.Printf("{\"URL\":\"%s\", \"NET_SCORE\":%1.2f, \"RAMP_UP_SCORE\":%1.2f, \"CORRECTNESS_SCORE\":%1.2f, \"BUS_FACTOR_SCORE\":%1.2f, \"RESPONSIVE_MAINTAINER_SCORE\":%1.2f, \"VERSION PINNING SCORE\":%1.2f, \"CODE REVIEWS SCORE\":%1.2f, \"LICENSE_SCORE\":%d}\n", modules[a].Url, modules[a].NetScore, modules[a].RampUp, modules[a].Correctness, modules[a].BusFactor, modules[a].RespMaint, modules[a].VersionPinning_score, modules[a].CodeReviews_score, b)
+		fmt.Printf("{\"NetScore\":%1.2f, \"RampUp\":%1.2f, \"Correctness\":%1.2f, \"BusFactor\":%1.2f, \"ResponsiveMaintainer\":%1.2f, \"GoodPinningPractice\":%1.2f, \"PullRequest\":%1.2f, \"LicenseScore\":%d}\n", modules[a].NetScore, modules[a].RampUp, modules[a].Correctness, modules[a].BusFactor, modules[a].RespMaint, modules[a].VersionPinning_score, modules[a].CodeReviews_score, b)
 		//fmt.Println(modules[a])
 	}
 
