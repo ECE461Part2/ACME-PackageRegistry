@@ -1,7 +1,6 @@
 var express=require('express');
 var bodyParser = require('body-parser');
 const crypto = require('crypto')
-const cookieParser = require('cookie-parser');
 const multer = require('multer');
 const AdmZip = require("adm-zip");
 const {exec} = require('child_process')
@@ -11,10 +10,6 @@ const fs = require('fs');
 const setupDatabase = require('./scripts/databaseSetup')
 const auth = require('./scripts/auth')
 const { Storage } = require('@google-cloud/storage');
-const { constants } = require('fs/promises');
-const { zip } = require('compressing');
-const { OutgoingMessage } = require('http');
-const { ChildProcess } = require('child_process');
 console.log(process.env.BUCKET_CREDENTIALS)
 if (process.env.BUCKET_CREDENTIALS == undefined) {
   console.log("Getting BUCKET_CREDENTIALS")
@@ -70,10 +65,10 @@ app.post('/packages', auth, (req, res) => {
   const packageQuery = req.body
   console.log("package query: " + JSON.stringify(packageQuery))
   console.log("package query: " + JSON.stringify(packageQuery.map(pkg => pkg.Name)))
-  console.log(`SELECT * FROM packages WHERE name IN (${packageQuery.map(() => '?').join(', ')})`)
+  console.log(`SELECT * FROM packages WHERE packageName IN (${packageQuery.map(() => '?').join(', ')})`)
 
 
-  db.all(`SELECT DISTINCT version, name, id FROM packages WHERE name IN (${packageQuery.map(() => '?').join(', ')})`, packageQuery.map(pkg => pkg.Name), (err, rows) => {
+  db.all(`SELECT DISTINCT version, packageName, id FROM packages WHERE packageName IN (${packageQuery.map(() => '?').join(', ')})`, packageQuery.map(pkg => pkg.packageName), (err, rows) => {
     if (err) {
       console.error(err);
       return;
@@ -82,7 +77,7 @@ app.post('/packages', auth, (req, res) => {
       if (rows.length > 50) {
         res.status(413).json()
       }
-      // const filteredRows = rows.map(row => ({ version: row.version, name: row.name }));
+      // const filteredRows = rows.map(row => ({ version: row.version, packageName: row.packageName }));
       res.status(200).json(rows)
     }
   })
@@ -296,7 +291,7 @@ app.post('/package/byRegEx', auth, (req, res) => {
   const query = req.body.RegEx
   //query the database for packages matching the search term
   //TODO: get regexp working
-  db.all('SELECT DISTINCT version, id, name FROM packages WHERE name REGEXP ?', `%${query}%`, (err, rows) => {
+  db.all('SELECT DISTINCT version, id, packageName FROM packages WHERE packageName REGEXP ?', `%${query}%`, (err, rows) => {
     if (err) {
       console.error(err);
       res.render('error');
