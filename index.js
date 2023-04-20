@@ -68,15 +68,13 @@ app.post('/packages', auth, (req, res) => {
 
 });
 
-app.get('/package/:id', auth, (req, res) => {
+app.put('/package/:id', auth, (req, res) => {
   // const packageQuery = req.body
   // console.log("package query: " + JSON.stringify(packageQuery))
 
-  res.status(200).json({"you get":"downloaded your package bro"})
-
 });
 
-app.put('/package/:id', auth, (req, res) => {
+app.get('/package/:id', auth, (req, res) => {
   // const packageQuery = req.body
   // console.log("package query: " + JSON.stringify(packageQuery))
 
@@ -130,7 +128,7 @@ app.put('/package/:id', auth, (req, res) => {
             const jsprogram = row.JSProgram
             if (url == ""){
               console.log("Package initially uploaded as Content: Sending Response.")
-              res.status(200).send({metadata:{Name: packageName, Version: version, ID: packageID}, data:{Content:base64Content, JSProgram: jsprogram}});
+              res.status(200).send(JSON.stringify({metadata:{Name: packageName, Version: version, ID: packageID}, data:{Content:base64Content, JSProgram: jsprogram}}));
             } else {
               console.log("Package initially uploaded as URL: Sending Response.")
               res.status(200).send(JSON.stringify({metadata:{Name: packageName, Version: version, ID: packageID}, data:{Content:base64Content, URL: row.url,  JSProgram: jsprogram}}));
@@ -146,10 +144,68 @@ app.put('/package/:id', auth, (req, res) => {
 });
 
 app.delete('/package/:id', auth, (req, res) => {
-  // const packageQuery = req.body
-  // console.log("package query: " + JSON.stringify(packageQuery))
+  console.log("\nPackage Deletion Request")
 
-  res.status(200).json({"you get":"deleted your package bro"})
+  // get id of package to be deleted
+  const id = req.params.id
+  if (id == undefined){
+    res.status(400).json("There is missing field(s) in the PackageID/AuthenticationToken or it is formed improperly, or the AuthenticationToken is invalid.")
+  } else{
+    console.log("Package ID: " + id)
+
+    // get filename of zip to be deleted
+    const fileName = id + '.zip'
+    console.log("Package Zip File: " + fileName)
+
+    // Check if package id is in the database
+    const sql1 = 'SELECT * FROM packages WHERE id = ?'
+    db.get(sql1, id, function(err, row) {
+      // if error, return 400
+      if (err) {
+        console.error(err)
+        res.status(400).json("There is missing field(s) in the PackageID/AuthenticationToken or it is formed improperly, or the AuthenticationToken is invalid.")
+      // if exists, delete from database and bucket
+      } else if (row) {
+        console.log('Package with ID: ' + id +', exists in the database.')
+        
+        // delete package from database
+        const sql = 'DELETE FROM packages WHERE id = ?'
+
+        // Execute the deletion query
+        db.run(sql, id, (err) => {
+          // if error, return 400
+          if (err) {
+            console.error(err)
+            res.status(400).json("There is missing field(s) in the PackageID/AuthenticationToken or it is formed improperly, or the AuthenticationToken is invalid.")
+
+          // else delete package from bucket
+          } else {
+            console.log('Package with id: ' + id + ', deleted successfully.')
+
+            // file in bucket
+            const file = bucket.file(fileName)
+
+            // Delete the file
+            file.delete((err) => {
+              // if error return 400
+              if (err) {
+                console.error(err)
+                res.status(400).json("There is missing field(s) in the PackageID/AuthenticationToken or it is formed improperly, or the AuthenticationToken is invalid.")
+                // if successful return 200
+              } else {
+                console.log('Bucket Object: '+ fileName +' deleted successfully.')
+                res.status(200).json("Package is deleted.")
+              }
+            })
+          }
+        })
+      // if file does not exist, return 404
+      } else {
+        console.log('Package with ID: ' + id + ', does not exist in the database.')
+        res.status(404).json("Package does not exist.")
+      }
+    })
+  } 
 
 });
 
