@@ -94,24 +94,7 @@ int main(int argc, char *argv[]) {
     }
     else {
         // Validating file name input - changed by Luke Diehm on 3/2
-
         string input = argv[1];
-        // FILE *fileptr; 
-        // fileptr = fopen(argv[1], "r");
-
-        // if (!fileptr) {
-        //     free(fileptr);
-        //     fprintf(stdout, "Command did not match any of the following: \n./run build\n./run install\n./run URL_FILE");
-        //     fprintf(stdout, "\nor the file could not be found in the given path."); 
-
-        //     if (atoi(logLevel) != 0){
-        //         logError(1, argv[1]);
-        //     } 
-        //     exit(EXIT_FAILURE);
-        // }
-
-        // Perform running 
-        // fclose(fileptr);
 
         // Running file analysis
         std::string lineN = std::to_string(__LINE__ - 1); 
@@ -128,7 +111,7 @@ int main(int argc, char *argv[]) {
         }
         loggerMain(runURL, lineNumbers);
 
-        url(argv[1]);   
+        url(argv[1], argv[2]);   
     }
      
     exit(EXIT_SUCCESS);

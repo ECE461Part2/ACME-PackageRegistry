@@ -28,9 +28,9 @@ void install_tests(int* tests_total, int* tests_passed) {
 }
 
 // Test Suite for URL command
-void url_tests(int* tests_total, int* tests_passed, char* filename) {
+void url_tests(int* tests_total, int* tests_passed, char* filename, char* dir) {
     int status;
-    if((status = url(filename)) == EXIT_SUCCESS) {
+    if((status = url(filename, dir)) == EXIT_SUCCESS) {
         (*tests_passed)++;
     }
     (*tests_total)++;

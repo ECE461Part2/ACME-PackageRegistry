@@ -15,9 +15,9 @@ int install() {
 }
 
 // Function to be used for url command
-int url(char* file) {
+int url(char* url, char* dir) {
     std::string str1 = (std::string) "go run main.go ";
-    int check = system((str1 + (std::string) file).c_str());
+    int check = system((str1 + url + " " + dir).c_str());
 
     if (check != 0){
         exit (EXIT_FAILURE);

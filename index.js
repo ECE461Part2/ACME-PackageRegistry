@@ -4,7 +4,7 @@ const crypto = require('crypto')
 const cookieParser = require('cookie-parser');
 const multer = require('multer');
 const AdmZip = require("adm-zip");
-const cmd = require('node-cmd');
+const {exec} = require('child_process')
 const path = require('path');
 const shell = require('shelljs')
 const fs = require('fs');
@@ -14,6 +14,7 @@ const { Storage } = require('@google-cloud/storage');
 const { constants } = require('fs/promises');
 const { zip } = require('compressing');
 const { OutgoingMessage } = require('http');
+const { ChildProcess } = require('child_process');
 console.log(process.env.BUCKET_CREDENTIALS)
 if (process.env.BUCKET_CREDENTIALS == undefined) {
   console.log("Getting BUCKET_CREDENTIALS")
@@ -45,6 +46,10 @@ app.use(function(req, res, next) {
 
 const db = setupDatabase()
 
+function send400(res, err) {
+  console.error(err)
+  res.status(400).json("There is missing field(s) in the PackageID/AuthenticationToken or it is formed improperly, or the AuthenticationToken is invalid.")
+}
 function error(res, err) {
   console.error(err);
   res.status(500).send("Internal error: "+err)
@@ -360,7 +365,22 @@ app.get('/upload', auth, function(req, res) {
 
 
 //_________________________ BJ _ FINISHED
-// DELETE A PACKAGE
+// DELETE A PACKAGE (how do i make sure auth send proper response)
+app.get('/package/:id/rate', (req, res) => {
+  console.log("\nPackage Rating Request")
+  //const url = 'https://github.com/jashkenas/underscore.git';
+  //shell.exec('git clone ' + url + ' ./rating/temp/')
+  //console.log("Repository cloned")
+  //shell.exec('echo PATH \$PATH')
+
+  //shell.exec('cd ./rating/')
+  //shell.exec('./run url packageLocation packageJSONLocation')
+  //shell.exec('cd ..')
+  res.status(200).json({rating: 0})
+})
+
+
+// DELETE A PACKAGE (how do i make sure auth send proper response)
 app.delete('/package/:id', auth, (req, res) => {
   console.log("\nPackage Deletion Request")
 
@@ -426,7 +446,7 @@ app.delete('/package/:id', auth, (req, res) => {
   } 
 })
 
-// DOWNLOAD A PACKAGE
+// DOWNLOAD A PACKAGE (how do i make sure auth send proper response)
 app.get('/package/:id', auth, (req, res) => {
   console.log("\nPackage Download Request")
 
@@ -450,6 +470,7 @@ app.get('/package/:id', auth, (req, res) => {
         res.status(400).json("There is missing field(s) in the PackageID/AuthenticationToken or it is formed improperly, or the AuthenticationToken is invalid.")
       // get package json from database
       } else if (row) {
+        db.run('UPDATE packages SET downloads = downloads + 1 WHERE id = ?', [name, version, url, 0, rating, 0, jsprogram, id], function(err) {})
         console.log(JSON.stringify(row))
 
         // get file from bucket and download to zips folder
@@ -496,32 +517,201 @@ app.get('/package/:id', auth, (req, res) => {
 //_________________________ BJ _ CURRENTLY WORKING ON
 // Update a package
 app.put('/package/:id', (req, res) => {
+  console.log("\nPackage Update Request")
+
   const id = req.params.id;
-  
-  console.log("ID: ", id)
-  console.log("Metadata: ", req.body.metadata)
-  console.log("Name: ", req.body.metadata.Name)
-  console.log("Version: ", req.body.metadata.Version)
-  console.log("ID: ", req.body.metadata.ID)
-  console.log("\n")
-  const ID = req.body.metadata.ID;
-  console.log("Data: ", req.body.data)
-  console.log("Content: ", req.body.data.Content)
-  console.log("URL: ", req.body.data.URL)
-  console.log("JSPROGRAM: ", req.body.data.JSPROGRAM)
+  console.log("ID:". id)
+  const name = req.body.metadata.Name
+  console.log("Package Name: ", name)
+  const version = req.body.metadata.Version
+  console.log("Version: ", version)
+  const reqID = req.body.metadata.ID
+  console.log("MetaData ID: ", reqID)
+  const content = req.body.data.Content
+  var url = req.body.data.URL
+  console.log("URL: ", url)
+  const fileName = id + '.zip'
+  // Current Directory is where files will be extracted
+  const currentDir = "./zips/" + id 
 
-
-
-
-  if (id == undefined) {
-    res.status(400).json()
-  }
-  if (id != ID) {
-    res.status(404).json("Package does not exist.")
+  // Output File is the file that is zipped and uploaded
+  const outputFile = './zips/' + id +'.zip'
+  var jsprogram = req.body.data.JSPROGRAM
+  if ((jsprogram == undefined) || (jsprogram == "")){
+    jsprogram = " "
   }
 
-  res.status(200).json("Version updated")
+  if (id != reqID){
+    send400(res, "NULL")
+  } 
+  else {
+    if ((content == undefined) && (url == undefined)){
+      send400(res, err)
+    }
+    else if ((content != undefined) && (url != undefined)){
+      send400(res, err)
+    }
+    else{
+      const sqlSelect = 'SELECT * FROM packages WHERE id = ? AND packageName = ? AND version = ?'
+      db.get(sqlSelect, [id, name, version], function(err, row) {
+        if (err) {
+          send400(res, err)
+        } 
+        else if (row) {
+          console.log(JSON.stringify(row))
+          
+          //perform update.
+          if (content != undefined){  
+            url = ""
+            // temporary zip to get zip from content
+            tempFile = outputFile
+
+            // gets content into a buffer
+            let buff = Buffer.from(content, 'base64')
+
+            // writes content to a zip file
+            try {
+              fs.writeFileSync(tempFile, buff);   
+              console.log("File written successfully");
+            } catch(err) {
+              send400(res, err)
+            }
+
+            // unzip the zip file
+            const zip = new AdmZip(tempFile);
+            zip.extractAllTo(currentDir, /*overwrite*/ true);
+            console.log('Zip extraction complete.');
+
+            // remove the zip file
+            fs.rmSync(tempFile, {recursive: true, force: true})
+          }
+          else{
+            // clone url somewhere on file system
+            if (!fs.existsSync(currentDir)){
+              fs.mkdirSync(currentDir)
+            }
+            try {
+              // clone repository
+              shell.exec('git clone ' + url + " " + currentDir + '/temp/')
+              console.log("Repository cloned")
+            } catch (err){
+              send400(res, err)
+            }
+          }
+              // check if package.json exists
+          if (content != ""){
+            var subfolders = []
+            try {
+              const files = fs.readdirSync(currentDir, { withFileTypes: true });
+              subfolders = files.filter((file) => file.isDirectory()).map((file) => file.name);
+              console.log(subfolders);
+            } 
+            catch (err) {
+              send400(res, err)
+            }
+            packageLocation = currentDir + '/'+ subfolders[0] +'/'
+          } 
+          else {
+            packageLocation = currentDir + '/temp/'
+          }
+
+          try {
+            // remove .git
+            fs.rmSync(packageLocation + ".git", {recursive: true, force: true})
+            console.log('Removed .git');
+            fs.accessSync(packageLocation + 'package.json', );
+            console.log('File can be read');
+          } catch (err) {
+            send400(res, err)
+          }
+
+          // find url, find name, find version # 
+          json = JSON.parse(fs.readFileSync(packageLocation + 'package.json', 'utf8'))
+          //version = json.version
+          packageName = json.name
+          if (url == ""){
+            url = json.repository.url;
+          }
+          console.log("URL: ", url);
+          console.log("Version: ", version);
+          console.log("Package Name: ", packageName);
+
+          // check to see if package already exists
+
+          // zip package
+          const zip2 = new AdmZip();
+          const files = fs.readdirSync(currentDir);
+          console.log("Zipping package");
+
+          files.forEach((file) => {
+            const filePath = path.join(currentDir, file);
+            const fileStats = fs.statSync(filePath);
+          
+            if (fileStats.isFile()) {
+              const fileData = fs.readFileSync(filePath);
+              const relativePath = path.relative(currentDir, filePath);
+              zip2.addFile(relativePath, fileData);
+            } else if (fileStats.isDirectory()) {
+              const relativePath = path.relative(currentDir, filePath);
+              zip2.addLocalFolder(filePath, relativePath);
+            }
+          });
+
+          zip2.writeZip(outputFile);
+          console.log("Zip created ");
+
+          //run rating algorithm
+          //rating = rate(url, packageLocation, packageJSONLocation) 
+          rating = 0
+
+          if (content != ""){
+            packageUrl = ''
+          } 
+          else {
+            packageUrl = url
+          }
+
+          //insert package into databased
+          db.run('UPDATE packages SET packageName = ?, version = ?, url = ?, stars = ?, rating = ?, downloads = ?, JSProgram = ? WHERE id = ?', [name, version, url, 0, rating, 0, jsprogram, id], function(err) {
+            if (err){
+              send400(res, err)
+            }
+            else {
+              const file = bucket.file(fileName)
+              file.delete((err) => {
+                // if error return 400
+                if (err) {
+                  send400(res, err)
+                } 
+                else {
+                  //upload zip file into bucket storage
+                  bucket.upload(outputFile, {contentType: 'application/x-zip-compressed'}, function(err){
+                    if (err) {
+                      send400(res, err)
+                    } else{
+                      // return status code
+                      console.log('Bucket Object: '+ fileName +' updated successfully.')
+                      res.status(200).json({id})
+                      fs.rmSync(outputFile, {recursive: true, force: true})
+                      fs.rmSync(currentDir, {recursive: true, force: true})
+                    }
+                  })
+                }
+              })
+            }
+          })
+        }
+        else {
+          console.log('Package with ID: ' + id + ', does not exist in the database.')
+          res.status(404).json("Package does not exist.")
+        }
+      })
+    }
+  }
+  fs.rmSync(outputFile, {recursive: true, force: true})
+  fs.rmSync(currentDir, {recursive: true, force: true})
 })
+
 
 // UPLOAD A PACKAGE
 app.post('/package', (req, res) => {
@@ -540,26 +730,27 @@ app.post('/package', (req, res) => {
     // from data get the URL or content
     var url = data.URL
     const content = data.Content
-    const jsprogram = data.JSProgram
+    var jsprogram = data.JSProgram
     if ((jsprogram == undefined) || (jsprogram == "")){
       jsprogram = " "
     }
 
     // Current Directory is where files will be extracted
-    const currentDir = "./zips/" + id 
+    const currentDir = "./rating/" + id 
 
     // Output File is the file that is zipped and uploaded
-    const outputFile = './zips/' + id +'.zip'
+    const outputFile = './rating/' + id +'.zip'
 
-    if (content == undefined){
-      if (url == undefined){
-        res.status(400).json("There is missing field(s) in the PackageData/AuthenticationToken or it is formed improperly (e.g. Content and URL are both set), or the AuthenticationToken is invalid.")
-      }
-    } else if ((content != undefined) && (url != undefined)){
+    if ((content == undefined) && (url == undefined)){
       res.status(400).json("There is missing field(s) in the PackageData/AuthenticationToken or it is formed improperly (e.g. Content and URL are both set), or the AuthenticationToken is invalid.")
-    } else {
+    } 
+    else if ((content != undefined) && (url != undefined)){
+      res.status(400).json("There is missing field(s) in the PackageData/AuthenticationToken or it is formed improperly (e.g. Content and URL are both set), or the AuthenticationToken is invalid.")
+    } 
+    else {
       // if the content method is filled out, perform content extraction
       if (content != undefined){  
+        url = ""
         // temporary zip to get zip from content
         tempFile = outputFile
 
@@ -582,13 +773,15 @@ app.post('/package', (req, res) => {
 
         // remove the zip file
         fs.rmSync(tempFile, {recursive: true, force: true})
-    } else {
+      } 
+      else {
         // clone url somewhere on file system
         if (!fs.existsSync(currentDir)){
           fs.mkdirSync(currentDir)
         }
-
         try {
+          // GET FILEPATH
+
           // clone repository
           shell.exec('git clone ' + url + " " + currentDir + '/temp/')
           console.log("Repository cloned")
@@ -599,6 +792,7 @@ app.post('/package', (req, res) => {
     }
 
       // check if package.json exists
+      console.log("Repository")
       if (content != ""){
         var subfolders = []
         try {
@@ -608,28 +802,30 @@ app.post('/package', (req, res) => {
         } catch (err) {
           console.log(err);
         }
-        packJSONLocation = currentDir + '/'+ subfolders[0] +'/'
+        packageLocation = id + '/'+ subfolders[0] +'/'
       } else {
-        packJSONLocation = currentDir + '/temp/'
+        packageLocation = id + '/temp/'
       }
 
       try {
         // remove .git
-        fs.rmSync(packJSONLocation + ".git", {recursive: true, force: true})
+        fs.rmSync('./rating/' + packageLocation + ".git", {recursive: true, force: true})
         console.log('Removed .git');
-        fs.accessSync(packJSONLocation + 'package.json', );
+        fs.accessSync('./rating/' + packageLocation + 'package.json', );
         console.log('File can be read');
       } catch (err) {
         console.error('No Read access');
       }
 
       // find url, find name, find version # 
-      json = JSON.parse(fs.readFileSync(packJSONLocation + 'package.json', 'utf8'))
+      json = JSON.parse(fs.readFileSync('./rating/' + packageLocation + 'package.json', 'utf8'))
       version = json.version
       packageName = json.name
       if (url == ""){
         url = json.repository.url;
       }
+      url = url.replace(".git","")
+      url = url.replace("git:","https:")
       console.log("URL: ", url);
       console.log("Version: ", version);
       console.log("Package Name: ", packageName);
@@ -659,31 +855,58 @@ app.post('/package', (req, res) => {
       console.log("Zip created ");
 
       //run rating algorithm
-      //rating = rate(id, url, version) 
-      rating = 0
-
-      if (content != ""){
-        packageUrl = ''
-      } else{
-        packageUrl = url
-      }
-      //insert package into databased
-      db.run('INSERT INTO packages (id, packageName, version, url, stars, rating, downloads, JSProgram) VALUES (?, ?, ?, ?, ? ,?, ?, ?)', [id, packageName, version, packageUrl, 0, rating, 0, " "], function(err) {})
-
-      //upload zip file into bucket storage
-      bucket.upload(outputFile, {contentType: 'application/x-zip-compressed'}, function(err, file){
-        if (err) {
-          console.error(err);
+      process.chdir('./rating');
+      console.log("Rating Algorithm running.")
+      exec('go run main.go ' + url + ' ' + packageLocation, (err, stdout, stderr) => {
+        if (err){
+          console.error(err)
+          rating = -1
         }
-        
-        //delete zip files
-        fs.rmSync(outputFile, {recursive: true, force: true})
+        else if (stdout){
+          rating = JSON.parse(stdout)
+          console.log("\nRating Algorithm Results")
+          console.log("NetScore: ", rating.NetScore)
+          console.log("RampUp: ", rating.RampUp)
+          console.log("Correctness: ", rating.Correctness)
+          console.log("BusFactor: ", rating.BusFactor)
+          console.log("ResponsiveMaintainer: ", rating.ResponsiveMaintainer)
+          console.log("GoodPinningPractice: ", rating.GoodPinningPractice)
+          console.log("PullRequest: ", rating.PullRequest)
+          console.log("LicenseScore: ", rating.LicenseScore)
+          console.log("\n")
+        } else if (stderr){
+          console.log(stderr)
+          rating = -1
+        }
+
+        if (content != ""){
+          packageUrl = ''
+        } else{
+          packageUrl = url
+        }
+        console.log("Inserting package into database.")
+  
+        //insert package into databased
+        db.run('INSERT INTO packages (id, packageName, version, url, stars, rating, downloads, JSProgram) VALUES (?, ?, ?, ?, ? ,?, ?, ?)', [id, packageName, version, packageUrl, 0, rating, 0, " "], function(err) {})    
+      
+        process.chdir('..')
+  
+        //upload zip file into bucket storage
+        bucket.upload(outputFile, {contentType: 'application/x-zip-compressed'}, function(err, file){
+          if (err) {
+            console.error(err);
+          }
+          
+          //delete zip files
+          fs.rmSync(outputFile, {recursive: true, force: true})
+        })
+  
+        fs.rmSync(currentDir, {recursive: true, force: true})
+  
+        // return status code
+        res.status(200).json({id})
       })
 
-      fs.rmSync(currentDir, {recursive: true, force: true})
-
-      // return status code
-      res.status(200).json({id})
   }}
 })
 

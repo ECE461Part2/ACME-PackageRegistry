@@ -828,3 +828,1056 @@ Output:
 {https://www.npmjs.com/package/express 0.58415 0.72499996 0.8 0.8 0.526 0 0.51 true}
 
 
+Command Successful:    Wed Apr 12 17:18:16 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 116
+Function: loggerMain in cli.cpp being called on 128
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+-------------------------------------
+For URL: https://www.npmjs.com/package/express
+Function: getEndpoint called on score.go at line 151
+Function: metrics.Correctness called on score.go at line 205
+Function: metrics.BusFactor called on score.go at line 209
+Function: metrics.RampUp called on score.go at line 213
+Function: metrics.ResponsiveMaintainer called on score.go at line 217
+Function: metrics.License called on score.go at line 221
+Function: metrics.versionPinning called on score.go at line 227
+Function: metrics.codeReviews called on score.go at line 231
+Function: metrics.NetScore called on score.go at line 235
+Function: ratom.Analyze called on main.go at line 53
+Function: SliceStable called on main.go at line 66
+
+Output:
+{https://www.npmjs.com/package/express 0.58415 0.72499996 0.8 0.8 0.526 0 0.51 true}
+
+
+Command Successful:    Sun Apr 16 19:43:22 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 116
+Function: loggerMain in cli.cpp being called on 128
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+-------------------------------------
+For URL: https://www.npmjs.com/package/express
+Function: getEndpoint called on score.go at line 151
+Function: metrics.Correctness called on score.go at line 205
+Function: metrics.BusFactor called on score.go at line 209
+Function: metrics.RampUp called on score.go at line 213
+Function: metrics.ResponsiveMaintainer called on score.go at line 217
+Function: metrics.License called on score.go at line 221
+Function: metrics.versionPinning called on score.go at line 227
+Function: metrics.codeReviews called on score.go at line 231
+Function: metrics.NetScore called on score.go at line 235
+Function: ratom.Analyze called on main.go at line 53
+Function: SliceStable called on main.go at line 66
+
+Output:
+{https://www.npmjs.com/package/express 0.60365003 0.72499996 0.8 0.8 0.656 0 0.51 true}
+
+
+Command Successful:    Sun Apr 16 19:45:40 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 116
+Function: loggerMain in cli.cpp being called on 128
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+Command Successful:    Sun Apr 16 19:46:00 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 116
+Function: loggerMain in cli.cpp being called on 128
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+Command Successful:    Sun Apr 16 19:46:27 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 116
+Function: loggerMain in cli.cpp being called on 128
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+Command Successful:    Sun Apr 16 19:49:25 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 116
+Function: loggerMain in cli.cpp being called on 128
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+-------------------------------------
+For URL: https://www.npmjs.com/package/express
+Function: getEndpoint called on score.go at line 151
+Function: metrics.Correctness called on score.go at line 205
+Function: metrics.BusFactor called on score.go at line 209
+Function: metrics.RampUp called on score.go at line 213
+Function: metrics.ResponsiveMaintainer called on score.go at line 217
+Function: metrics.License called on score.go at line 221
+Function: metrics.versionPinning called on score.go at line 227
+Function: metrics.codeReviews called on score.go at line 231
+Function: metrics.NetScore called on score.go at line 235
+Function: ratom.Analyze called on main.go at line 53
+Function: SliceStable called on main.go at line 66
+
+Output:
+{https://www.npmjs.com/package/express 0.60365003 0.72499996 0.8 0.8 0.656 0 0.51 true}
+
+
+Command Successful:    Mon Apr 17 17:11:38 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 116
+Function: loggerMain in cli.cpp being called on 128
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+-------------------------------------
+For URL: https://www.npmjs.com/package/express
+Function: getEndpoint called on score.go at line 151
+Function: metrics.Correctness called on score.go at line 205
+Function: metrics.BusFactor called on score.go at line 209
+Function: metrics.RampUp called on score.go at line 213
+Function: metrics.ResponsiveMaintainer called on score.go at line 217
+Function: metrics.License called on score.go at line 221
+Function: metrics.versionPinning called on score.go at line 227
+Function: metrics.codeReviews called on score.go at line 231
+Function: metrics.NetScore called on score.go at line 235
+Function: ratom.Analyze called on main.go at line 53
+Function: SliceStable called on main.go at line 66
+
+Output:
+{https://www.npmjs.com/package/express 0.60365003 0.72499996 0.8 0.8 0.656 0 0.51 true}
+
+
+-------------------------------------
+For URL: https://github.com/expressjs/express
+Function: getEndpoint called on score.go at line 151
+Function: metrics.Correctness called on score.go at line 205
+Function: metrics.BusFactor called on score.go at line 209
+Function: metrics.RampUp called on score.go at line 213
+Function: metrics.ResponsiveMaintainer called on score.go at line 217
+Function: metrics.License called on score.go at line 221
+Function: metrics.versionPinning called on score.go at line 227
+Function: metrics.codeReviews called on score.go at line 231
+Function: metrics.NetScore called on score.go at line 235
+Function: ratom.Analyze called on main.go at line 53
+Function: SliceStable called on main.go at line 66
+
+Output:
+{https://github.com/expressjs/express 0.60365003 0.72499996 0.8 0.8 0.656 0 0.51 true}
+
+
+Command Successful:    Tue Apr 18 12:54:03 2023
+Command ran was:       ./run build
+
+________________Debugging Information________________
+Function: main in cli.cpp 'build' command called on line 47
+Function: loggerMain being called on 65
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+-------------------------------------
+For URL: https://github.com/expressjs/express
+Function: getEndpoint called on score.go at line 151
+Function: metrics.Correctness called on score.go at line 205
+Function: metrics.BusFactor called on score.go at line 209
+Function: metrics.RampUp called on score.go at line 213
+Function: metrics.ResponsiveMaintainer called on score.go at line 217
+Function: metrics.License called on score.go at line 221
+Function: metrics.versionPinning called on score.go at line 227
+Function: metrics.codeReviews called on score.go at line 231
+Function: metrics.NetScore called on score.go at line 235
+Function: ratom.Analyze called on main.go at line 53
+Function: SliceStable called on main.go at line 66
+
+Output:
+{https://github.com/expressjs/express 0.60365003 0.72499996 0.8 0.8 0.656 0 0.51 true}
+
+
+Command Successful:    Tue Apr 18 13:46:27 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 99
+Function: loggerMain in cli.cpp being called on 111
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+Command Successful:    Tue Apr 18 13:46:40 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 99
+Function: loggerMain in cli.cpp being called on 111
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+Command Successful:    Tue Apr 18 13:47:35 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 99
+Function: loggerMain in cli.cpp being called on 111
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+Command Successful:    Tue Apr 18 13:48:56 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 99
+Function: loggerMain in cli.cpp being called on 111
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+-------------------------------------
+For URL: https://github.com/expressjs/express
+Function: getEndpoint called on score.go at line 151
+Function: metrics.Correctness called on score.go at line 205
+Function: metrics.BusFactor called on score.go at line 209
+Function: metrics.RampUp called on score.go at line 213
+Function: metrics.ResponsiveMaintainer called on score.go at line 217
+Function: metrics.License called on score.go at line 221
+Function: metrics.versionPinning called on score.go at line 227
+Function: metrics.codeReviews called on score.go at line 231
+Function: metrics.NetScore called on score.go at line 235
+Function: ratom.Analyze called on main.go at line 54
+Function: SliceStable called on main.go at line 67
+
+Output:
+{https://github.com/expressjs/express 0.60365003 0.72499996 0.8 0.8 0.656 0 0.51 true}
+
+
+Command Successful:    Tue Apr 18 13:50:24 2023
+Command ran was:       ./run build
+
+________________Debugging Information________________
+Function: main in cli.cpp 'build' command called on line 47
+Function: loggerMain being called on 65
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+Command Successful:    Tue Apr 18 13:51:00 2023
+Command ran was:       ./run build
+
+________________Debugging Information________________
+Function: main in cli.cpp 'build' command called on line 47
+Function: loggerMain being called on 65
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+Command Successful:    Tue Apr 18 13:52:26 2023
+Command ran was:       ./run build
+
+________________Debugging Information________________
+Function: main in cli.cpp 'build' command called on line 47
+Function: loggerMain being called on 65
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+Command Successful:    Tue Apr 18 13:52:33 2023
+Command ran was:       ./run build
+
+________________Debugging Information________________
+Function: main in cli.cpp 'build' command called on line 47
+Function: loggerMain being called on 65
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+Command Successful:    Tue Apr 18 13:52:57 2023
+Command ran was:       ./run build
+
+________________Debugging Information________________
+Function: main in cli.cpp 'build' command called on line 47
+Function: loggerMain being called on 65
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+Command Successful:    Tue Apr 18 13:53:03 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 99
+Function: loggerMain in cli.cpp being called on 111
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+-------------------------------------
+For URL: https://github.com/expressjs/express
+Function: getEndpoint called on score.go at line 151
+Function: metrics.Correctness called on score.go at line 205
+Function: metrics.BusFactor called on score.go at line 209
+Function: metrics.RampUp called on score.go at line 213
+Function: metrics.ResponsiveMaintainer called on score.go at line 217
+Error while trying to find ReadMe in temp/express
+Function: metrics.License called on score.go at line 221
+Function: metrics.versionPinning called on score.go at line 227
+Function: metrics.codeReviews called on score.go at line 231
+Function: metrics.NetScore called on score.go at line 235
+Function: ratom.Analyze called on main.go at line 54
+Function: SliceStable called on main.go at line 67
+
+Output:
+{https://github.com/expressjs/express 0.60365003 0.72499996 0.8 0.8 0.656 0 0.51 false}
+
+
+Command Successful:    Tue Apr 18 13:54:01 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 99
+Function: loggerMain in cli.cpp being called on 111
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+-------------------------------------
+For URL: https://github.com/expressjs/express
+Function: getEndpoint called on score.go at line 151
+Function: metrics.Correctness called on score.go at line 205
+Function: metrics.BusFactor called on score.go at line 209
+Function: metrics.RampUp called on score.go at line 213
+Function: metrics.ResponsiveMaintainer called on score.go at line 217
+Error while trying to find ReadMe in temp/express
+Function: metrics.License called on score.go at line 221
+Function: metrics.versionPinning called on score.go at line 227
+Function: metrics.codeReviews called on score.go at line 231
+Function: metrics.NetScore called on score.go at line 235
+Function: ratom.Analyze called on main.go at line 54
+Function: SliceStable called on main.go at line 67
+
+Output:
+{https://github.com/expressjs/express 0.60365003 0.72499996 0.8 0.8 0.656 0 0.51 false}
+
+
+Command Successful:    Tue Apr 18 13:54:34 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 99
+Function: loggerMain in cli.cpp being called on 111
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+-------------------------------------
+For URL: https://github.com/expressjs/express
+Function: getEndpoint called on score.go at line 151
+Function: metrics.Correctness called on score.go at line 205
+Function: metrics.BusFactor called on score.go at line 209
+Function: metrics.RampUp called on score.go at line 213
+Function: metrics.ResponsiveMaintainer called on score.go at line 217
+Function: metrics.License called on score.go at line 221
+Function: metrics.versionPinning called on score.go at line 227
+Function: metrics.codeReviews called on score.go at line 231
+Function: metrics.NetScore called on score.go at line 235
+Function: ratom.Analyze called on main.go at line 54
+Function: SliceStable called on main.go at line 67
+
+Output:
+{https://github.com/expressjs/express 0.60365003 0.72499996 0.8 0.8 0.656 0 0.51 true}
+
+
+Command Successful:    Tue Apr 18 13:56:17 2023
+Command ran was:       ./run build
+
+________________Debugging Information________________
+Function: main in cli.cpp 'build' command called on line 47
+Function: loggerMain being called on 65
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+Command Successful:    Tue Apr 18 13:56:21 2023
+Command ran was:       ./run install
+
+________________Debugging Information________________
+Function: main in cli.cpp 'install' command called on line 23
+Function: loggerMain being called on 41
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+Command Successful:    Tue Apr 18 13:56:23 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 99
+Function: loggerMain in cli.cpp being called on 111
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+-------------------------------------
+For URL: https://github.com/expressjs/express
+Function: getEndpoint called on score.go at line 151
+Function: metrics.Correctness called on score.go at line 205
+Function: metrics.BusFactor called on score.go at line 209
+Function: metrics.RampUp called on score.go at line 213
+Function: metrics.ResponsiveMaintainer called on score.go at line 217
+Function: metrics.License called on score.go at line 221
+Function: metrics.versionPinning called on score.go at line 227
+Function: metrics.codeReviews called on score.go at line 231
+Function: metrics.NetScore called on score.go at line 235
+Function: ratom.Analyze called on main.go at line 54
+Function: SliceStable called on main.go at line 67
+
+Output:
+{https://github.com/expressjs/express 0.60365003 0.72499996 0.8 0.8 0.656 0 0.51 true}
+
+
+Command Successful:    Tue Apr 18 13:57:01 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 99
+Function: loggerMain in cli.cpp being called on 111
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+-------------------------------------
+For URL: https://github.com/expressjs/express
+Function: getEndpoint called on score.go at line 151
+Function: metrics.Correctness called on score.go at line 205
+Function: metrics.BusFactor called on score.go at line 209
+Function: metrics.RampUp called on score.go at line 213
+Function: metrics.ResponsiveMaintainer called on score.go at line 217
+Function: metrics.License called on score.go at line 221
+Function: metrics.versionPinning called on score.go at line 227
+Function: metrics.codeReviews called on score.go at line 231
+Function: metrics.NetScore called on score.go at line 235
+Function: ratom.Analyze called on main.go at line 54
+Function: SliceStable called on main.go at line 67
+
+Output:
+{https://github.com/expressjs/express 0.60365003 0.72499996 0.8 0.8 0.656 0 0.51 true}
+
+
+Command Successful:    Tue Apr 18 13:57:47 2023
+Command ran was:       ./run RUN_URL
+
+________________Debugging Information________________
+Function: main in cli.cpp 'test' command called on line 99
+Function: loggerMain in cli.cpp being called on 111
+Function: loggerMain  in logger.cpp creating log (verbosity 2) with function loggerUpdateTwo on line 144
+Function: loggerUpdateTwo in logger.cpp logging information on line 54
+-------------------------------------
+For URL: https://github.com/expressjs/express
+Function: getEndpoint called on score.go at line 151
+Function: metrics.Correctness called on score.go at line 205
+Function: metrics.BusFactor called on score.go at line 209
+Function: metrics.RampUp called on score.go at line 213
+Function: metrics.ResponsiveMaintainer called on score.go at line 217
+Function: metrics.License called on score.go at line 221
+Function: metrics.versionPinning called on score.go at line 227
+Function: metrics.codeReviews called on score.go at line 231
+Function: metrics.NetScore called on score.go at line 235
+Function: ratom.Analyze called on main.go at line 54
+Function: SliceStable called on main.go at line 67
+
+Output:
+{https://github.com/expressjs/express 0.60365003 0.72499996 0.8 0.8 0.656 0 0.51 true}
+
+
+-------------------------------------
+For URL: https://github.com/expressjs/express
+Function: getEndpoint called on score.go at line 151
+Function: metrics.Correctness called on score.go at line 205
+Function: metrics.BusFactor called on score.go at line 209
+Function: metrics.RampUp called on score.go at line 213
+Function: metrics.ResponsiveMaintainer called on score.go at line 217
+Function: metrics.License called on score.go at line 221
+Function: metrics.versionPinning called on score.go at line 227
+Function: metrics.codeReviews called on score.go at line 231
+Function: metrics.NetScore called on score.go at line 235
+Function: ratom.Analyze called on main.go at line 54
+Function: SliceStable called on main.go at line 67
+
+Output:
+{https://github.com/expressjs/express 0.52715003 0.72499996 0.8 0.8 0.656 0 0 true}
+
+
+-------------------------------------
+For URL: https://github.com/expressjs/express
+Function: getEndpoint called on score.go at line 151
+Function: metrics.Correctness called on score.go at line 205
+Function: metrics.BusFactor called on score.go at line 209
+Function: metrics.RampUp called on score.go at line 213
+Function: metrics.ResponsiveMaintainer called on score.go at line 217
+Function: metrics.License called on score.go at line 221
+Function: metrics.versionPinning called on score.go at line 227
+Function: metrics.codeReviews called on score.go at line 231
+Function: metrics.NetScore called on score.go at line 235
+Function: ratom.Analyze called on main.go at line 54
+Function: SliceStable called on main.go at line 67
+
+Output:
+{https://github.com/expressjs/express 0.60365003 0.72499996 0.8 0.8 0.656 0 0.51 true}
+
+
+-------------------------------------
+For URL: https://github.com/expressjs/express
+Function: getEndpoint called on score.go at line 151
+Function: metrics.Correctness called on score.go at line 205
+Function: metrics.BusFactor called on score.go at line 209
+Function: metrics.RampUp called on score.go at line 213
+Function: metrics.ResponsiveMaintainer called on score.go at line 217
+Function: metrics.License called on score.go at line 221
+Function: metrics.versionPinning called on score.go at line 227
+Function: metrics.codeReviews called on score.go at line 231
+Function: metrics.NetScore called on score.go at line 235
+Function: ratom.Analyze called on main.go at line 54
+Function: SliceStable called on main.go at line 67
+
+Output:
+{https://github.com/expressjs/express 0.60365003 0.72499996 0.8 0.8 0.656 0 0.51 true}
+
+
+-------------------------------------
+For URL: https://github.com/expressjs/express
+Function: getEndpoint called on score.go at line 151
+Function: metrics.Correctness called on score.go at line 205
+Function: metrics.BusFactor called on score.go at line 209
+Function: metrics.RampUp called on score.go at line 213
+Function: metrics.ResponsiveMaintainer called on score.go at line 217
+Function: metrics.License called on score.go at line 221
+Function: metrics.versionPinning called on score.go at line 227
+Function: metrics.codeReviews called on score.go at line 231
+Function: metrics.NetScore called on score.go at line 235
+Function: ratom.Analyze called on main.go at line 54
+Function: SliceStable called on main.go at line 67
+
+Output:
+{https://github.com/expressjs/express 0.60365003 0.72499996 0.8 0.8 0.656 0 0.51 true}
+
+
+-------------------------------------
+For URL: https://github.com/expressjs/express
+Function: getEndpoint called on score.go at line 151
+Function: metrics.Correctness called on score.go at line 205
+Function: metrics.BusFactor called on score.go at line 209
+Function: metrics.RampUp called on score.go at line 213
+Function: metrics.ResponsiveMaintainer called on score.go at line 217
+Function: metrics.License called on score.go at line 221
+Function: metrics.versionPinning called on score.go at line 227
+Function: metrics.codeReviews called on score.go at line 231
+Function: metrics.NetScore called on score.go at line 235
+Function: ratom.Analyze called on main.go at line 54
+Function: SliceStable called on main.go at line 67
+
+Output:
+{https://github.com/expressjs/express 0.60365003 0.72499996 0.8 0.8 0.656 0 0.51 true}
+
+
+-------------------------------------
+For URL: https://github.com/expressjs/express
+Function: getEndpoint called on score.go at line 151
+Function: metrics.Correctness called on score.go at line 205
+Function: metrics.BusFactor called on score.go at line 209
+Function: metrics.RampUp called on score.go at line 213
+Function: metrics.ResponsiveMaintainer called on score.go at line 217
+Function: metrics.License called on score.go at line 221
+Function: metrics.versionPinning called on score.go at line 227
+Function: metrics.codeReviews called on score.go at line 231
+Function: metrics.NetScore called on score.go at line 235
+Function: ratom.Analyze called on main.go at line 54
+Function: SliceStable called on main.go at line 67
+
+Output:
+{https://github.com/expressjs/express 0.60365003 0.72499996 0.8 0.8 0.656 0 0.51 true}
+
+
+-------------------------------------
+For URL: https://github.com/expressjs/express
+Function: getEndpoint called on score.go at line 151
+Function: metrics.Correctness called on score.go at line 205
+Function: metrics.BusFactor called on score.go at line 209
+Function: metrics.RampUp called on score.go at line 213
+Function: metrics.ResponsiveMaintainer called on score.go at line 217
+Function: metrics.License called on score.go at line 221
+Function: metrics.versionPinning called on score.go at line 227
+Function: metrics.codeReviews called on score.go at line 231
+Function: metrics.NetScore called on score.go at line 235
+Function: ratom.Analyze called on main.go at line 54
+Function: SliceStable called on main.go at line 67
+
+Output:
+{https://github.com/expressjs/express 0.60365003 0.72499996 0.8 0.8 0.656 0 0.51 true}
+
+
+-------------------------------------
+For URL: https://github.com/expressjs/express
+Function: getEndpoint called on score.go at line 151
+Function: metrics.Correctness called on score.go at line 205
+Function: metrics.BusFactor called on score.go at line 209
+Function: metrics.RampUp called on score.go at line 213
+Function: metrics.ResponsiveMaintainer called on score.go at line 217
+Function: metrics.License called on score.go at line 221
+Function: metrics.versionPinning called on score.go at line 227
+Function: metrics.codeReviews called on score.go at line 231
+Function: metrics.NetScore called on score.go at line 235
+Function: ratom.Analyze called on main.go at line 54
+Function: SliceStable called on main.go at line 67
+
+Output:
+{https://github.com/expressjs/express 0.60365003 0.72499996 0.8 0.8 0.656 0 0.51 true}
+
+
+-------------------------------------
+For URL: https://github.com/expressjs/express
+Function: getEndpoint called on score.go at line 151
+Function: metrics.Correctness called on score.go at line 205
+Function: metrics.BusFactor called on score.go at line 209
+Function: metrics.RampUp called on score.go at line 213
+Function: metrics.ResponsiveMaintainer called on score.go at line 217
+Function: metrics.License called on score.go at line 221
+Function: metrics.versionPinning called on score.go at line 227
+Function: metrics.codeReviews called on score.go at line 231
+Function: metrics.NetScore called on score.go at line 235
+Function: ratom.Analyze called on main.go at line 53
+Function: SliceStable called on main.go at line 66
+
+Output:
+{https://github.com/expressjs/express 0.60365003 0.72499996 0.8 0.8 0.656 0 0.51 true}
+
+
+-------------------------------------
+For URL: https://github.com/expressjs/express
+Function: getEndpoint called on score.go at line 151
+Function: metrics.Correctness called on score.go at line 205
+Function: metrics.BusFactor called on score.go at line 209
+Function: metrics.RampUp called on score.go at line 213
+Function: metrics.ResponsiveMaintainer called on score.go at line 217
+Function: metrics.License called on score.go at line 221
+Function: metrics.versionPinning called on score.go at line 227
+Function: metrics.codeReviews called on score.go at line 231
+Function: metrics.NetScore called on score.go at line 235
+Function: ratom.Analyze called on main.go at line 53
+Function: SliceStable called on main.go at line 66
+
+Output:
+{https://github.com/expressjs/express 0.60365003 0.72499996 0.8 0.8 0.656 0 0.51 true}
+
+
+-------------------------------------
+For URL: https://github.com/expressjs/express
+Function: getEndpoint called on score.go at line 151
+Function: metrics.Correctness called on score.go at line 205
+Function: metrics.BusFactor called on score.go at line 209
+Function: metrics.RampUp called on score.go at line 213
+Function: metrics.ResponsiveMaintainer called on score.go at line 217
+Function: metrics.License called on score.go at line 221
+Function: metrics.versionPinning called on score.go at line 227
+Function: metrics.codeReviews called on score.go at line 231
+Function: metrics.NetScore called on score.go at line 235
+Function: ratom.Analyze called on main.go at line 53
+Function: SliceStable called on main.go at line 66
+
+Output:
+{https://github.com/expressjs/express 0.60365003 0.72499996 0.8 0.8 0.656 0 0.51 true}
+
+
+-------------------------------------
+For URL: https://github.com/expressjs/express
+Function: getEndpoint called on score.go at line 151
+Function: metrics.Correctness called on score.go at line 205
+Function: metrics.BusFactor called on score.go at line 209
+Function: metrics.RampUp called on score.go at line 213
+Function: metrics.ResponsiveMaintainer called on score.go at line 217
+Function: metrics.License called on score.go at line 221
+Function: metrics.versionPinning called on score.go at line 227
+Function: metrics.codeReviews called on score.go at line 231
+Function: metrics.NetScore called on score.go at line 235
+Function: ratom.Analyze called on main.go at line 53
+Function: SliceStable called on main.go at line 66
+
+Output:
+{https://github.com/expressjs/express 0.60365003 0.72499996 0.8 0.8 0.656 0 0.51 true}
+
+
+-------------------------------------
+For URL: https://github.com/expressjs/express
+Function: getEndpoint called on score.go at line 151
+Function: metrics.Correctness called on score.go at line 205
+Function: metrics.BusFactor called on score.go at line 209
+Function: metrics.RampUp called on score.go at line 213
+Function: metrics.ResponsiveMaintainer called on score.go at line 217
+Function: metrics.License called on score.go at line 221
+Function: metrics.versionPinning called on score.go at line 227
+Function: metrics.codeReviews called on score.go at line 231
+Function: metrics.NetScore called on score.go at line 235
+Function: ratom.Analyze called on main.go at line 53
+Function: SliceStable called on main.go at line 66
+
+Output:
+{https://github.com/expressjs/express 0.60365003 0.72499996 0.8 0.8 0.656 0 0.51 true}
+
+
+-------------------------------------
+For URL: https://github.com/expressjs/express
+Function: getEndpoint called on score.go at line 151
+Function: metrics.Correctness called on score.go at line 205
+Function: metrics.BusFactor called on score.go at line 209
+Function: metrics.RampUp called on score.go at line 213
+Function: metrics.ResponsiveMaintainer called on score.go at line 217
+Function: metrics.License called on score.go at line 221
+Function: metrics.versionPinning called on score.go at line 227
+Function: metrics.codeReviews called on score.go at line 231
+Function: metrics.NetScore called on score.go at line 235
+Function: ratom.Analyze called on main.go at line 53
+Function: SliceStable called on main.go at line 66
+
+Output:
+{https://github.com/expressjs/express 0.60365003 0.72499996 0.8 0.8 0.656 0 0.51 true}
+
+
+-------------------------------------
+For URL: https://github.com/expressjs/express
+Function: getEndpoint called on score.go at line 151
+Function: metrics.Correctness called on score.go at line 205
+Function: metrics.BusFactor called on score.go at line 209
+Function: metrics.RampUp called on score.go at line 213
+Function: metrics.ResponsiveMaintainer called on score.go at line 217
+Function: metrics.License called on score.go at line 221
+Function: metrics.versionPinning called on score.go at line 227
+Function: metrics.codeReviews called on score.go at line 231
+Function: metrics.NetScore called on score.go at line 235
+Function: ratom.Analyze called on main.go at line 53
+Function: SliceStable called on main.go at line 66
+
+Output:
+{https://github.com/expressjs/express 0.60365003 0.72499996 0.8 0.8 0.656 0 0.51 true}
+
+
+-------------------------------------
+For URL: https://github.com/expressjs/express
+Function: getEndpoint called on score.go at line 151
+Function: metrics.Correctness called on score.go at line 205
+Function: metrics.BusFactor called on score.go at line 209
+Function: metrics.RampUp called on score.go at line 213
+Function: metrics.ResponsiveMaintainer called on score.go at line 217
+Error while trying to find ReadMe in ./zips/0c3ac3627785f2483aae231e759c0eb51d4dada84e90cd1beb693dfcb9e07ec2/underscore-master/
+Function: metrics.License called on score.go at line 221
+Function: metrics.versionPinning called on score.go at line 227
+Function: metrics.codeReviews called on score.go at line 231
+Function: metrics.NetScore called on score.go at line 235
+Function: ratom.Analyze called on main.go at line 53
+Function: SliceStable called on main.go at line 66
+
+Output:
+{https://github.com/expressjs/express 0.60365003 0.72499996 0.8 0.8 0.656 0 0.51 false}
+
+
+-------------------------------------
+For URL: https://github.com/expressjs/express
+Function: getEndpoint called on score.go at line 151
+Function: metrics.Correctness called on score.go at line 205
+Function: metrics.BusFactor called on score.go at line 209
+Function: metrics.RampUp called on score.go at line 213
+Function: metrics.ResponsiveMaintainer called on score.go at line 217
+Function: metrics.License called on score.go at line 221
+Function: metrics.versionPinning called on score.go at line 227
+Function: metrics.codeReviews called on score.go at line 231
+Function: metrics.NetScore called on score.go at line 235
+Function: ratom.Analyze called on main.go at line 53
+Function: SliceStable called on main.go at line 66
+
+Output:
+{https://github.com/expressjs/express 0.75365 0.72499996 0.8 0.8 0.656 1 0.51 false}
+
+
+-------------------------------------
+For URL: https://github.com/expressjs/express
+Function: getEndpoint called on score.go at line 151
+Function: metrics.Correctness called on score.go at line 205
+Function: metrics.BusFactor called on score.go at line 209
+Function: metrics.RampUp called on score.go at line 213
+Function: metrics.ResponsiveMaintainer called on score.go at line 217
+Function: metrics.License called on score.go at line 221
+Function: metrics.versionPinning called on score.go at line 227
+Function: metrics.codeReviews called on score.go at line 231
+Function: metrics.NetScore called on score.go at line 235
+Function: ratom.Analyze called on main.go at line 53
+Function: SliceStable called on main.go at line 66
+
+Output:
+{https://github.com/expressjs/express 0.75365 0.72499996 0.8 0.8 0.656 1 0.51 false}
+
+
+-------------------------------------
+For URL: https://github.com/expressjs/express
+Function: getEndpoint called on score.go at line 151
+Function: metrics.Correctness called on score.go at line 205
+Function: metrics.BusFactor called on score.go at line 209
+Function: metrics.RampUp called on score.go at line 213
+Function: metrics.ResponsiveMaintainer called on score.go at line 217
+Function: metrics.License called on score.go at line 221
+Function: metrics.versionPinning called on score.go at line 227
+Function: metrics.codeReviews called on score.go at line 231
+Function: metrics.NetScore called on score.go at line 235
+Function: ratom.Analyze called on main.go at line 53
+Function: SliceStable called on main.go at line 66
+
+Output:
+{https://github.com/expressjs/express 0.75365 0.72499996 0.8 0.8 0.656 1 0.51 false}
+
+
+-------------------------------------
+For URL: https://github.com/expressjs/express
+Function: getEndpoint called on score.go at line 151
+Function: metrics.Correctness called on score.go at line 205
+Function: metrics.BusFactor called on score.go at line 209
+Function: metrics.RampUp called on score.go at line 213
+Function: metrics.ResponsiveMaintainer called on score.go at line 217
+Function: metrics.License called on score.go at line 221
+Function: metrics.versionPinning called on score.go at line 227
+Function: metrics.codeReviews called on score.go at line 231
+Function: metrics.NetScore called on score.go at line 235
+Function: ratom.Analyze called on main.go at line 53
+Function: SliceStable called on main.go at line 66
+
+Output:
+{https://github.com/expressjs/express 0.75365 0.72499996 0.8 0.8 0.656 1 0.51 false}
+
+
+-------------------------------------
+For URL: git://github.com/jashkenas/underscore.git
+Function: getEndpoint called on score.go at line 151
+Invalid endpoint / URL given could not retrieve API data!
+Function: ratom.Analyze called on main.go at line 53
+Function: SliceStable called on main.go at line 66
+
+Output:
+{git://github.com/jashkenas/underscore.git -1 -1 -1 -1 -1 -1 -1 false}
+
+
+-------------------------------------
+For URL: git://github.com/jashkenas/underscore.git
+Function: getEndpoint called on score.go at line 151
+Invalid endpoint / URL given could not retrieve API data!
+Function: ratom.Analyze called on main.go at line 53
+Function: SliceStable called on main.go at line 66
+
+Output:
+{git://github.com/jashkenas/underscore.git -1 -1 -1 -1 -1 -1 -1 false}
+
+
+-------------------------------------
+For URL: https://github.com/jashkenas/underscore
+Function: getEndpoint called on score.go at line 151
+Function: metrics.Correctness called on score.go at line 205
+Function: metrics.BusFactor called on score.go at line 209
+Function: metrics.RampUp called on score.go at line 213
+Function: metrics.ResponsiveMaintainer called on score.go at line 217
+Function: metrics.License called on score.go at line 221
+Function: metrics.versionPinning called on score.go at line 227
+Function: metrics.codeReviews called on score.go at line 231
+Function: metrics.NetScore called on score.go at line 235
+Function: ratom.Analyze called on main.go at line 53
+Function: SliceStable called on main.go at line 66
+
+Output:
+{https://github.com/jashkenas/underscore 0.67495 0.675 0.67 0.8 0.54800004 1 0.36 false}
+
+
+-------------------------------------
+For URL: https://github.com/jashkenas/underscore
+Function: getEndpoint called on score.go at line 151
+Function: metrics.Correctness called on score.go at line 205
+Function: metrics.BusFactor called on score.go at line 209
+Function: metrics.RampUp called on score.go at line 213
+Function: metrics.ResponsiveMaintainer called on score.go at line 217
+Function: metrics.License called on score.go at line 221
+Function: metrics.versionPinning called on score.go at line 227
+Function: metrics.codeReviews called on score.go at line 231
+Function: metrics.NetScore called on score.go at line 235
+Function: ratom.Analyze called on main.go at line 53
+Function: SliceStable called on main.go at line 66
+
+Output:
+{https://github.com/jashkenas/underscore 0.67495 0.675 0.67 0.8 0.54800004 1 0.36 false}
+
+
+-------------------------------------
+For URL: https://github.com/expressjs/express
+Function: getEndpoint called on score.go at line 151
+Function: metrics.Correctness called on score.go at line 205
+Function: metrics.BusFactor called on score.go at line 209
+Function: metrics.RampUp called on score.go at line 213
+Function: metrics.ResponsiveMaintainer called on score.go at line 217
+Function: metrics.License called on score.go at line 221
+Function: metrics.versionPinning called on score.go at line 227
+Function: metrics.codeReviews called on score.go at line 231
+Function: metrics.NetScore called on score.go at line 235
+Function: ratom.Analyze called on main.go at line 53
+Function: SliceStable called on main.go at line 66
+
+Output:
+{https://github.com/expressjs/express 0.60365003 0.72499996 0.8 0.8 0.656 0 0.51 true}
+
+
+-------------------------------------
+For URL: https://github.com/expressjs/express
+Function: getEndpoint called on score.go at line 151
+Function: metrics.Correctness called on score.go at line 205
+Function: metrics.BusFactor called on score.go at line 209
+Function: metrics.RampUp called on score.go at line 213
+Function: metrics.ResponsiveMaintainer called on score.go at line 217
+Function: metrics.License called on score.go at line 221
+Function: metrics.versionPinning called on score.go at line 227
+Function: metrics.codeReviews called on score.go at line 231
+Function: metrics.NetScore called on score.go at line 235
+Function: ratom.Analyze called on main.go at line 53
+Function: SliceStable called on main.go at line 66
+
+Output:
+{https://github.com/expressjs/express 0.60365003 0.72499996 0.8 0.8 0.656 0 0.51 true}
+
+
+-------------------------------------
+For URL: https://github.com/expressjs/express
+Function: getEndpoint called on score.go at line 151
+Function: metrics.Correctness called on score.go at line 205
+Function: metrics.BusFactor called on score.go at line 209
+Function: metrics.RampUp called on score.go at line 213
+Function: metrics.ResponsiveMaintainer called on score.go at line 217
+Function: metrics.License called on score.go at line 221
+Function: metrics.versionPinning called on score.go at line 227
+Function: metrics.codeReviews called on score.go at line 231
+Function: metrics.NetScore called on score.go at line 235
+Function: ratom.Analyze called on main.go at line 53
+Function: SliceStable called on main.go at line 66
+
+Output:
+{https://github.com/expressjs/express 0.60365003 0.72499996 0.8 0.8 0.656 0 0.51 true}
+
+
+-------------------------------------
+For URL: https://github.com/expressjs/express
+Function: getEndpoint called on score.go at line 151
+Function: metrics.Correctness called on score.go at line 205
+Function: metrics.BusFactor called on score.go at line 209
+Function: metrics.RampUp called on score.go at line 213
+Function: metrics.ResponsiveMaintainer called on score.go at line 217
+Function: metrics.License called on score.go at line 221
+Function: metrics.versionPinning called on score.go at line 227
+Function: metrics.codeReviews called on score.go at line 231
+Function: metrics.NetScore called on score.go at line 235
+Function: ratom.Analyze called on main.go at line 53
+Function: SliceStable called on main.go at line 66
+
+Output:
+{https://github.com/expressjs/express 0.60365003 0.72499996 0.8 0.8 0.656 0 0.51 true}
+
+
+-------------------------------------
+For URL: https://github.com/expressjs/express
+Function: getEndpoint called on score.go at line 151
+Function: metrics.Correctness called on score.go at line 205
+Function: metrics.BusFactor called on score.go at line 209
+Function: metrics.RampUp called on score.go at line 213
+Function: metrics.ResponsiveMaintainer called on score.go at line 217
+Function: metrics.License called on score.go at line 221
+Function: metrics.versionPinning called on score.go at line 227
+Function: metrics.codeReviews called on score.go at line 231
+Function: metrics.NetScore called on score.go at line 235
+Function: ratom.Analyze called on main.go at line 53
+Function: SliceStable called on main.go at line 66
+
+Output:
+{https://github.com/expressjs/express 0.60365003 0.72499996 0.8 0.8 0.656 0 0.51 true}
+
+
+-------------------------------------
+For URL: https://github.com/expressjs/express
+Function: getEndpoint called on score.go at line 151
+Function: metrics.Correctness called on score.go at line 205
+Function: metrics.BusFactor called on score.go at line 209
+Function: metrics.RampUp called on score.go at line 213
+Function: metrics.ResponsiveMaintainer called on score.go at line 217
+Function: metrics.License called on score.go at line 221
+Function: metrics.versionPinning called on score.go at line 227
+Function: metrics.codeReviews called on score.go at line 231
+Function: metrics.NetScore called on score.go at line 235
+Function: ratom.Analyze called on main.go at line 53
+Function: SliceStable called on main.go at line 66
+
+Output:
+{https://github.com/expressjs/express 0.60365003 0.72499996 0.8 0.8 0.656 0 0.51 true}
+
+
+-------------------------------------
+For URL: https://github.com/jashkenas/underscore
+Function: getEndpoint called on score.go at line 151
+Function: metrics.Correctness called on score.go at line 205
+Function: metrics.BusFactor called on score.go at line 209
+Function: metrics.RampUp called on score.go at line 213
+Function: metrics.ResponsiveMaintainer called on score.go at line 217
+Function: metrics.License called on score.go at line 221
+Function: metrics.versionPinning called on score.go at line 227
+Function: metrics.codeReviews called on score.go at line 231
+Function: metrics.NetScore called on score.go at line 235
+Function: ratom.Analyze called on main.go at line 53
+Function: SliceStable called on main.go at line 66
+
+Output:
+{https://github.com/jashkenas/underscore 0.67495 0.675 0.67 0.8 0.54800004 1 0.36 false}
+
+
+-------------------------------------
+For URL: https://github.com/jashkenas/underscore
+Function: getEndpoint called on score.go at line 151
+Function: metrics.Correctness called on score.go at line 205
+Function: metrics.BusFactor called on score.go at line 209
+Function: metrics.RampUp called on score.go at line 213
+Function: metrics.ResponsiveMaintainer called on score.go at line 217
+Function: metrics.License called on score.go at line 221
+Function: metrics.versionPinning called on score.go at line 227
+Function: metrics.codeReviews called on score.go at line 231
+Function: metrics.NetScore called on score.go at line 235
+Function: ratom.Analyze called on main.go at line 53
+Function: SliceStable called on main.go at line 66
+
+Output:
+{https://github.com/jashkenas/underscore 0.67495 0.675 0.67 0.8 0.54800004 1 0.36 false}
+
+
+-------------------------------------
+For URL: https://github.com/jashkenas/underscore
+Function: getEndpoint called on score.go at line 151
+Function: metrics.Correctness called on score.go at line 205
+Function: metrics.BusFactor called on score.go at line 209
+Function: metrics.RampUp called on score.go at line 213
+Function: metrics.ResponsiveMaintainer called on score.go at line 217
+Function: metrics.License called on score.go at line 221
+Function: metrics.versionPinning called on score.go at line 227
+Function: metrics.codeReviews called on score.go at line 231
+Function: metrics.NetScore called on score.go at line 235
+Function: ratom.Analyze called on main.go at line 53
+Function: SliceStable called on main.go at line 66
+
+Output:
+{https://github.com/jashkenas/underscore 0.67495 0.675 0.67 0.8 0.54800004 1 0.36 false}
+
+
+-------------------------------------
+For URL: https://github.com/jashkenas/underscore
+Function: getEndpoint called on score.go at line 151
+Function: metrics.Correctness called on score.go at line 205
+Function: metrics.BusFactor called on score.go at line 209
+Function: metrics.RampUp called on score.go at line 213
+Function: metrics.ResponsiveMaintainer called on score.go at line 217
+Function: metrics.License called on score.go at line 221
+Function: metrics.versionPinning called on score.go at line 227
+Function: metrics.codeReviews called on score.go at line 231
+Function: metrics.NetScore called on score.go at line 235
+Function: ratom.Analyze called on main.go at line 53
+Function: SliceStable called on main.go at line 66
+
+Output:
+{https://github.com/jashkenas/underscore 0.67495 0.675 0.67 0.8 0.54800004 1 0.36 false}
+
+
+-------------------------------------
+For URL: https://github.com/jashkenas/underscore
+Function: getEndpoint called on score.go at line 151
+Function: metrics.Correctness called on score.go at line 205
+Function: metrics.BusFactor called on score.go at line 209
+Function: metrics.RampUp called on score.go at line 213
+Function: metrics.ResponsiveMaintainer called on score.go at line 217
+Function: metrics.License called on score.go at line 221
+Function: metrics.versionPinning called on score.go at line 227
+Function: metrics.codeReviews called on score.go at line 231
+Function: metrics.NetScore called on score.go at line 235
+Function: ratom.Analyze called on main.go at line 53
+Function: SliceStable called on main.go at line 66
+
+Output:
+{https://github.com/jashkenas/underscore 0.67495 0.675 0.67 0.8 0.54800004 1 0.36 false}
+
+

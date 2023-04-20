@@ -4,4 +4,4 @@
 
 int build();
 int install();
-int url(char* file);
+int url(char* url, char* dir);

@@ -9,13 +9,13 @@ import (
 	"encoding/json"
 
 	"io"
-	"log"
+	// "log"
 	"net/http"
 	"os"
 	"strings"
 	"github.com/shurcooL/githubv4"
 
-	"github.com/go-git/go-git/v5"
+	// "github.com/go-git/go-git/v5"
 	// "github.com/ldiehm/complete_cli/ratom/metrics"
 	"ece461-project-cli/ratom/metrics"
 	
@@ -37,51 +37,51 @@ type Module struct {
 
 	
 }
-//Function to get the GitHub URL from the npmurl input
-func getGithubUrl(url string) string {
-	before, after, found := strings.Cut(url, "www")
-	//Finding endpoints and checking for their existence
-	if found {
-		npmEndpoint := before + "registry" + after
-		npmEndpoint = strings.Replace(npmEndpoint, "com", "org", 1)
-		npmEndpoint = strings.Replace(npmEndpoint, "package/", "", 1)
+// //Function to get the GitHub URL from the npmurl input
+// func getGithubUrl(url string) string {
+// 	before, after, found := strings.Cut(url, "www")
+// 	//Finding endpoints and checking for their existence
+// 	if found {
+// 		npmEndpoint := before + "registry" + after
+// 		npmEndpoint = strings.Replace(npmEndpoint, "com", "org", 1)
+// 		npmEndpoint = strings.Replace(npmEndpoint, "package/", "", 1)
 
-		resp, err := http.Get(npmEndpoint)
-		if err != nil {
-			return ""
-		}
+// 		resp, err := http.Get(npmEndpoint)
+// 		if err != nil {
+// 			return ""
+// 		}
 
-		if resp.StatusCode == http.StatusOK {
-			bodyBytes, err := io.ReadAll(resp.Body)
+// 		if resp.StatusCode == http.StatusOK {
+// 			bodyBytes, err := io.ReadAll(resp.Body)
 
-			if err != nil {
-				return ""
-			}
+// 			if err != nil {
+// 				return ""
+// 			}
 
-			bodyString := string(bodyBytes)
+// 			bodyString := string(bodyBytes)
 
-			resBytes := []byte(bodyString)
-			var npmRes map[string]interface{}
-			_ = json.Unmarshal(resBytes, &npmRes)
+// 			resBytes := []byte(bodyString)
+// 			var npmRes map[string]interface{}
+// 			_ = json.Unmarshal(resBytes, &npmRes)
 			
-			//Checking for existence of GitHub url
-			if npmRes["bugs"] == nil{
-				metrics.Functions = append(metrics.Functions, "Module is not hosted on GitHub or link cannot be found on line "+metrics.File_line())
-				return ""
-			}
+// 			//Checking for existence of GitHub url
+// 			if npmRes["bugs"] == nil{
+// 				metrics.Functions = append(metrics.Functions, "Module is not hosted on GitHub or link cannot be found on line "+metrics.File_line())
+// 				return ""
+// 			}
 
-			bugs := npmRes["bugs"].(map[string]interface{})
-			npmEndpoint = bugs["url"].(string)
+// 			bugs := npmRes["bugs"].(map[string]interface{})
+// 			npmEndpoint = bugs["url"].(string)
 
-			if npmEndpoint == ""{
-				return ""
-			}
+// 			if npmEndpoint == ""{
+// 				return ""
+// 			}
 
-			url = strings.Replace(npmEndpoint, "/issues", "", 1)
-		}
-	}
-	return url
-}
+// 			url = strings.Replace(npmEndpoint, "/issues", "", 1)
+// 		}
+// 	}
+// 	return url
+// }
 
 //Get the endpoint and turn into https format
 func getEndpoint(url string) string {
@@ -94,38 +94,38 @@ func GetToken() string {
 	return os.Getenv("GITHUB_TOKEN")
 }
 
-func Clone(repo string) string {
+// func Clone(repo string) string {
 
-	// Temp directory to clone the repository
-	if GITHUB_TOKEN == "" {
-		GITHUB_TOKEN = GetToken()
-	}
+// 	// Temp directory to clone the repository
+// 	if GITHUB_TOKEN == "" {
+// 		GITHUB_TOKEN = GetToken()
+// 	}
 
-	lastIdx := strings.LastIndex(repo, "/")
-	dir := "temp/" + repo[lastIdx+1:]
+// 	lastIdx := strings.LastIndex(repo, "/")
+// 	dir := "temp/" + repo[lastIdx+1:]
 
-	err := os.MkdirAll(dir, 0777)
+// 	err := os.MkdirAll(dir, 0777)
 
-	if err != nil {
-		log.Fatal(err)
-	}
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
 
-	_, err = git.PlainClone(dir, false, &git.CloneOptions{
-		URL:          repo + ".git",
-		SingleBranch: false,
-		Depth:        1,
-	})
+// 	_, err = git.PlainClone(dir, false, &git.CloneOptions{
+// 		URL:          repo + ".git",
+// 		SingleBranch: false,
+// 		Depth:        1,
+// 	})
 
-	if err != nil {
-		metrics.Functions = append(metrics.Functions, "Can't clone "+repo+".git")
-		log.Fatal(err)
-		return "err"
-	}
-	return dir
-}
+// 	if err != nil {
+// 		metrics.Functions = append(metrics.Functions, "Can't clone "+repo+".git")
+// 		log.Fatal(err)
+// 		return "err"
+// 	}
+// 	return dir
+// }
 
 //Function to find and analyze the validity of the http url input
-func Analyze(url string, client *http.Client) Module {
+func Analyze(gitUrl string, client *http.Client, dir string) Module {
 	//Metric variables
 	var busFactor float32
 	var responsiveMaintainer float32
@@ -136,15 +136,15 @@ func Analyze(url string, client *http.Client) Module {
 	var versionPinning_score float32
 	var codeReviews_score float32
 
-	gitUrl := getGithubUrl(url)
+	// gitUrl := getGithubUrl(url)
 
 	//Checking for url availability
-	if gitUrl == "" {
-		metrics.Functions = append(metrics.Functions, "Can't find valid endpoint for input: "+url)
-		return Module{url, -1, -1, -1, -1, -1, -1, -1, false}
-	}
+	// if gitUrl == "" {
+	// 	metrics.Functions = append(metrics.Functions, "Can't find valid endpoint for input: "+url)
+	// 	return Module{url, -1, -1, -1, -1, -1, -1, -1, false}
+	// }
 
-	dir := Clone(gitUrl)
+	// dir := Clone(gitUrl)
 
 	endpoint := getEndpoint(gitUrl)
 	
@@ -156,7 +156,7 @@ func Analyze(url string, client *http.Client) Module {
 	//Error checking for invalid endpoint
 	if error != nil {
 		metrics.Functions = append(metrics.Functions, "HTTP GET request to  "+endpoint+" returns an error on line "+metrics.File_line())
-		return Module{url, -1, -1, -1, -1, -1, -1, -1, false}
+		return Module{gitUrl, -1, -1, -1, -1, -1, -1, -1, false}
 	}
 
 	if resp.StatusCode == http.StatusOK {
@@ -235,7 +235,7 @@ func Analyze(url string, client *http.Client) Module {
 		lineNumb = metrics.File_line()
 		metrics.Functions = append(metrics.Functions, "Function: metrics.NetScore called on score.go at line "+lineNumb)
 	
-		defer os.RemoveAll(dir)
+		// defer os.RemoveAll(dir)
 
 	
 		} else {
@@ -254,7 +254,7 @@ func Analyze(url string, client *http.Client) Module {
 
 	defer resp.Body.Close()
 
-	m := Module{url, netScore, rampUp, correctnessScore, busFactor, responsiveMaintainer, versionPinning_score, codeReviews_score, license}
+	m := Module{gitUrl, netScore, rampUp, correctnessScore, busFactor, responsiveMaintainer, versionPinning_score, codeReviews_score, license}
 	return m
 }
 

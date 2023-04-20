@@ -24,10 +24,6 @@ func CodeReviews(gitUrl string) float32 {
 
 	// create scanner to scan file
 	scanner := bufio.NewScanner(file)
-	e := os.Remove("CR_Score.txt")
-    if e != nil {
-        fmt.Println("Didn't find CR_Score.txt")
-    }
 
 	for scanner.Scan() {
 		// reads string in score txt, converts to float64
@@ -41,8 +37,18 @@ func CodeReviews(gitUrl string) float32 {
 			return float32(score)
 		}
 	}
+	e2 := file.Close()
+	if e2 != nil {
+        fmt.Println("Couldn't Close File CR_Score.txt")
+    }
+	e := os.Remove("CR_Score.txt")
+    if e != nil {
+        fmt.Println("Didn't find CR_Score.txt")
+    }
+
 	return 0
 
 }
+
 
 
