@@ -18,7 +18,7 @@ const { ChildProcess } = require('child_process');
 console.log(process.env.BUCKET_CREDENTIALS)
 if (process.env.BUCKET_CREDENTIALS == undefined) {
   console.log("Getting BUCKET_CREDENTIALS")
-  require('dotenv').config({path:__dirname+'/./../../../../../.env'})
+  require('dotenv').config({path:__dirname+'/./../../../.env'})
 
 }
 console.log(process.env.BUCKET_CREDENTIALS)
