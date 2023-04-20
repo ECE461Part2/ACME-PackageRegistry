@@ -217,6 +217,202 @@ app.get('/package/:id/rate', auth, (req, res) => {
 
 });
 
+app.post('/package', auth, (req, res) => {
+  console.log("\nPackage Upload Request")
+
+  // create a unique id for the current package
+  const id = crypto.createHash('sha256').update(Date.now().toString()).digest('hex')
+
+  // get the data from the body of the request
+  const data = req.body.data
+
+  // if data is undefined throw an error
+  if (data == undefined){
+    res.status(400).json("There is missing field(s) in the PackageData/AuthenticationToken or it is formed improperly (e.g. Content and URL are both set), or the AuthenticationToken is invalid.")
+  } else {
+    // from data get the URL or content
+    var url = data.URL
+    const content = data.Content
+    var jsprogram = data.JSProgram
+    if ((jsprogram == undefined) || (jsprogram == "")){
+      jsprogram = " "
+    }
+
+    // Current Directory is where files will be extracted
+    const currentDir = "./rating/" + id 
+
+    // Output File is the file that is zipped and uploaded
+    const outputFile = './rating/' + id +'.zip'
+
+    if ((content == undefined) && (url == undefined)){
+      res.status(400).json("There is missing field(s) in the PackageData/AuthenticationToken or it is formed improperly (e.g. Content and URL are both set), or the AuthenticationToken is invalid.")
+    } 
+    else if ((content != undefined) && (url != undefined)){
+      res.status(400).json("There is missing field(s) in the PackageData/AuthenticationToken or it is formed improperly (e.g. Content and URL are both set), or the AuthenticationToken is invalid.")
+    } 
+    else {
+      // if the content method is filled out, perform content extraction
+      if (content != undefined){  
+        url = ""
+        // temporary zip to get zip from content
+        tempFile = outputFile
+
+        // gets content into a buffer
+        let buff = Buffer.from(content, 'base64')
+
+        // writes content to a zip file
+        try {
+          fs.writeFileSync(tempFile, buff);   
+          console.log("File written successfully");
+        } catch(err) {
+          res.status(400).json("There is missing field(s) in the PackageData/AuthenticationToken or it is formed improperly (e.g. Content and URL are both set), or the AuthenticationToken is invalid.")
+          console.error(err);
+        }
+
+        // unzip the zip file
+        const zip = new AdmZip(tempFile);
+        zip.extractAllTo(currentDir, /*overwrite*/ true);
+        console.log('Zip extraction complete.');
+
+        // remove the zip file
+        fs.rmSync(tempFile, {recursive: true, force: true})
+      } 
+      else {
+        // clone url somewhere on file system
+        if (!fs.existsSync(currentDir)){
+          fs.mkdirSync(currentDir)
+        }
+        try {
+          // GET FILEPATH
+
+          // clone repository
+          shell.exec('git clone ' + url + " " + currentDir + '/temp/')
+          console.log("Repository cloned")
+        } catch (err){
+          console.error(err);
+          res.status(400).json("There is missing field(s) in the PackageData/AuthenticationToken or it is formed improperly (e.g. Content and URL are both set), or the AuthenticationToken is invalid.")
+        }
+    }
+
+      // check if package.json exists
+      console.log("Repository")
+      if (content != ""){
+        var subfolders = []
+        try {
+          const files = fs.readdirSync(currentDir, { withFileTypes: true });
+          subfolders = files.filter((file) => file.isDirectory()).map((file) => file.name);
+          console.log(subfolders);
+        } catch (err) {
+          console.log(err);
+        }
+        packageLocation = id + '/'+ subfolders[0] +'/'
+      } else {
+        packageLocation = id + '/temp/'
+      }
+
+      try {
+        // remove .git
+        fs.rmSync('./rating/' + packageLocation + ".git", {recursive: true, force: true})
+        console.log('Removed .git');
+        fs.accessSync('./rating/' + packageLocation + 'package.json', );
+        console.log('File can be read');
+      } catch (err) {
+        console.error('No Read access');
+      }
+
+      // find url, find name, find version # 
+      json = JSON.parse(fs.readFileSync('./rating/' + packageLocation + 'package.json', 'utf8'))
+      version = json.version
+      packageName = json.name
+      if (url == ""){
+        url = json.repository.url;
+      }
+      url = url.replace(".git","")
+      url = url.replace("git:","https:")
+      console.log("URL: ", url);
+      console.log("Version: ", version);
+      console.log("Package Name: ", packageName);
+
+      // check to see if package already exists
+
+      // zip package
+      const zip2 = new AdmZip();
+      const files = fs.readdirSync(currentDir);
+      console.log("Zipping package");
+
+      files.forEach((file) => {
+        const filePath = path.join(currentDir, file);
+        const fileStats = fs.statSync(filePath);
+      
+        if (fileStats.isFile()) {
+          const fileData = fs.readFileSync(filePath);
+          const relativePath = path.relative(currentDir, filePath);
+          zip2.addFile(relativePath, fileData);
+        } else if (fileStats.isDirectory()) {
+          const relativePath = path.relative(currentDir, filePath);
+          zip2.addLocalFolder(filePath, relativePath);
+        }
+      });
+
+      zip2.writeZip(outputFile);
+      console.log("Zip created ");
+
+      //run rating algorithm
+      process.chdir('./rating');
+      console.log("Rating Algorithm running.")
+      exec('go run main.go ' + url + ' ' + packageLocation, (err, stdout, stderr) => {
+        if (err){
+          console.error(err)
+          rating = -1
+        }
+        else if (stdout){
+          rating = JSON.parse(stdout)
+          console.log("\nRating Algorithm Results")
+          console.log("NetScore: ", rating.NetScore)
+          console.log("RampUp: ", rating.RampUp)
+          console.log("Correctness: ", rating.Correctness)
+          console.log("BusFactor: ", rating.BusFactor)
+          console.log("ResponsiveMaintainer: ", rating.ResponsiveMaintainer)
+          console.log("GoodPinningPractice: ", rating.GoodPinningPractice)
+          console.log("PullRequest: ", rating.PullRequest)
+          console.log("LicenseScore: ", rating.LicenseScore)
+          console.log("\n")
+        } else if (stderr){
+          console.log(stderr)
+          rating = -1
+        }
+
+        if (content != ""){
+          packageUrl = ''
+        } else{
+          packageUrl = url
+        }
+        console.log("Inserting package into database.")
+  
+        //insert package into databased
+        db.run('INSERT INTO packages (id, name, version, url, stars, rating, downloads, JSProgram) VALUES (?, ?, ?, ?, ? ,?, ?, ?)', [id, packageName, version, packageUrl, 0, rating, 0, " "], function(err) {})    
+      
+        process.chdir('..')
+  
+        //upload zip file into bucket storage
+        bucket.upload(outputFile, {contentType: 'application/x-zip-compressed'}, function(err, file){
+          if (err) {
+            console.error(err);
+          }
+          
+          //delete zip files
+          fs.rmSync(outputFile, {recursive: true, force: true})
+        })
+  
+        fs.rmSync(currentDir, {recursive: true, force: true})
+  
+        // return status code
+        res.status(200).json({id})
+      })
+
+  }}
+})
+
 //login screen
 app.get("/", (req, res) => {
   res.redirect("/authenticate");
