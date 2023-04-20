@@ -27,6 +27,6 @@
     "shelljs": "^0.8.5",
     "sqlite3": "^5.1.4",
     "stringify-object": "^5.0.0",
-    "uuid": "^9.0.0",
+    "uuid": "^9.0.0"
   }
 }
