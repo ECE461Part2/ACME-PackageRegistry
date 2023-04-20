@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+  <form id="login-form">
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username">
+    <br>
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password">
+    <br>
+    <button type="submit">Submit</button>
+  </form>
+
+  <script>
+    function authenticate() {
+      event.preventDefault();
+
+      const form = document.getElementById('login-form');
+      const username = form.elements.username.value;
+      const password = form.elements.password.value;
+      console.log("HIII")
+
+      fetch('/authenticate', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          "User": {
+            "name": username,
+            "isAdmin": false
+          },
+          "Secret": {
+            "password": password
+          }
+        })
+      })
+      .then(response => {
+        if (response.status === 200) {
+          return response.text();
+        } else {
+          throw new Error('Invalid credentials');
+        }
+      })
+      .then(token => {
+        // Store the token in local storage or a cookie
+        console.log('Bearer token:', JSON.parse(token).authorization);
+        
+        // Redirect to the profile page with token in header
+        // window.location.href = '/profile';
+        const headers = new Headers();
+        headers.append("authorization", JSON.parse(token).authorization);
+        window.localStorage.setItem('token', token);
+        const options = {
+          method: 'GET',
+          headers: headers,
+        };
+        fetch('/profile', options)
+        .then(response => {
+          if (response.status === 200) {
+            var token = window.localStorage.getItem('token');
+            window.location.href = '/profile';
+          } else {
+            throw new Error('Failed to retrieve user profile');
+          }
+        });
+      })
+      .catch(error => console.error(error));
+    }
+
+    const form = document.getElementById('login-form');
+    form.addEventListener('submit', authenticate);
+  </script>
+</html>

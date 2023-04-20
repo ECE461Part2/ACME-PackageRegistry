@@ -4,20 +4,431 @@
 	<title>Profile Page</title>
 </head>
 <body>
-	<h1>Welcome, <%= username%></h1>
-
-    <div class="col-md-6">
-        <h3>Actions</h3>
-        <ul>
-            <li><a href="/directory">Directory</a></li>
-            <li><a href="/search">Search</a></li>
-            <li><a href="/download">Download</a></li>
-            <li><a href="/upload">Upload</a></li>
-            <li><a href="/update">Update</a></li>
-            <li><a href="/rate">Rate</a></li>
-            <li><a href="/ingest">Ingest</a></li>
-        </ul>
-    </div>
-    <a href="/logout">Logout</a>
+  <h1>Profile</h1>
+  <h2>List Packages</h2>
+  <div>
+    <label for="packageQuery">Query:</label>
+    <input type="text" id="packageQuery" name="packageQuery">
+    <label for="packageQuery">Name1:Verison1, Name2:Version2... (Ex: "Underscore:1.2.0, Lodash:2.4.1-2.5.0")</label>
+    <br>
+    <label for="offset">Page:</label>
+    <input type="text" id="offset" name="offset">
+    <br>
+    <button onclick="listPackages()">List</button>
+    <br>
+    <h3>Packages:</h3>
+    <pre id="packagesResponse"></pre>
+  </div>
+  <hr>
+  <h2>Upload a Package</h2>
+  <div>
+    <label for="url">URL:</label>
+    <input type="text" id="url" name="url">
+    <br>
+    <label for="content">Content:</label>
+    <input type="text" id="content" name="content">
+    <br>
+    <label for="jsprogram">JSProgram:</label>
+    <input type="text" id="jsprogram" name="jsprogram">
+    <br>
+    <button onclick="uploadPackage()">Go</button>
+    <br>
+    <h3>Response:</h3>
+    <pre id="uploadResponse"></pre>
+  </div>
+  <hr>
+  <h2>Package Options</h2>
+  <div>
+    <label for="packageid">Package ID:</label>
+    <input type="text" id="packageid" name="packageid">
+    <br>
+    <button onclick="downloadPackage()">Download</button>
+    <button onclick="updatePackage()">Update</button>
+    <button onclick="deletePackage()">Delete</button>
+    <button onclick="ratePackage()">Rate</button>
+    <br>
+    <h3>Response:</h3>
+    <pre id="optionsResponse"></pre>
+  </div>
+  <hr>
+  <h2>Get Package by RegEx</h2>
+  <div>
+    <label for="regex">RegEx:</label>
+    <input type="text" id="regex" name="regex">
+    <br>
+    <button onclick="getPackageByRegex()">Go</button>
+    <br>
+    <h3>Response:</h3>
+    <pre id="regexResponse"></pre>
+  </div>
+  <hr>
+  <h2>Register New User</h2>
+  <div>
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username">
+    <br>
+    <label for="password">Password:</label>
+    <input type="text" id="password" name="password">
+    <br>
+    <label for="isadmin">isAdmin:</label>
+    <input type="checkbox" id="isadmin" name="isadmin">
+    <br>
+    <button onclick="registerUser()">Register</button>
+    <br>
+    <h3>Response:</h3>
+    <pre id="registerResponse"></pre>
+  </div>
+  <hr>
+  <h2>Delete User</h2>
+  <div>
+    <label for="deleteuser">Username:</label>
+    <input type="text" id="deleteuser" name="deleteuser">
+    <br>
+    <button onclick="deleteUser()">Delete</button>
+    <br>
+    <h3>Response:</h3>
+    <pre id="deleteUserResponse"></pre>
+  </div>
+  <hr>
+  <h2>Reset Site</h2>
+  <button onclick="resetSite()">Reset</button>
+  <br>
+  <h3>Response:</h3>
+  <pre id="resetResponse"></pre>
 </body>
+
+
+  <script>
+    function listPackages() {
+      console.log("Sending API request to list packages");
+      const offset = document.getElementById("offset").value;
+      const packageQuery = document.getElementById("packageQuery").value;
+
+      const headers = new Headers();
+      const token = localStorage.getItem("token");
+      console.log('Bearer token:', JSON.parse(token).authorization);
+      headers.append("authorization", JSON.parse(token).authorization);
+      headers.append("Content-Type", "application/json")
+
+      const packagesArray = packageQuery.split(',').map(package => {
+        const nameAndVersion = package.split(':');
+        const name = nameAndVersion[0].trim();
+        const version = nameAndVersion[1].trim();
+        return { Name: name, Version: version };
+      });
+
+      const options = {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify(packagesArray)
+      };
+
+      fetch(`/packages?offset=${offset}`, options)
+      .then((response) => response.json())
+      .then((data) => {
+        const responseBox = document.getElementById("packagesResponse");
+        responseBox.innerText = JSON.stringify(data, null, 2);
+      })
+      .catch((error) => {
+        const responseBox = document.getElementById("packagesResponse");
+        responseBox.innerText = "Error: " + error.message;
+      });
+    }
+
+    function uploadPackage() {
+      console.log("Sending API request to upload a package");
+      const url = document.getElementById("url").value;
+      const content = document.getElementById("content").value;
+      const JSProgram = document.getElementById("jsprogram").value;
+
+      const headers = new Headers();
+      const token = localStorage.getItem("token");
+      console.log('Bearer token:', JSON.parse(token).authorization);
+      headers.append("authorization", JSON.parse(token).authorization);
+      headers.append("Content-Type", "application/json")
+
+      const options = {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify({
+          data: {
+            url,
+            content,
+            JSProgram
+          }
+        })
+      };
+
+      fetch("/package", options)
+      .then((response) => response.json())
+      .then((data) => {
+        const responseBox = document.getElementById("uploadResponse");
+        responseBox.innerText = JSON.stringify(data, null, 2);
+      })
+      .catch((error) => {
+        const responseBox = document.getElementById("uploadResponse");
+        responseBox.innerText = "Error: " + error.message;
+      });
+    }
+
+    function downloadPackage() {
+      console.log("Sending API request to download a package");
+
+      const packageid = document.getElementById("packageid").value;
+
+      const headers = new Headers();
+      const token = localStorage.getItem("token");
+      if (token == undefined) {
+        const responseBox = document.getElementById("optionsResponse");
+        responseBox.innerText = "Error: Please authenticate";
+      }
+      console.log('Bearer token:', JSON.parse(token).authorization);
+      headers.append("authorization", JSON.parse(token).authorization);
+      headers.append("Content-Type", "application/json")
+
+      const options = {
+        method: 'GET',
+        headers: headers
+      };
+
+      fetch(`/package/${packageid}`, options)
+      .then((response) => response.json())
+      .then((data) => {
+        const responseBox = document.getElementById("optionsResponse");
+        responseBox.innerText = JSON.stringify(data, null, 2);
+      })
+      .catch((error) => {
+        const responseBox = document.getElementById("optionsResponse");
+        responseBox.innerText = "Error: " + error.message;
+      });
+    }
+
+    function updatePackage() {
+      console.log("Sending API request to update a package");
+
+      const packageid = document.getElementById("packageid").value;
+
+      const headers = new Headers();
+      const token = localStorage.getItem("token");
+      if (token == undefined) {
+        const responseBox = document.getElementById("optionsResponse");
+        responseBox.innerText = "Error: Please authenticate";
+      }
+      console.log('Bearer token:', JSON.parse(token).authorization);
+      headers.append("authorization", JSON.parse(token).authorization);
+      headers.append("Content-Type", "application/json")
+
+      const options = {
+        method: 'PUT',
+        headers: headers
+      };
+
+      fetch(`/package/${packageid}`, options)
+      .then((response) => response.json())
+      .then((data) => {
+        const responseBox = document.getElementById("optionsResponse");
+        responseBox.innerText = JSON.stringify(data, null, 2);
+      })
+      .catch((error) => {
+        const responseBox = document.getElementById("optionsResponse");
+        responseBox.innerText = "Error: " + error.message;
+      });
+    }
+
+    function deletePackage() {
+      console.log("Sending API request to delete a package");
+
+      const packageid = document.getElementById("packageid").value;
+
+      const headers = new Headers();
+      const token = localStorage.getItem("token");
+      if (token == undefined) {
+        const responseBox = document.getElementById("optionsResponse");
+        responseBox.innerText = "Error: Please authenticate";
+      }
+      console.log('Bearer token:', JSON.parse(token).authorization);
+      headers.append("authorization", JSON.parse(token).authorization);
+      headers.append("Content-Type", "application/json")
+
+      const options = {
+        method: 'DELETE',
+        headers: headers
+      };
+
+      fetch(`/package/${packageid}`, options)
+      .then((response) => response.json())
+      .then((data) => {
+        const responseBox = document.getElementById("optionsResponse");
+        responseBox.innerText = JSON.stringify(data, null, 2);
+      })
+      .catch((error) => {
+        const responseBox = document.getElementById("optionsResponse");
+        responseBox.innerText = "Error: " + error.message;
+      });
+    }
+
+    function ratePackage() {
+      console.log("Sending API request to rate a package");
+
+      const packageid = document.getElementById("packageid").value;
+
+      const headers = new Headers();
+      const token = localStorage.getItem("token");
+      if (token == undefined) {
+        const responseBox = document.getElementById("optionsResponse");
+        responseBox.innerText = "Error: Please authenticate";
+      }
+      console.log('Bearer token:', JSON.parse(token).authorization);
+      headers.append("authorization", JSON.parse(token).authorization);
+      headers.append("Content-Type", "application/json")
+
+      const options = {
+        method: 'GET',
+        headers: headers
+      };
+
+      fetch(`/package/${packageid}/rate`, options)
+      .then((response) => response.json())
+      .then((data) => {
+        const responseBox = document.getElementById("optionsResponse");
+        responseBox.innerText = JSON.stringify(data, null, 2);
+      })
+      .catch((error) => {
+        const responseBox = document.getElementById("optionsResponse");
+        responseBox.innerText = "Error: " + error.message;
+      });
+    }
+
+    function getPackageByRegex() {
+      console.log("Sending API request to get package by regex");
+
+      const regex = document.getElementById("regex").value;
+
+      const headers = new Headers();
+      const token = localStorage.getItem("token");
+      console.log('Bearer token:', JSON.parse(token).authorization);
+      headers.append("authorization", JSON.parse(token).authorization);
+      headers.append("Content-Type", "application/json")
+
+      const options = {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify({regex:regex})
+      };
+
+      fetch(`/package/byRegEx`, options)
+      .then((response) => response.json())
+      .then((data) => {
+        const responseBox = document.getElementById("regexResponse");
+        responseBox.innerText = JSON.stringify(data, null, 2);
+      })
+      .catch((error) => {
+        const responseBox = document.getElementById("regexResponse");
+        responseBox.innerText = "Error: " + error.message;
+      });
+    }
+
+    function registerUser() {
+      console.log("Sending API request to register user");
+
+      const name = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+      const isAdmin = document.getElementById("isadmin").value;
+
+      const headers = new Headers();
+      const token = localStorage.getItem("token");
+      console.log('Bearer token:', JSON.parse(token).authorization);
+      headers.append("authorization", JSON.parse(token).authorization);
+      headers.append("Content-Type", "application/json")
+
+      const options = {
+        method: 'PUT',
+        headers: headers,
+        body: JSON.stringify({
+          User: {
+            name,
+            isAdmin
+          },
+          Secret: {
+            password
+          }
+        })
+      };
+
+      fetch("/register", options)
+      .then((response) => response.json())
+      .then((data) => {
+        const responseBox = document.getElementById("registerResponse");
+        responseBox.innerText = JSON.stringify(data, null, 2);
+      })
+      .catch((error) => {
+        const responseBox = document.getElementById("registerResponse");
+        responseBox.innerText = "Error: " + error.message;
+      });
+    }
+
+    function deleteUser() {
+      console.log("Sending API request to delete user");
+
+      const name = document.getElementById("deleteuser").value;
+
+      const headers = new Headers();
+      const token = localStorage.getItem("token");
+      console.log('Bearer token:', JSON.parse(token).authorization);
+      headers.append("authorization", JSON.parse(token).authorization);
+      headers.append("Content-Type", "application/json")
+
+      const options = {
+        method: 'DELETE',
+        headers: headers,
+        body: JSON.stringify({
+          User: {
+            name
+          }
+        })
+      };
+
+      fetch("/register", options)
+      .then((response) => response.json())
+      .then((data) => {
+        const responseBox = document.getElementById("deleteUserResponse");
+        responseBox.innerText = JSON.stringify(data, null, 2);
+      })
+      .catch((error) => {
+        const responseBox = document.getElementById("deleteUserResponse");
+        responseBox.innerText = "Error: " + error.message;
+      });
+    }
+
+    function resetSite() {
+      console.log("Sending API request to reset the site");
+
+      const headers = new Headers();
+      const token = localStorage.getItem("token");
+      console.log('Bearer token:', JSON.parse(token).authorization);
+      headers.append("authorization", JSON.parse(token).authorization);
+      // headers.append("Content-Type", "application/json")
+
+      const options = {
+        method: 'DELETE',
+        headers: headers,
+        body: JSON.stringify({
+          User: {
+            name
+          }
+        })
+      };
+
+      fetch("/reset", options)
+      .then((response) => response.json())
+      .then((data) => {
+        const responseBox = document.getElementById("resetResponse");
+        responseBox.innerText = JSON.stringify(data, null, 2);
+      })
+      .catch((error) => {
+        const responseBox = document.getElementById("resetResponse");
+        responseBox.innerText = "Error: " + error.message;
+      });
+    }
+  </script>
 </html>

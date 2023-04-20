@@ -54,6 +54,7 @@ func main() {
 	metrics.Functions = append(metrics.Functions, "Function: ratom.Analyze called on main.go at line "+lineNumb)
 
 	modules = append(modules, module)
+
 		//urls = append(urls, url)
 	// }
 

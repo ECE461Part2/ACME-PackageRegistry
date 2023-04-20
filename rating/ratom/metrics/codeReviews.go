@@ -19,7 +19,6 @@ func CodeReviews(gitUrl string) float32 {
 	file, err := os.Open("CR_Score.txt")
 	if err != nil{
 		fmt.Println("Couldn't find CR_Score.txt")
-		return 0
 	}
 
 	// create scanner to scan file
@@ -37,18 +36,7 @@ func CodeReviews(gitUrl string) float32 {
 			return float32(score)
 		}
 	}
-	e2 := file.Close()
-	if e2 != nil {
-        fmt.Println("Couldn't Close File CR_Score.txt")
-    }
-	e := os.Remove("CR_Score.txt")
-    if e != nil {
-        fmt.Println("Didn't find CR_Score.txt")
-    }
-
 	return 0
 
 }
-
-
 

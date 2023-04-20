@@ -47,7 +47,6 @@ function setupDatabase() {
     };
     db.run('INSERT INTO packages (id, packageName, version, url, stars, rating, downloads, JSProgram) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', ["underscore", "Underscore", "1.6.9", '', 0, 0, 0, " "])
     db.run('INSERT INTO packages (id, packageName, version, url, stars, rating, downloads, JSProgram) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', ["lodash", "Lodash", "1.1.0", '', 0, 0, 0, " "])
-
     
     return db
 }
