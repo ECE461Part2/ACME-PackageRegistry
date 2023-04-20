@@ -5,7 +5,7 @@ const multer = require('multer');
 const setupDatabase = require('./scripts/databaseSetup')
 const auth = require('./scripts/auth')
 const { Storage } = require('@google-cloud/storage');
-const re2 = require('re2');
+// const re2 = require('re2');
 if (process.env.BUCKET_CREDENTIALS == undefined) {
   console.log("Getting BUCKET_CREDENTIALS")
   require('dotenv').config({path:__dirname+'/./../../../.env'})
@@ -274,7 +274,7 @@ app.post('/package/byRegEx', auth, (req, res) => {
   const query = req.body.regex
   console.log(query)
   
-  const regex = new re2(query)
+  // const regex = new re2(query)
 
   // Get all package names
   db.all("SELECT DISTINCT name FROM packages", (err, rows) => {
