@@ -752,6 +752,14 @@ app.delete("/reset", auth, (req, res) => {
     return;
   }
 
+  bucket.deleteFiles()
+  .then(() => {
+    console.log(`All files deleted from bucket ${bucketName}.`)
+  })
+  .catch((err) => {
+    error(res, err)
+  })
+
   db.run('DELETE FROM users; DELETE FROM packages;', function(err) {
     if (err) {
       error(res, err)
