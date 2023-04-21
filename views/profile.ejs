@@ -73,6 +73,15 @@
     <label for="isadmin">isAdmin:</label>
     <input type="checkbox" id="isadmin" name="isadmin">
     <br>
+    <label for="download">download permission:</label>
+    <input type="checkbox" id="download" name="download">
+    <br>
+    <label for="search">search permission:</label>
+    <input type="checkbox" id="search" name="search">
+    <br>
+    <label for="upload">upload, update, rate permission:</label>
+    <input type="checkbox" id="upload" name="upload">
+    <br>
     <button onclick="registerUser()">Register</button>
     <br>
     <h3>Response:</h3>
@@ -333,7 +342,10 @@
 
       const name = document.getElementById("username").value;
       const password = document.getElementById("password").value;
-      const isAdmin = document.getElementById("isadmin").value;
+      const isAdmin = document.getElementById("isadmin").checked;
+      const download = document.getElementById("download").checked;
+      const search = document.getElementById("search").checked;
+      const upload = document.getElementById("upload").checked;
 
       const headers = new Headers();
       const token = localStorage.getItem("token");
@@ -341,13 +353,20 @@
       headers.append("authorization", JSON.parse(token).authorization);
       headers.append("Content-Type", "application/json")
 
+      var permissions = 0
+      if (download == true) { permissions += 1 }
+      if (search == true) { permissions += 2 }
+      if (upload == true) { permissions += 4 }
+      if (isAdmin == true) { permissions = 7; }
+
       const options = {
         method: 'PUT',
         headers: headers,
         body: JSON.stringify({
           User: {
             name,
-            isAdmin
+            isAdmin,
+            permissions
           },
           Secret: {
             password
