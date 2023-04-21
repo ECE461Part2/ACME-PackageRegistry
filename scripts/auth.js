@@ -22,14 +22,15 @@ function auth(req, res, next) {
       error(res, err)
     } else if (row) {
       if (timestamp > row.timestamp + 10*60*60 || row.interactions > 1000) {
-        res.status(400).json("There is missing field(s) in the PackageID/AuthenticationToken or it is formed improperly, or the AuthenticationToken is invalid.")
-        return
+      res.status(400).send(JSON.stringify("There is missing field(s) in the PackageID/AuthenticationToken or it is formed improperly, or the AuthenticationToken is invalid."))
+      return
       }
       db.run('UPDATE users SET interactions = interactions + 1 WHERE id = ?', [row.id], err => {
         if (err)
           error(res, err)
         req.username = row.username
         req.isAdmin = row.admin
+        req.permissions = row.permissions
         console.log("Authenticated user " + req.username)
         next()
         return
