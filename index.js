@@ -68,7 +68,7 @@ app.post('/packages', auth, (req, res) => {
 
 });
 
-app.put('/package/:id', (req, res) => {
+app.put('/package/:id', auth, (req, res) => {
   console.log("\nPackage Update Request")
 
   const id = req.params.id;
@@ -621,6 +621,7 @@ app.put("/authenticate", (req, res) => {
   var isAdmin  = req.body.User.isAdmin
   var passHash =crypto.createHash('sha256').update(password).digest('hex')
   var hash = crypto.createHash('sha256').update(username + password + Date.now().toString()).digest('hex')
+  var timestamp = Math.floor(Date.now() / 1000)
   console.log("Got username: " + username);
   console.log("Got password: " + password);
   console.log("Got admin: " + isAdmin);
@@ -638,7 +639,7 @@ app.put("/authenticate", (req, res) => {
       error(res, err)
     } else if (row) {
       //if found, update hash and login
-      db.run('UPDATE users SET hash = ? WHERE id = ?', [hash, row.id], err => {
+      db.run('UPDATE users SET hash = ?, timestamp = ? WHERE id = ?', [hash, timestamp, row.id], err => {
         if (err)
           error(res, err)
         console.log("Authentication success " + username);
