@@ -1,15 +1,15 @@
 package ratom
 
 import (
-	"testing"
-	"fmt"
-	"golang.org/x/oauth2"
-	"os"
 	"context"
-	"io/ioutil"
 	"encoding/json"
-	"net/http"
+	"fmt"
 	"github.com/paingp/ece461-project-cli/ratom/metrics"
+	"golang.org/x/oauth2"
+	"io/ioutil"
+	"net/http"
+	"os"
+	"testing"
 )
 
 var file = "https://github.com/lodash/lodash"
@@ -28,7 +28,7 @@ func TestAnalyze(t *testing.T) {
 	LoggerVerbOne(modules)
 	LoggerVerbTwo(modules)
 
-	if(module.License == false) {
+	if module.License == false {
 		fmt.Printf("No License")
 	}
 }
@@ -49,7 +49,7 @@ func TestAnalyzeNPM(t *testing.T) {
 	LoggerVerbOne(modules)
 	LoggerVerbTwo(modules)
 
-	if(module.License == false) {
+	if module.License == false {
 		fmt.Printf("Cannot find license")
 	}
 }
@@ -70,7 +70,7 @@ func TestAnalyzeNoGithub(t *testing.T) {
 	LoggerVerbOne(modules)
 	LoggerVerbTwo(modules)
 
-	if(module.NetScore != -1) {
+	if module.NetScore != -1 {
 		t.Fatalf("Incorrectly parsed")
 	}
 }
@@ -91,7 +91,7 @@ func TestAnalyzeGoogle(t *testing.T) {
 	LoggerVerbOne(modules)
 	LoggerVerbTwo(modules)
 
-	if(module.NetScore != -1) {
+	if module.NetScore != -1 {
 		t.Fatalf("Incorrectly parsed")
 	}
 }
@@ -100,7 +100,6 @@ var endpoint = "https://api.github.com/repos/cloudinary/cloudinary_npm"
 var endpoint2 = "https://api.github.com/repos/ben-ng/add"
 var endpoint3 = "https://api.github.com/repos/axios/axios"
 var endpoint4 = "https://api.github.com/repos/campb474/ECE368"
-
 
 // Tests 1 - 6
 // Testing busFactor on github link
@@ -167,7 +166,6 @@ func TestCorrectness(t *testing.T) {
 
 		var cor = metrics.Correctness(jsonRes)
 
-
 		if cor < 0 || cor > 1 {
 			t.Fatalf("Correctness is out of range")
 		}
@@ -203,7 +201,6 @@ func TestRampUp(t *testing.T) {
 		_ = json.Unmarshal(resBytes, &jsonRes)
 
 		var ramp = metrics.RampUp(jsonRes, 3)
-
 
 		if ramp < 0 || ramp > 1 {
 			t.Fatalf("Ramp Up is out of range")
@@ -650,7 +647,6 @@ func TestNetScore3(t *testing.T) {
 		var ramp = metrics.RampUp(jsonRes, 74)
 		var resp = metrics.ResponsiveMaintainer(jsonRes)
 		var net = metrics.NetScore(cor, bus, ramp, resp, false)
-
 
 		if net < 0 || net > 1 {
 			t.Fatalf("Net Score is out of range")
