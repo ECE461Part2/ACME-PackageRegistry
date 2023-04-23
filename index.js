@@ -431,21 +431,46 @@ app.delete('/package/:id', auth, (req, res) => {
 });
 
 app.get('/package/:id/rate', auth, (req, res) => {
-  // const packageQuery = req.body
-  // console.log("package query: " + JSON.stringify(packageQuery))
-
+  console.log("\nPackage Rating Request")
+  const id = req.params.id
+  console.log("File ID: ", id)
   if ((req.permissions & (1 << 2)) == 0) {
     res.status(401).send(JSON.stringify("You do not have permission for this action."))
     return
   }
-
-  res.status(200).send(JSON.stringify({"you get":"rated your package bro"}))
-
+  else if (id == undefined) {
+    console.log("Error with id.")
+    res.status(400).send(JSON.stringify("There is missing field(s) in the PackageID/AuthenticationToken or it is formed improperly, or the AuthenticationToken is invalid."))
+  } 
+  else {
+    db.get('SELECT * FROM packages WHERE id = ?', id, function(err, row) {
+      if (err) {
+        console.log("Error with id.")
+        res.status(400).send(JSON.stringify("There is missing field(s) in the PackageID/AuthenticationToken or it is formed improperly, or the AuthenticationToken is invalid."))
+      } 
+      else if (row) {
+        const rating = JSON.parse(row.rating)
+        console.log("\nRating Algorithm Results")
+        console.log("NetScore: ", rating.NetScore, "\nRampUp: ", rating.RampUp, "\nCorrectness: ", rating.Correctness, "\nBusFactor: ", rating.BusFactor, "\nResponsiveMaintainer: ", rating.ResponsiveMaintainer, "\nGoodPinningPractice: ", rating.GoodPinningPractice, "\nPullRequest: ", rating.PullRequest, "\nLicenseScore: ", rating.LicenseScore, "\n")
+        if ((rating.BusFactor == -1) || (rating.Correctness == -1) || (rating.RampUp == -1) || (rating.ResponsiveMaintainer == -1) || (rating.LicenseScore == -1) || (rating.GoodPinningPractice == -1) || (rating.PullRequest == -1) || (rating.NetScore == -1)){
+          console.log("At least one metric scored -1.")
+          res.status(500).send(JSON.stringify("The package rating system choked on at least one of the metrics."))
+        } 
+        else {
+          console.log("Returning rating data (proper request).")
+          res.status(200).send(JSON.stringify({"BusFactor":rating.BusFactor, "Correctness": rating.Correctness, "RampUp":rating.RampUp, "ResponsiveMaintainer": rating.ResponsiveMaintainer, "LicenseScore": rating.LicenseScore, "GoodPinningPractice":rating.GoodPinningPractice, "PullRequest":rating.PullRequest, "NetScore":rating.NetScore}))
+        }
+      } 
+      else{
+        console.log("Package does not exist.")
+        res.status(404).send(JSON.stringify("Package does not exist."))
+      }
+    })
+  }
 });
 
 app.post('/package', auth, (req, res) => {
   console.log("\nPackage Upload Request")
-
   if ((req.permissions & (1 << 2)) == 0) {
     res.status(401).send(JSON.stringify("You do not have permission for this action."))
     return
@@ -516,8 +541,6 @@ app.post('/package', auth, (req, res) => {
           fs.mkdirSync(currentDir)
         }
         try {
-          // GET FILEPATH
-
           // clone repository
           shell.exec('git clone ' + url + " " + currentDir + '/temp/')
           console.log("Repository cloned")
@@ -600,21 +623,12 @@ app.post('/package', auth, (req, res) => {
         }
         else if (stdout){
           rating = JSON.parse(stdout)
-          console.log("\nRating Algorithm Results")
-          console.log("NetScore: ", rating.NetScore)
-          console.log("RampUp: ", rating.RampUp)
-          console.log("Correctness: ", rating.Correctness)
-          console.log("BusFactor: ", rating.BusFactor)
-          console.log("ResponsiveMaintainer: ", rating.ResponsiveMaintainer)
-          console.log("GoodPinningPractice: ", rating.GoodPinningPractice)
-          console.log("PullRequest: ", rating.PullRequest)
-          console.log("LicenseScore: ", rating.LicenseScore)
-          console.log("\n")
+          console.log("NetScore: ", rating.NetScore, "\nRampUp: ", rating.RampUp, "\nCorrectness: ", rating.Correctness, "\nBusFactor: ", rating.BusFactor, "\nResponsiveMaintainer: ", rating.ResponsiveMaintainer, "\nGoodPinningPractice: ", rating.GoodPinningPractice, "\nPullRequest: ", rating.PullRequest, "\nLicenseScore: ", rating.LicenseScore, "\n")
+          rating = JSON.stringify(rating)
         } else if (stderr){
           console.log(stderr)
           rating = -1
         }
-
         if (content != ""){
           packageUrl = ''
         } else{
