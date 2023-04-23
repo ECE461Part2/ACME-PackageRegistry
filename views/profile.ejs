@@ -37,13 +37,38 @@
     <pre id="uploadResponse"></pre>
   </div>
   <hr>
+  <h2>Update a Package</h2>
+  <div>
+    <label for="updatename">Name:</label>
+    <input type="text" id="updatename" name="updatename">
+    <br>
+    <label for="updateid">ID:</label>
+    <input type="text" id="updateid" name="updateid">
+    <br>
+    <label for="updateversion">Version:</label>
+    <input type="text" id="updateversion" name="updateversion">
+    <br>
+    <label for="updateurl">URL:</label>
+    <input type="text" id="updateurl" name="updateurl">
+    <br>
+    <label for="updatecontent">Content:</label>
+    <input type="text" id="updatecontent" name="updatecontent">
+    <br>
+    <label for="updatejsprogram">JSProgram:</label>
+    <input type="text" id="updatejsprogram" name="updatejsprogram">
+    <br>
+    <button onclick="updatePackage()">Go</button>
+    <br>
+    <h3>Response:</h3>
+    <pre id="updateResponse"></pre>
+  </div>
+  <hr>
   <h2>Package Options</h2>
   <div>
     <label for="packageid">Package ID:</label>
     <input type="text" id="packageid" name="packageid">
     <br>
     <button onclick="downloadPackage()">Download</button>
-    <button onclick="updatePackage()">Update</button>
     <button onclick="deletePackage()">Delete</button>
     <button onclick="ratePackage()">Rate</button>
     <br>
@@ -70,16 +95,16 @@
     <label for="password">Password:</label>
     <input type="text" id="password" name="password">
     <br>
-    <label for="isadmin">isAdmin:</label>
+    <label for="isadmin">Admin:</label>
     <input type="checkbox" id="isadmin" name="isadmin">
     <br>
-    <label for="download">download permission:</label>
+    <label for="download">Download permission:</label>
     <input type="checkbox" id="download" name="download">
     <br>
-    <label for="search">search permission:</label>
+    <label for="search">Search permission:</label>
     <input type="checkbox" id="search" name="search">
     <br>
-    <label for="upload">upload, update, rate permission:</label>
+    <label for="upload">Upload, update, rate permission:</label>
     <input type="checkbox" id="upload" name="upload">
     <br>
     <button onclick="registerUser()">Register</button>
@@ -146,8 +171,8 @@
 
     function uploadPackage() {
       console.log("Sending API request to upload a package");
-      const url = document.getElementById("url").value;
-      const content = document.getElementById("content").value;
+      const URL = document.getElementById("url").value;
+      const Content = document.getElementById("content").value;
       const JSProgram = document.getElementById("jsprogram").value;
 
       const headers = new Headers();
@@ -161,8 +186,8 @@
         headers: headers,
         body: JSON.stringify({
           data: {
-            url,
-            content,
+            URL,
+            Content,
             JSProgram
           }
         })
@@ -215,12 +240,18 @@
     function updatePackage() {
       console.log("Sending API request to update a package");
 
-      const packageid = document.getElementById("packageid").value;
+      const packageid = document.getElementById("updateid").value;
+      const ID = document.getElementById("updateid").value;
+      const Name = document.getElementById("updatename").value;
+      const Version = document.getElementById("updateversion").value;
+      const URL = document.getElementById("updateurl").value;
+      const Content = document.getElementById("updatecontent").value;
+      const JSProgram = document.getElementById("updatejsprogram").value;
 
       const headers = new Headers();
       const token = localStorage.getItem("token");
       if (token == undefined) {
-        const responseBox = document.getElementById("optionsResponse");
+        const responseBox = document.getElementById("updateResponse");
         responseBox.innerText = "Error: Please authenticate";
       }
       console.log('Bearer token:', JSON.parse(token).authorization);
@@ -229,7 +260,19 @@
 
       const options = {
         method: 'PUT',
-        headers: headers
+        headers: headers,
+        body: JSON.stringify({
+          data: {
+            URL,
+            Content,
+            JSProgram
+          },
+          metadata: {
+            Name,
+            Version,
+            ID
+          }
+        })
       };
 
       fetch(`/package/${packageid}`, options)
