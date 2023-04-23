@@ -6,6 +6,11 @@ const setupDatabase = require('./scripts/databaseSetup')
 const auth = require('./scripts/auth')
 const { Storage } = require('@google-cloud/storage');
 const re2 = require('re2');
+const fs = require('fs')
+const AdmZip = require('adm-zip')
+const path = require('path')
+const {exec} = require('child_process')
+const shell = require('shelljs')
 if (process.env.BUCKET_CREDENTIALS == undefined) {
   console.log("Getting BUCKET_CREDENTIALS")
   require('dotenv').config({path:__dirname+'/./../../../.env'})
@@ -37,6 +42,11 @@ const db = setupDatabase()
 function error(res, err) {
   console.error(err);
   res.status(500).send("Internal error: "+err)
+}
+
+function send400(res, err) {
+  console.error(err);
+  res.status(400).send(JSON.stringify("There is missing field(s) in the PackageID/AuthenticationToken or it is formed improperly, or the AuthenticationToken is invalid."))
 }
 
 function validatePassword(password) {
@@ -83,7 +93,7 @@ app.put('/package/:id', auth, (req, res) => {
   }
 
   const id = req.params.id;
-  console.log("ID:". id)
+  console.log("ID:", id)
   const name = req.body.metadata.Name
   console.log("Package Name: ", name)
   const version = req.body.metadata.Version
@@ -109,10 +119,10 @@ app.put('/package/:id', auth, (req, res) => {
   } 
   else {
     if ((content == undefined) && (url == undefined)){
-      send400(res, err)
+      send400(res, "Need content or a url")
     }
     else if ((content != undefined) && (url != undefined)){
-      send400(res, err)
+      send400(res, "Got content and a url")
     }
     else{
       const sqlSelect = 'SELECT * FROM packages WHERE id = ? AND name = ? AND version = ?'
@@ -446,6 +456,7 @@ app.post('/package', auth, (req, res) => {
 
   // get the data from the body of the request
   const data = req.body.data
+  console.log("Data:", data)
 
   // if data is undefined throw an error
   if (data == undefined){
@@ -458,22 +469,23 @@ app.post('/package', auth, (req, res) => {
     if ((jsprogram == undefined) || (jsprogram == "")){
       jsprogram = " "
     }
-
+    
     // Current Directory is where files will be extracted
     const currentDir = "./rating/" + id 
-
+    
     // Output File is the file that is zipped and uploaded
     const outputFile = './rating/' + id +'.zip'
-
-    if ((content == undefined) && (url == undefined)){
+    
+    if ((content == undefined || content == '') && (url == undefined || url == '')){
       res.status(400).send(JSON.stringify("There is missing field(s) in the PackageData/AuthenticationToken or it is formed improperly (e.g. Content and URL are both set), or the AuthenticationToken is invalid."))
     } 
-    else if ((content != undefined) && (url != undefined)){
+    else if ((content != undefined && content != '') && (url != undefined && url != '')){
       res.status(400).send(JSON.stringify("There is missing field(s) in the PackageData/AuthenticationToken or it is formed improperly (e.g. Content and URL are both set), or the AuthenticationToken is invalid."))
     } 
     else {
+      console.log("HERE")
       // if the content method is filled out, perform content extraction
-      if (content != undefined){  
+      if (content != undefined && content != ''){  
         url = ""
         // temporary zip to get zip from content
         tempFile = outputFile
