@@ -221,6 +221,7 @@
       }
       console.log('Bearer token:', token);
       headers.append("X-Authorization", token);
+      headers.append("Content-Type", "application/json")
 
       const options = {
         method: 'GET',
