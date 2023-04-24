@@ -56,6 +56,7 @@ function validatePassword(password) {
 }
 
 app.post('/packages', auth, (req, res) => {
+  console.log("\n[/packages POST]")
   // Get the offset parameter from the query string
   if ((req.permissions & (1 << 1)) == 0) {
     res.status(401).send(JSON.stringify("You do not have permission for this action."))
@@ -74,21 +75,19 @@ app.post('/packages', auth, (req, res) => {
       return;
     } else {
       console.log(rows)
-      if (rows.length > 50) {
-        res.status(413).send(JSON.stringify())
-        return
-      }
-      // const filteredRows = rows.map(row => ({ version: row.version, name: row.name }));
-      res.status(200).send(JSON.stringify(rows))
-    }
+      console.log("[/packages POST] [200]\n")
+      res.status(200).send(JSON.stringify(rows.slice(0+(50*(offset-1)),50+(50*offset-1))))
+}
   })
 
 });
 
 app.put('/package/:id', auth, (req, res) => {
+  console.log("\n[/package/id PUT]")
   console.log("\nPackage Update Request")
 
   if ((req.permissions & (1 << 2)) == 0) {
+    console.log("[/package/id PUT] [ 401 ]\n")
     res.status(401).send(JSON.stringify("You do not have permission for this action."))
     return
   }
@@ -116,19 +115,23 @@ app.put('/package/:id', auth, (req, res) => {
   }
 
   if (id != reqID){
+    console.log("[/package/id PUT] [ 400 ] ID mismatch\n")
     send400(res, "NULL")
   } 
   else {
     if ((content == undefined) && (url == undefined)){
+      console.log("[/package/id PUT] [ 400 ] No content or url\n")
       send400(res, "Need content or a url")
     }
     else if ((content != undefined) && (url != undefined)){
+      console.log("[/package/id PUT] [ 400 ] Content and url\n")
       send400(res, "Got content and a url")
     }
     else{
       const sqlSelect = 'SELECT * FROM packages WHERE id = ? AND name = ? AND version = ?'
       db.get(sqlSelect, [id, name, version], function(err, row) {
         if (err) {
+          console.log("[/package/id PUT] [ 400 ] Get package sql error\n")
           send400(res, err)
         } 
         else if (row) {
@@ -148,6 +151,7 @@ app.put('/package/:id', auth, (req, res) => {
               fs.writeFileSync(tempFile, buff);   
               console.log("File written successfully");
             } catch(err) {
+              console.log("[/package/id PUT] [ 400 ] File write failed\n")
               send400(res, err)
             }
 
@@ -169,6 +173,7 @@ app.put('/package/:id', auth, (req, res) => {
               shell.exec('git clone ' + url + " " + currentDir + '/temp/')
               console.log("Repository cloned")
             } catch (err){
+              console.log("[/package/id PUT] [ 400 ] Repo clone failed\n")
               send400(res, err)
             }
           }
@@ -181,6 +186,7 @@ app.put('/package/:id', auth, (req, res) => {
               console.log(subfolders);
             } 
             catch (err) {
+              console.log("[/package/id PUT] [ 400 ] Package.json get failed\n")
               send400(res, err)
             }
             packageLocation = currentDir + '/'+ subfolders[0] +'/'
@@ -196,6 +202,7 @@ app.put('/package/:id', auth, (req, res) => {
             fs.accessSync(packageLocation + 'package.json', );
             console.log('File can be read');
           } catch (err) {
+            console.log("[/package/id PUT] [ 400 ] Remove .git failed\n")
             send400(res, err)
           }
 
@@ -204,7 +211,7 @@ app.put('/package/:id', auth, (req, res) => {
           //version = json.version
           packageName = json.name
           if (url == ""){
-            url = json.repository.url;
+            url = json.homepage;
           }
           console.log("URL: ", url);
           console.log("Version: ", version);
@@ -248,6 +255,7 @@ app.put('/package/:id', auth, (req, res) => {
           //insert package into databased
           db.run('UPDATE packages SET name = ?, version = ?, url = ?, stars = ?, rating = ?, downloads = ?, JSProgram = ? WHERE id = ?', [name, version, url, 0, rating, 0, jsprogram, id], function(err) {
             if (err){
+              console.log("[/package/id PUT] [ 400 ] Package update failed\n")
               send400(res, err)
             }
             else {
@@ -255,6 +263,7 @@ app.put('/package/:id', auth, (req, res) => {
               file.delete((err) => {
                 // if error return 400
                 if (err) {
+                  console.log("[/package/id PUT] [ 400 ] File delete error\n")
                   send400(res, err)
                 } 
                 else {
@@ -265,6 +274,7 @@ app.put('/package/:id', auth, (req, res) => {
                     } else{
                       // return status code
                       console.log('Bucket Object: '+ fileName +' updated successfully.')
+                      console.log("[/package/id PUT] [ 200 ]\n")
                       res.status(200).send(JSON.stringify({id}))
                       fs.rmSync(outputFile, {recursive: true, force: true})
                       fs.rmSync(currentDir, {recursive: true, force: true})
@@ -277,6 +287,7 @@ app.put('/package/:id', auth, (req, res) => {
         }
         else {
           console.log('Package with ID: ' + id + ', does not exist in the database.')
+          console.log("[/package/id PUT] [ 400 ] Package ID does not exist\n")
           res.status(404).send(JSON.stringify("Package does not exist."))
         }
       })
@@ -287,104 +298,133 @@ app.put('/package/:id', auth, (req, res) => {
 })
 
 app.get('/package/:id', auth, (req, res) => {
-  console.log("\nPackage Download Request")
+  console.log("\n[/package/id GET]")
   if ((req.permissions & (1 << 0)) == 0) { // check permissions
+    console.log("[/package/id GET] [ 401 ] Not allowed\n")
     res.status(401).send(JSON.stringify("You do not have permission for this action."))
+    return
   } 
-  else{
-    const id = req.params.id  // get package id
-    console.log("File ID: ", id)
-    const fileName = id + '.zip'  // get fileName of package
-    if (id == undefined) {  //check to see if package id is defined
-      res.status(400).send(JSON.stringify("There is missing field(s) in the PackageID/AuthenticationToken or it is formed improperly, or the AuthenticationToken is invalid."))
-    } 
-    else{  // Check if package id is in the database
-      db.get('SELECT * FROM packages WHERE id = ?', id, function(err, row) {
-        if (err) { send400(res, err)} 
-        else if (row) { // package found
-          db.run('UPDATE packages SET downloads = downloads + 1 WHERE id = ?', id, function(err) {}) // add one to downloads
-          console.log(JSON.stringify(row))
-          const file = bucket.file(fileName)  // get file from bucket and download to zips folder
-          file.download({ destination: './rating/' + fileName }, function(err) { // download file to location
-            if (err) { send400(res, err)} 
-            else {  // convert file to base 64 encoded version and send as body in response
-              console.log('Bucket Object: '+ fileName + ', downloaded to zips folder')
-              const zipBuff = fs.readFileSync('./rating/' + fileName)
-              const base64Content = zipBuff.toString('base64')
-              //console.log(base64Content)
-              fs.rmSync('./rating/' + fileName, {recursive: true, force: true})  //delete zip files
-              //output
-              const packageName = row.name
-              const version = row.version
-              const packageID = row.id
-              const url = row.url
-              const jsprogram = row.JSProgram
-              if (url == ""){ // if uploaded content
-                console.log("Package initially uploaded as Content: Sending Response.")
-                res.status(200).send(JSON.stringify({metadata:{Name: packageName, Version: version, ID: packageID}, data:{Content:base64Content, JSProgram: jsprogram}}))
-              } else {  // if ingested URL
-                console.log("Package initially uploaded as URL: Sending Response.")
-                res.status(200).send(JSON.stringify({metadata:{Name: packageName, Version: version, ID: packageID}, data:{Content:base64Content, URL: row.url,  JSProgram: jsprogram}}))
-              }
+  const id = req.params.id  // get package id
+  console.log("File ID: ", id)
+  const fileName = id + '.zip'  // get fileName of package
+  if (id == undefined) {  //check to see if package id is defined
+    console.log("[/package/id GET] [ 400 ] ID undefined\n")
+    res.status(400).send(JSON.stringify("There is missing field(s) in the PackageID/AuthenticationToken or it is formed improperly, or the AuthenticationToken is invalid."))
+  }
+  else{  // Check if package id is in the database
+    db.get('SELECT * FROM packages WHERE id = ?', id, function(err, row) {
+      if (err) { 
+        console.log("[/package/id GET] [ 400 ] Could not get package matching ID\n")
+        send400(res, err)
+      }
+      else if (row) { // package found
+        db.run('UPDATE packages SET downloads = downloads + 1 WHERE id = ?', id, function(err) {}) // add one to downloads
+        console.log(JSON.stringify(row))
+        const file = bucket.file(fileName)  // get file from bucket and download to zips folder
+        file.download({ destination: './rating/' + fileName }, function(err) { // download file to location
+          if (err) {
+            console.log("[/package/id GET] [ 400 ] File download error\n")
+            console.error(err)
+            send400(res, err)
+          }
+          else {  // convert file to base 64 encoded version and send as body in response
+            console.log('Bucket Object: '+ fileName + ', downloaded to zips folder')
+            const zipBuff = fs.readFileSync('./rating/' + fileName)
+            const base64Content = zipBuff.toString('base64')
+            //console.log(base64Content)
+            fs.rmSync('./rating/' + fileName, {recursive: true, force: true})  //delete zip files
+            //output
+            const packageName = row.name
+            const version = row.version
+            const packageID = row.id
+            const url = row.url
+            const jsprogram = row.JSProgram
+            if (url == ""){ // if uploaded content
+              console.log("Package initially uploaded as Content: Sending Response.")
+              console.log("[/package/id GET] [ 200 ] " + JSON.stringify({metadata:{Name: packageName, Version: version, ID: packageID}, data:{Content:base64Content, JSProgram: jsprogram}}) + " \n")
+              res.status(200).send(JSON.stringify({metadata:{Name: packageName, Version: version, ID: packageID}, data:{Content:base64Content, JSProgram: jsprogram}}))
+            } else {  // if ingested URL
+              console.log("Package initially uploaded as URL: Sending Response.")
+              console.log("[/package/id GET] [ 200 ] " + JSON.stringify({metadata:{Name: packageName, Version: version, ID: packageID}, data:{Content:base64Content, JSProgram: jsprogram}}) + " \n")
+              res.status(200).send(JSON.stringify({metadata:{Name: packageName, Version: version, ID: packageID}, data:{Content:base64Content, URL: row.url,  JSProgram: jsprogram}}))
             }
-          })
-        }
-        else{  // if package does not exist return 404
-          console.log('Package with ID: ' + id + ', does not exist in the database.')
-          res.status(404).send(JSON.stringify("Package does not exist."))
-        }
-      })
-    }
+          }
+        })
+      }
+      else{  // if package does not exist return 404
+        console.log('Package with ID: ' + id + ', does not exist in the database.')
+        console.log("[/package/id GET] [ 404 ] Package does not exist\n")
+        res.status(404).send(JSON.stringify("Package does not exist."))
+      }
+    })
   }
 });
 
 app.delete('/package/:id', auth, (req, res) => {
-  console.log("\nPackage Deletion Request")
+  console.log("\n[/package/id DELETE]")
   if ((req.permissions & (1 << 2)) == 0) { // check permissions
+    console.log("[/package/id DELETE] [ 401 ] Not allowed\n")
     res.status(401).send(JSON.stringify("You do not have permission for this action."))
+    return
   }
-  else { // try to delete package
-    const id = req.params.id // get package id
-    console.log("Package ID: " + id)
-    if (id == undefined){  // check for valid id
-      res.status(400).send(JSON.stringify("There is missing field(s) in the PackageID/AuthenticationToken or it is formed improperly, or the AuthenticationToken is invalid."))
-    } 
-    else{
-      const fileName = id + '.zip'  // get filename of zip to be deleted
-      console.log("Package Zip File: " + fileName)
-      db.get('SELECT * FROM packages WHERE id = ?', id, function(err, row) {  // Check if package id is in the database
-        if (err) { send400(res, err)} 
-        else if (row) {  // if exists, delete from database and bucket
-          console.log('Package with ID: ' + id +', exists in the database.')
-          db.run('DELETE FROM packages WHERE id = ?', id, (err) => { // Execute the deletion query
-            if (err) { send400(res, err)} 
-            else {  // else delete package from bucket
-              console.log('Package with id: ' + id + ', deleted successfully.')
-              const file = bucket.file(fileName)  // file in bucket
-              file.delete((err) => {  // Delete the file
-                if (err) { send400(res, err)}
-                else { //successful deletion
-                  console.log('Bucket Object: '+ fileName +' deleted successfully.')
-                  res.status(200).send(JSON.stringify("Package is deleted."))
-                }
-              })
-            }
-          })
-        } 
-        else {  // if file does not exist, return 404
-          console.log('Package with ID: ' + id + ', does not exist in the database.')
-          res.status(404).send(JSON.stringify("Package does not exist."))
-        }
-      })
-    } 
-  }
+  const id = req.params.id // get package id
+  console.log("Package ID: " + id)
+  if (id == undefined){  // check for valid id
+    console.log("[/package/id DELETE] [ 400 ] ID undefined\n")
+    send400(res, err)
+  } 
+  else{
+    const fileName = id + '.zip'  // get filename of zip to be deleted
+    console.log("Package Zip File: " + fileName)
+    db.get('SELECT * FROM packages WHERE id = ?', id, function(err, row) {  // Check if package id is in the database
+      // if error, return 400
+      if (err) {
+        console.error(err)
+        console.log("[/package/id DELETE] [ 400 ] Could not get package matching ID\n")
+        send400(res, err)
+      // if exists, delete from database and bucket
+      } else if (row) {
+        console.log('Package with ID: ' + id +', exists in the database.')
+        db.run('DELETE FROM packages WHERE id = ?', id, (err) => { // Execute the deletion query
+          if (err) {
+            console.error(err)
+            console.log("[/package/id DELETE] [ 400 ] Deletion error\n")
+            send400(res, err)
+          // else delete package from bucket
+          } else {
+            console.log('Package with id: ' + id + ', deleted successfully.')
+            const file = bucket.file(fileName)  // file in bucket
+            file.delete((err) => {  // Delete the file
+              if (err) {
+                console.error(err)
+                console.log("[/package/id DELETE] [ 400 ] Bucket delete error\n")
+                send400(res, err)
+              } else { //successful deletion
+                console.log('Bucket Object: '+ fileName +' deleted successfully.')
+                console.log("[/package/id DELETE] [ 200 ] \n")
+                res.status(200).send(JSON.stringify("Package is deleted."))
+              }
+            })
+          }
+        })
+      }
+      else {  // if file does not exist, return 404
+        console.log('Package with ID: ' + id + ', does not exist in the database.')
+        console.log("[/package/id GET] [ 404 ] Package does not exist\n")
+        res.status(404).send(JSON.stringify("Package does not exist."))
+      }
+    })
+  } 
+
 });
 
 app.get('/package/:id/rate', auth, (req, res) => {
-  console.log("\nPackage Rating Request")
+  console.log("\n[/package/id/rate GET]")
+
   const id = req.params.id // get id from request
   console.log("File ID: ", id) 
   if ((req.permissions & (1 << 2)) == 0) { // permissions denied
+    console.log("[/package/id/rate GET] [ 401 ] Not allowed\n")
     res.status(401).send(JSON.stringify("You do not have permission for this action."))
     return
   }
@@ -417,8 +457,9 @@ app.get('/package/:id/rate', auth, (req, res) => {
 });
 
 app.post('/package', auth, (req, res) => {
-  console.log("\nPackage Upload Request")
+  console.log("\n[/package POST]")
   if ((req.permissions & (1 << 2)) == 0) { /// check for permission
+    console.log("[/package POST] [ 401 ] Not allowed\n")
     res.status(401).send(JSON.stringify("You do not have permission for this action."))
   } 
   else { // try to upload package
@@ -426,6 +467,7 @@ app.post('/package', auth, (req, res) => {
     const data = req.body.data    // get the data from the body of the request
     console.log("Data:", data)
     if (data == undefined){    // if data is undefined throw an error
+      console.log("[/package POST] [ 401 ] Data undefined\n")
       res.status(400).send(JSON.stringify("There is missing field(s) in the PackageData/AuthenticationToken or it is formed improperly (e.g. Content and URL are both set), or the AuthenticationToken is invalid."))
     } else {
       const currentDir = "./rating/" + id  // where files will be extracted
@@ -437,9 +479,11 @@ app.post('/package', auth, (req, res) => {
         jsprogram = " "
       }
       if ((content == undefined || content == '') && (url == undefined || url == '')){ // both are undefined
+        console.log("[/package POST] [ 400 ] Got content and url\n")
         res.status(400).send(JSON.stringify("There is missing field(s) in the PackageData/AuthenticationToken or it is formed improperly (e.g. Content and URL are both set), or the AuthenticationToken is invalid."))
       } 
       else if ((content != undefined && content != '') && (url != undefined && url != '')){ // both are defined
+        console.log("[/package POST] [ 400 ] Got no content or url\n")
         res.status(400).send(JSON.stringify("There is missing field(s) in the PackageData/AuthenticationToken or it is formed improperly (e.g. Content and URL are both set), or the AuthenticationToken is invalid."))
       } 
       else { // one is defined
@@ -451,6 +495,7 @@ app.post('/package', auth, (req, res) => {
             fs.writeFileSync(tempFile, buff)
             console.log("File written successfully")
           } catch(err) {
+            console.log("[/package POST] [ 400 ] File write failed\n")
             send400(res, err)
             return
           }
@@ -467,6 +512,7 @@ app.post('/package', auth, (req, res) => {
             shell.exec('git clone ' + url + " " + currentDir + '/temp/')            
             console.log("Repository cloned")
           } catch (err){
+            console.log("[/package POST] [ 400 ] Clone failed\n")
             send400(res, err)
             return
           }
@@ -501,17 +547,21 @@ app.post('/package', auth, (req, res) => {
         version = json.version
         packageName = json.name
         if (url == undefined || url == ''){ // if url not defined, find url
-          url = json.repository.url
+          url = json.homepage
         }
         url = url.replace(".git","") // fixes .git urls
         url = url.replace("git:","https:") //fixes git: urls
+        url = url.replace("#readme","")
+        if (url == ""){
+          url = json.repository.url;
+        }
         console.log("URL: ", url, "\nVersion: ", version, "\nPackage Name: ", packageName)
 
         // zip package
         const zip2 = new AdmZip()
-        const files = fs.readdirSync(currentDir) 
+        const files = fs.readdirSync(currentDir)
         console.log("Zipping package")
-        files.forEach((file) => {        
+        files.forEach((file) => {
           const filePath = path.join(currentDir, file)
           const fileStats = fs.statSync(filePath)
         
@@ -550,6 +600,7 @@ app.post('/package', auth, (req, res) => {
             packageUrl = url
           }
           if ((url != "") && ((rating.BusFactor < 0.5) || (rating.Correctness < 0.5) || (rating.RampUp < 0.5) || (rating.ResponsiveMaintainer < 0.5) || (rating.LicenseScore < 0.5))){  // error in rating
+            console.log("[/package POST] [ 424 ] Package does not qualify for upload\n")
             res.status(424).send(JSON.stringify("Package is not uploaded due to the disqualified rating.")) 
           } else{
             db.get('SELECT * FROM packages WHERE name = ?', packageName, function(err, row) {
@@ -558,6 +609,7 @@ app.post('/package', auth, (req, res) => {
               }
               else if (row){
                 console.log("Package exists already.")
+                console.log("[/package POST] [ 400 ] Package already exists\n")
                 res.status(409).send(JSON.stringify("Package exists already.")) 
               } 
               else{
@@ -580,9 +632,11 @@ app.post('/package', auth, (req, res) => {
                   const fileName = id + '.zip'  // get filename of zip to be deleted
                   const zipBuff = fs.readFileSync('./rating/' + fileName)
                   const base64Content = zipBuff.toString('base64')
+                  console.log("[/package POST] [ 201 ]\n")
                   res.status(201).send(JSON.stringify({"metadata":{"Name":packageName, "Version":version, "ID":id}, "data":{"URL":data.url, "Content":base64Content, "JSProgram":data.JSProgam}}))  // return status code
                 }
                 else{
+                  console.log("[/package POST] [ 201 ]\n")
                   res.status(201).send(JSON.stringify({"metadata":{"Name":packageName, "Version":version, "ID":id}, "data":{"Content":data.Content, "JSProgram":data.JSProgam}}))  // return status code
                 } 
               }
@@ -606,6 +660,7 @@ app.get("/authenticate", (req, res) => {
 
 //handle user login
 app.put("/authenticate", (req, res) => {
+  console.log("\n[/authenticate PUT]")
   console.log("body: " + JSON.stringify(req.body))
   var username = req.body.User.name
   var password = req.body.Secret.password
@@ -618,6 +673,7 @@ app.put("/authenticate", (req, res) => {
   console.log("Got admin: " + isAdmin);
   console.log("Login hash: " + hash)
   if (username == undefined || username == "" || password == undefined || password == "") {
+    console.log("[/authenticate PUT] [ 400 ] No username or password\n")
     res.status(400).send(JSON.stringify("Please provide a username and password"))
     return;
   }
@@ -627,28 +683,30 @@ app.put("/authenticate", (req, res) => {
   //look for user
   db.get('SELECT * FROM users WHERE username = ? AND passHash = ?', [username, passHash], (err, row) => {
     if (err) {
+      console.log("[/authenticate PUT] [ 400 ] Error looking up user\n")
       error(res, err)
     } else if (row) {
       //if found, update hash and login
       db.run('UPDATE users SET hash = ?, timestamp = ? WHERE id = ?', [hash, timestamp, row.id], err => {
-        if (err)
+        if (err) {
+          console.log("[/authenticate PUT] [ 400 ] Error updating hash\n")
           error(res, err)
-        console.log("Authentication success " + username);
-        res.status(200).send(JSON.stringify({
-          authorization
-        }))
+        }
+        console.log("Authentication success " + username + "\n");
+        console.log("[/authenticate PUT] [ 200 ]\n")
+        res.status(200).send(JSON.stringify(authorization))
       });
     } else {
       //if not found, prompt not found
-      console.log("Incorrect username/password: " + username);
+      console.log("Incorrect username/password: " + username + "\n");
+      console.log("[/authenticate PUT] [ 400 ] User not found\n")
       res.status(401).send(JSON.stringify())
-      // res.render("login", { errorMessage:"Username/password not found"})
     }
   })
-  res.status(501).json
 });
 
 app.put("/register", auth, (req, res) => {
+  console.log("\n[/register PUT]")
   console.log("body: " + JSON.stringify(req.body))
   var username = req.body.User.name
   var password = req.body.Secret.password
@@ -663,17 +721,20 @@ app.put("/register", auth, (req, res) => {
   console.log("Got permissions: " + permissions);
   console.log("Login hash: " + hash)
   if (req.isAdmin != true) {
+    console.log("[/register PUT] [ 401 ] Not admin\n")
     res.status(401).send(JSON.stringify("Must be admin to complete this action"))
     return;
   }
 
   if (username == undefined || username == "" || password == undefined || password == "") {
+    console.log("[/register PUT] [ 400 ] No username or password\n")
     res.status(400).send(JSON.stringify("Please provide a username and password"))
     return;
   }
   
   //validate the password
   if (validatePassword(password) == 0) {
+    console.log("[/register PUT] [ 400 ] Invalid password\n")
     res.status(400).send(JSON.stringify("Password must be minimum 8 characters with upper and lower case, and at least one number and special character"))
     return;
   }
@@ -682,15 +743,20 @@ app.put("/register", auth, (req, res) => {
   //check if username exists
   db.get('SELECT * FROM users WHERE username = ?', [username], (err, row) => {
     if (err) {
+      console.log("[/register PUT] [ 400 ] Error looking for users\n")
       error(res, err)
     } else if (row) {
       //if exists, promp login or different username
+      console.log("[/register PUT] [ 400 ] Account exists\n")
       res.status(400).send(JSON.stringify("Account already exists, please login or choose a different username"))
     } else {
       //if new username, create new user
       db.run('INSERT INTO users (username, passHash, hash, admin, permissions) VALUES (?, ?, ?, ?, ?)', [username, passHash, hash, isAdmin, permissions], function(err) {
-        if (err)
+        if (err) {
+          console.log("[/register PUT] [ 400 ] Insert error\n")
           error(res, err)
+        }
+        console.log("[/register PUT] [ 200 ] Registered new user\n")
         res.status(200).send(JSON.stringify({value}))
       });
     }
@@ -699,15 +765,18 @@ app.put("/register", auth, (req, res) => {
 });
 
 app.delete("/register", auth, (req, res) => {
+  console.log("\n[/register DELETE]")
   console.log("body: " + JSON.stringify(req.body))
   var username = req.body.User.name
   console.log("Got username: " + username);
   if (req.isAdmin != true && req.username != username) {
+    console.log("[/register DELETE] [ 401 ] Not user or admin\n")
     res.status(401).send(JSON.stringify("Must be admin or this user to complete this action"))
     return;
   }
 
   if (username == undefined || username == "") {
+    console.log("[/register DELETE] [ 400 ] No username provided\n")
     res.status(400).send(JSON.stringify("Please provide a username"))
     return;
   }
@@ -715,17 +784,21 @@ app.delete("/register", auth, (req, res) => {
   //check if username exists
   db.get('SELECT * FROM users WHERE username = ?', [username], (err, row) => {
     if (err) {
+      console.log("[/register DELETE] [ 400 ] Error lookup username\n")
       error(res, err)
     } else if (row) {
       //if exists, promp login or different username
       db.run('DELETE FROM users WHERE username = ?', [username], function(err) {
         if (err) {
-          error(res, err)
+        console.log("[/register DELETE] [ 400 ] Error delete user\n")
+        error(res, err)
         } else {
+          console.log("[/register DELETE] [ 200 ] \n")
           res.status(200).send(JSON.stringify("Deleted user"))
         }
       });
     } else {
+      console.log("[/register DELETE] [ 400 ] User does not exist\n")
       res.status(400).send(JSON.stringify("Account does not exist, please choose a different username"))
     }
   })
@@ -733,48 +806,39 @@ app.delete("/register", auth, (req, res) => {
 });
 
 app.delete("/reset", auth, (req, res) => {
-  console.log("body: " + JSON.stringify(req.body))
-  var username = req.username
-  console.log("Got username: " + username);
-  if (username == undefined) {
-    res.status(400).send(JSON.stringify())
-  }
+  console.log("\n[/reset DELETE]")
+
   if (req.isAdmin != true) {
+    console.log("[/reset DELETE] [ 401 ] Not admin\n")
     res.status(401).send(JSON.stringify("You do not have permission to reset the registry."))
     return;
   }
 
-  bucket.deleteFiles()
-  .then(() => {
-    console.log(`All files deleted from bucket ${bucketName}.`)
-  })
-  .catch((err) => {
-    error(res, err)
-  })
-
-  db.run('DELETE FROM users; DELETE FROM packages;', function(err) {
-    if (err) {
+  
+  db.serialize(() => {
+    bucket.deleteFiles()
+    .then(() => {
+      console.log(`All files deleted from bucket ${bucketName}.\n`)
+    })
+    .catch((err) => {
+      console.log("[/reset DELETE] [ 400 ] Error clearing bucket\n")
       error(res, err)
-    } else {
-      console.log("Reset users and packages")
-    
-      var passHash =crypto.createHash('sha256').update('correcthorsebatterystaple123(!__+@**(A’”`;DROP TABLE packages;').digest('hex')
-    
-      db.run('INSERT INTO users (username, admin, passHash) VALUES (?, ?, ?)', ['ece461defaultadminuser', true, passHash], function(err) {
-        if (err) {
-          error(res, err)
-        } else {
-          res.status(200).send(JSON.stringify({ message: "Reset users and packages" }));
-        }
-      });
-    }
+    })
+    db.run('DELETE FROM users;');
+    db.run('DELETE FROM packages;');
+    var passHash =crypto.createHash('sha256').update('correcthorsebatterystaple123(!__+@**(A’”`;DROP TABLE packages;').digest('hex')
+    db.run('INSERT OR IGNORE INTO users (username, admin, permissions, passHash) VALUES (?, ?, ?, ?)', 
+    ['ece30861defaultadminuser', true, 7, passHash]);
+    console.log("[/reset DELETE] [ 200 ]\n")
   })
 
 });
 
 //search page
 app.post('/package/byRegEx', auth, (req, res) => {
+  console.log("\n[/regex POST]")
   if ((req.permissions & (1 << 1)) == 0) {
+    console.log("[/regex POST] [ 401 ] Not allowed\n")
     res.status(401).send(JSON.stringify("You do not have permission for this action."))
     return
   }
@@ -789,6 +853,8 @@ app.post('/package/byRegEx', auth, (req, res) => {
   db.all("SELECT DISTINCT name FROM packages", (err, rows) => {
     if (err) {
       console.error(err.message)
+      console.log("[/regex POST] [ 400 ] Error getting packages\n")
+      error(res, err)
       return
     }
 
@@ -800,9 +866,11 @@ app.post('/package/byRegEx', auth, (req, res) => {
     // Get package details for matched names
     db.all(`SELECT DISTINCT name, version FROM Packages WHERE Name IN (${matchedNames.map(() => '?').join(',')})`, matchedNames, (err, rows) => {
       if (err) {
+        console.log("[/regex POST] [ 400 ] Error searching with regex\n")
         error(res, err)
         return
       }
+      console.log("[/regex POST] [ 200 ]\n")
       res.status(200).send(JSON.stringify(rows))
     })
   })
@@ -811,7 +879,7 @@ app.post('/package/byRegEx', auth, (req, res) => {
 
 //user profile page
 app.get('/profile', (req, res) => {
-  console.log("Logged in user: "+req.username)
+  console.log("Rendering /profile")
   return res.render('profile', {username: req.username})
 });
 

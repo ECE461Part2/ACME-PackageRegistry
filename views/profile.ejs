@@ -129,6 +129,9 @@
   <br>
   <h3>Response:</h3>
   <pre id="resetResponse"></pre>
+  <br>
+  <br>
+  <br>
 </body>
 
 
@@ -139,9 +142,9 @@
       const packageQuery = document.getElementById("packageQuery").value;
 
       const headers = new Headers();
-      const token = localStorage.getItem("token");
-      console.log('Bearer token:', JSON.parse(token).authorization);
-      headers.append("authorization", JSON.parse(token).authorization);
+      const token = localStorage.getItem("token").replaceAll("\"","",);
+      console.log('Bearer token:', token);
+      headers.append("X-Authorization", token);
       headers.append("Content-Type", "application/json")
 
       const packagesArray = packageQuery.split(',').map(package => {
@@ -176,9 +179,9 @@
       const JSProgram = document.getElementById("jsprogram").value;
 
       const headers = new Headers();
-      const token = localStorage.getItem("token");
-      console.log('Bearer token:', JSON.parse(token).authorization);
-      headers.append("authorization", JSON.parse(token).authorization);
+      const token = localStorage.getItem("token").replaceAll("\"","",);
+      console.log('Bearer token:', token);
+      headers.append("X-Authorization", token);
       headers.append("Content-Type", "application/json")
 
       const options = {
@@ -211,13 +214,13 @@
       const packageid = document.getElementById("packageid").value;
 
       const headers = new Headers();
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("token").replaceAll("\"","",);
       if (token == undefined) {
         const responseBox = document.getElementById("optionsResponse");
         responseBox.innerText = "Error: Please authenticate";
       }
-      console.log('Bearer token:', JSON.parse(token).authorization);
-      headers.append("authorization", JSON.parse(token).authorization);
+      console.log('Bearer token:', token);
+      headers.append("X-Authorization", token);
       headers.append("Content-Type", "application/json")
 
       const options = {
@@ -249,13 +252,13 @@
       const JSProgram = document.getElementById("updatejsprogram").value;
 
       const headers = new Headers();
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("token").replaceAll("\"","",);
       if (token == undefined) {
         const responseBox = document.getElementById("updateResponse");
         responseBox.innerText = "Error: Please authenticate";
       }
-      console.log('Bearer token:', JSON.parse(token).authorization);
-      headers.append("authorization", JSON.parse(token).authorization);
+      console.log('Bearer token:', token);
+      headers.append("X-Authorization", token);
       headers.append("Content-Type", "application/json")
 
       const options = {
@@ -293,13 +296,13 @@
       const packageid = document.getElementById("packageid").value;
 
       const headers = new Headers();
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("token").replaceAll("\"","",);
       if (token == undefined) {
         const responseBox = document.getElementById("optionsResponse");
         responseBox.innerText = "Error: Please authenticate";
       }
-      console.log('Bearer token:', JSON.parse(token).authorization);
-      headers.append("authorization", JSON.parse(token).authorization);
+      console.log('Bearer token:', token);
+      headers.append("X-Authorization", token);
       headers.append("Content-Type", "application/json")
 
       const options = {
@@ -325,13 +328,13 @@
       const packageid = document.getElementById("packageid").value;
 
       const headers = new Headers();
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("token").replaceAll("\"","",);
       if (token == undefined) {
         const responseBox = document.getElementById("optionsResponse");
         responseBox.innerText = "Error: Please authenticate";
       }
-      console.log('Bearer token:', JSON.parse(token).authorization);
-      headers.append("authorization", JSON.parse(token).authorization);
+      console.log('Bearer token:', token);
+      headers.append("X-Authorization", token);
       headers.append("Content-Type", "application/json")
 
       const options = {
@@ -357,9 +360,9 @@
       const regex = document.getElementById("regex").value;
 
       const headers = new Headers();
-      const token = localStorage.getItem("token");
-      console.log('Bearer token:', JSON.parse(token).authorization);
-      headers.append("authorization", JSON.parse(token).authorization);
+      const token = localStorage.getItem("token").replaceAll("\"","",);
+      console.log('Bearer token:', token);
+      headers.append("X-Authorization", token);
       headers.append("Content-Type", "application/json")
 
       const options = {
@@ -391,9 +394,9 @@
       const upload = document.getElementById("upload").checked;
 
       const headers = new Headers();
-      const token = localStorage.getItem("token");
-      console.log('Bearer token:', JSON.parse(token).authorization);
-      headers.append("authorization", JSON.parse(token).authorization);
+      const token = localStorage.getItem("token").replaceAll("\"","",);
+      console.log('Bearer token:', token);
+      headers.append("X-Authorization", token);
       headers.append("Content-Type", "application/json")
 
       var permissions = 0
@@ -435,9 +438,9 @@
       const name = document.getElementById("deleteuser").value;
 
       const headers = new Headers();
-      const token = localStorage.getItem("token");
-      console.log('Bearer token:', JSON.parse(token).authorization);
-      headers.append("authorization", JSON.parse(token).authorization);
+      const token = localStorage.getItem("token").replaceAll("\"","",);
+      console.log('Bearer token:', token);
+      headers.append("X-Authorization", token);
       headers.append("Content-Type", "application/json")
 
       const options = {
@@ -466,9 +469,9 @@
       console.log("Sending API request to reset the site");
 
       const headers = new Headers();
-      const token = localStorage.getItem("token");
-      console.log('Bearer token:', JSON.parse(token).authorization);
-      headers.append("authorization", JSON.parse(token).authorization);
+      const token = localStorage.getItem("token").replaceAll("\"","",);
+      console.log('Bearer token:', token);
+      headers.append("X-Authorization", token);
       // headers.append("Content-Type", "application/json")
 
       const options = {

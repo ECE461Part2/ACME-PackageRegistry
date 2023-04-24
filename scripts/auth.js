@@ -4,15 +4,19 @@ const db = new sqlite3.Database(dbPath);
 
 // authentication middleware
 function auth(req, res, next) {
-  console.log("auth body: " + JSON.stringify(req.headers))
+  console.log("\n[AUTH MIDDLEWARE]")
+  console.log("Auth headers: " + JSON.stringify(req.headers))
+  console.log("Auth body: " + JSON.stringify(req.body))
   var timestamp = Math.floor(Date.now() / 1000)
-  const authHeader = req.headers.authorization
+  var date = new Date().toLocaleString('en-US', {timeZone: 'America/New_York'})
+  console.log("[", date, "]")
+  const authHeader = req.headers['x-authorization']
   const hash = authHeader && authHeader.split(' ')[1];
   // console.log("authHeader: "+authHeader)
   console.log("hash: " + hash)
 
   if (!hash) {
-    res.send(400).json()
+    res.status(400).send()
     return
   }
 
@@ -31,13 +35,15 @@ function auth(req, res, next) {
         req.username = row.username
         req.isAdmin = row.admin
         req.permissions = row.permissions
-        console.log("Authenticated user " + req.username)
+        console.log("Authenticated user: " + req.username + "   Admin: " + req.isAdmin + "   Permissions: " +req.permissions)
+        console.log("[AUTH COMPLETE] [ SUCCESS ]\n")
         next()
         return
       });
     } else {
       //if not logged in, redirect to login page
       console.log("User hash not found... Redirecting to login")
+      console.log("[AUTH COMPLETE] [ FAIL ]\n")
       res.status(400).send(JSON.stringify("There is missing field(s) in the PackageID/AuthenticationToken or it is formed improperly, or the AuthenticationToken is invalid."))
     }
   })
