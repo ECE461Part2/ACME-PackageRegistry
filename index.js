@@ -84,7 +84,6 @@ app.post('/packages', auth, (req, res) => {
 
 app.put('/package/:id', auth, (req, res) => {
   console.log("\n[/package/id PUT]")
-  console.log("\nPackage Update Request")
 
   if ((req.permissions & (1 << 2)) == 0) {
     console.log("[/package/id PUT] [ 401 ]\n")
@@ -101,6 +100,7 @@ app.put('/package/:id', auth, (req, res) => {
   const reqID = req.body.metadata.ID
   console.log("MetaData ID: ", reqID)
   const content = req.body.data.Content
+  console.log("Content: ", content)
   var url = req.body.data.URL
   console.log("URL: ", url)
   const fileName = id + '.zip'
@@ -119,11 +119,11 @@ app.put('/package/:id', auth, (req, res) => {
     send400(res, "NULL")
   } 
   else {
-    if ((content == undefined) && (url == undefined)){
+    if ((content == undefined || content == '') && (url == undefined || url == '')){ // both are undefined
       console.log("[/package/id PUT] [ 400 ] No content or url\n")
       send400(res, "Need content or a url")
     }
-    else if ((content != undefined) && (url != undefined)){
+    else if ((content != undefined && content != '') && (url != undefined && url != '')){ // both are defined
       console.log("[/package/id PUT] [ 400 ] Content and url\n")
       send400(res, "Got content and a url")
     }

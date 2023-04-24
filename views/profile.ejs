@@ -281,11 +281,11 @@
       fetch(`/package/${packageid}`, options)
       .then((response) => response.json())
       .then((data) => {
-        const responseBox = document.getElementById("optionsResponse");
+        const responseBox = document.getElementById("updateResponse");
         responseBox.innerText = JSON.stringify(data, null, 2);
       })
       .catch((error) => {
-        const responseBox = document.getElementById("optionsResponse");
+        const responseBox = document.getElementById("updateResponse");
         responseBox.innerText = "Error: " + error.message;
       });
     }
