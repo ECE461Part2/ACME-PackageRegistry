@@ -76,13 +76,13 @@ app.post('/packages', auth, (req, res) => {
     } else {
       console.log(rows)
       if (rows.length > 50) {
-        res.status(413).send(JSON.stringify(rows.slice(0,50)))
         console.log("[/packages POST] [413] Too many entries\n")
+        res.status(413).send(JSON.stringify(rows.slice(0,50)))
         return
       }
       // const filteredRows = rows.map(row => ({ version: row.version, name: row.name }));
-      res.status(200).send(JSON.stringify(rows))
       console.log("[/packages POST] [200]\n")
+      res.status(200).send(JSON.stringify(rows))
 }
   })
 
@@ -304,79 +304,58 @@ app.put('/package/:id', auth, (req, res) => {
 })
 
 app.get('/package/:id', auth, (req, res) => {
-  // const packageQuery = req.body
-  // console.log("package query: " + JSON.stringify(packageQuery))
-
   console.log("\n[/package/id GET]")
-  console.log("\nPackage Download Request")
-
-  if ((req.permissions & (1 << 0)) == 0) {
+  if ((req.permissions & (1 << 0)) == 0) { // check permissions
     console.log("[/package/id GET] [ 401 ] Not allowed\n")
     res.status(401).send(JSON.stringify("You do not have permission for this action."))
     return
-  }
-
-  // get package id
-  const id = req.params.id
+  } 
+  const id = req.params.id  // get package id
   console.log("File ID: ", id)
-
-  // get fileName of package
-  const fileName = id + '.zip'
-
-  //check to see if package id is defined
-  if (id == undefined) {
+  const fileName = id + '.zip'  // get fileName of package
+  if (id == undefined) {  //check to see if package id is defined
     console.log("[/package/id GET] [ 400 ] ID undefined\n")
-    send400(res, err)
-    // Check if package id is in the database
-  } else{
-    const sqlSelect = 'SELECT * FROM packages WHERE id = ?'
-    db.get(sqlSelect, id, function(err, row) {
-      // if error, return 400
-      if (err) {
-        console.error(err)
+    res.status(400).send(JSON.stringify("There is missing field(s) in the PackageID/AuthenticationToken or it is formed improperly, or the AuthenticationToken is invalid."))
+  } else{  // Check if package id is in the database
+    db.get('SELECT * FROM packages WHERE id = ?', id, function(err, row) {
+      if (err) { 
         console.log("[/package/id GET] [ 400 ] Could not get package matching ID\n")
         send400(res, err)
-      // get package json from database
-      } else if (row) {
-        db.run('UPDATE packages SET downloads = downloads + 1 WHERE id = ?', [id], function(err) {})
+      }
+      else if (row) { // package found
+        db.run('UPDATE packages SET downloads = downloads + 1 WHERE id = ?', id, function(err) {}) // add one to downloads
         console.log(JSON.stringify(row))
-
-        // get file from bucket and download to zips folder
-        const file = bucket.file(fileName)
-        file.download({ destination: './rating/' + fileName }, function(err) {
-          // if error, return 400
+        const file = bucket.file(fileName)  // get file from bucket and download to zips folder
+        file.download({ destination: './rating/' + fileName }, function(err) { // download file to location
           if (err) {
             console.log("[/package/id GET] [ 400 ] File download error\n")
             console.error(err)
             send400(res, err)
-          // convert file to base 64 encoded version and send as body in response
-          } else {
+          } else {  // convert file to base 64 encoded version and send as body in response
             console.log('Bucket Object: '+ fileName + ', downloaded to zips folder')
             const zipBuff = fs.readFileSync('./rating/' + fileName)
             const base64Content = zipBuff.toString('base64')
             //console.log(base64Content)
-            
-            //delete zip files
-            fs.rmSync('./rating/' + fileName, {recursive: true, force: true})
-            
+            fs.rmSync('./rating/' + fileName, {recursive: true, force: true})  //delete zip files
             //output
             const packageName = row.name
             const version = row.version
             const packageID = row.id
             const url = row.url
             const jsprogram = row.JSProgram
-            if (url == ""){
+            if (url == ""){ // if uploaded content
               console.log("Package initially uploaded as Content: Sending Response.")
-              console.log("[/package/id GET] [ 200 ] \n")
-              res.status(200).send(JSON.stringify({metadata:{Name: packageName, Version: version, ID: packageID}, data:{Content:base64Content, JSProgram: jsprogram}}));
-            } else {
+              console.log("[/package/id GET] [ 200 ] " + JSON.stringify({metadata:{Name: packageName, Version: version, ID: packageID}, data:{Content:base64Content, JSProgram: jsprogram}}) + " \n")
+              res.status(200).send(JSON.stringify({metadata:{Name: packageName, Version: version, ID: packageID}, data:{Content:base64Content, JSProgram: jsprogram}}))
+            } else {  // if ingested URL
               console.log("Package initially uploaded as URL: Sending Response.")
-              console.log("[/package/id GET] [ 200 ] \n")
-              res.status(200).send(JSON.stringify({metadata:{Name: packageName, Version: version, ID: packageID}, data:{Content:base64Content, URL: row.url,  JSProgram: jsprogram}}));
+              console.log("[/package/id GET] [ 200 ] " + JSON.stringify({metadata:{Name: packageName, Version: version, ID: packageID}, data:{Content:base64Content, JSProgram: jsprogram}}) + " \n")
+              res.status(200).send(JSON.stringify({metadata:{Name: packageName, Version: version, ID: packageID}, data:{Content:base64Content, URL: row.url,  JSProgram: jsprogram}}))
             }
-          }})
-      // if package does not exist return 404
-      }else{
+          }
+        })
+      }
+      else{  // if package does not exist return 404
         console.log('Package with ID: ' + id + ', does not exist in the database.')
         console.log("[/package/id GET] [ 404 ] Package does not exist\n")
         res.status(404).send(JSON.stringify("Package does not exist."))
