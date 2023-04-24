@@ -467,8 +467,8 @@ app.post('/package', auth, (req, res) => {
     const data = req.body.data    // get the data from the body of the request
     console.log("Data:", data)
     if (data == undefined){    // if data is undefined throw an error
-    console.log("[/package POST] [ 401 ] Data undefined\n")
-    res.status(400).send(JSON.stringify("There is missing field(s) in the PackageData/AuthenticationToken or it is formed improperly (e.g. Content and URL are both set), or the AuthenticationToken is invalid."))
+      console.log("[/package POST] [ 401 ] Data undefined\n")
+      res.status(400).send(JSON.stringify("There is missing field(s) in the PackageData/AuthenticationToken or it is formed improperly (e.g. Content and URL are both set), or the AuthenticationToken is invalid."))
     } else {
       const currentDir = "./rating/" + id  // where files will be extracted
       const outputFile = './rating/' + id +'.zip'  // file that is zipped and uploaded
