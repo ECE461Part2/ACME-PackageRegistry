@@ -76,7 +76,7 @@ app.post('/packages', auth, (req, res) => {
     } else {
       console.log(rows)
       if (rows.length > 50) {
-        res.status(413).send(JSON.stringify(rows[0,50]))
+        res.status(413).send(JSON.stringify(rows.slice(0,50)))
         console.log("[/packages POST] [413] Too many entries\n")
         return
       }
