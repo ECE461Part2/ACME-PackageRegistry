@@ -826,7 +826,7 @@ app.delete("/reset", auth, (req, res) => {
     })
     db.run('DELETE FROM users;');
     db.run('DELETE FROM packages;');
-    var passHash =crypto.createHash('sha256').update('correcthorsebatterystaple123(!__+@**(A’”`;DROP TABLE packages;').digest('hex')
+    var passHash =crypto.createHash('sha256').update("correcthorsebatterystaple123(!__+@**(A'\"`;DROP TABLE packages;").digest('hex')
     db.run('INSERT OR IGNORE INTO users (username, admin, permissions, passHash) VALUES (?, ?, ?, ?)', 
     ['ece30861defaultadminuser', true, 7, passHash]);
     console.log("[/reset DELETE] [ 200 ]\n")
@@ -844,8 +844,12 @@ app.post('/package/byRegEx', auth, (req, res) => {
   }
 
   console.log("body: " + JSON.stringify(req.body))
-  const query = req.body.regex
-  console.log(query)
+  var query = req.body.regex
+  console.log("regex:",query)
+  if (query == undefined) {
+    query = req.body.RegEx
+    console.log("RegEx:",query)
+  }
   
   const regex = new re2(query)
 
