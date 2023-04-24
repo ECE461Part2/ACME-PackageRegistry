@@ -30,6 +30,10 @@ func CodeReviews(gitUrl string) float32 {
 		score, err := strconv.ParseFloat(s, 64)
 		// if error return 0 as score and remove file, otherwise return score
 		if err != nil {
+			e2 := file.Close()
+			if e2 != nil {
+				fmt.Println("Couldn't Close File CR_Score.txt")
+			}
 			fmt.Println("Conversion of string to float didn't work.")
 			e := os.Remove("CR_Score.txt")
 			if e != nil {
@@ -37,6 +41,10 @@ func CodeReviews(gitUrl string) float32 {
 			}
 			return 0
 		} else {
+			e2 := file.Close()
+			if e2 != nil {
+				fmt.Println("Couldn't Close File CR_Score.txt")
+			}
 			e := os.Remove("CR_Score.txt")
 			if e != nil {
 				fmt.Println("Didn't find CR_Score.txt")

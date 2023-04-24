@@ -33,7 +33,7 @@ function setupDatabase() {
        version TEXT NOT NULL,
        stars INTEGER DEFAULT 0,
        url TEXT,
-       rating INTEGER DEFAULT 0,
+       rating JSON,
        JSProgram TEXT,
        downloads INTEGER DEFAULT 0
      );
