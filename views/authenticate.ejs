@@ -17,7 +17,6 @@
       const form = document.getElementById('login-form');
       const username = form.elements.username.value;
       const password = form.elements.password.value;
-      console.log("HIII")
 
       fetch('/authenticate', {
         method: 'PUT',
@@ -43,12 +42,12 @@
       })
       .then(token => {
         // Store the token in local storage or a cookie
-        console.log('Bearer token:', JSON.parse(token).authorization);
+        console.log('Bearer token:', token);
         
         // Redirect to the profile page with token in header
         // window.location.href = '/profile';
         const headers = new Headers();
-        headers.append("authorization", JSON.parse(token).authorization);
+        headers.append("X-Authorization", token);
         window.localStorage.setItem('token', token);
         const options = {
           method: 'GET',
