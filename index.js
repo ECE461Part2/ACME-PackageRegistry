@@ -83,7 +83,7 @@ app.post('/packages', auth, (req, res) => {
 });
 
 app.put('/package/:id', auth, (req, res) => {
-  console.log("\n[/package/id PUT]")
+  console.log("\n[/package/id PUT] Update")
 
   if ((req.permissions & (1 << 2)) == 0) {
     console.log("[/package/id PUT] [ 401 ]\n")

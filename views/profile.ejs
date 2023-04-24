@@ -207,6 +207,10 @@
 
       const packageid = document.getElementById("packageid").value;
 
+      if (ID == undefined) {
+        const responseBox = document.getElementById("updateResponse");
+        responseBox.innerText = "Error: Provide an ID";
+      }
       const headers = new Headers();
       const token = localStorage.getItem("token").replaceAll("\"","",);
       console.log('Bearer token:', token);
@@ -238,6 +242,10 @@
       const Content = document.getElementById("updatecontent").value;
       const JSProgram = document.getElementById("updatejsprogram").value;
 
+      if (ID == undefined) {
+        const responseBox = document.getElementById("updateResponse");
+        responseBox.innerText = "Error: Provide an ID";
+      }
       const headers = new Headers();
       const token = localStorage.getItem("token").replaceAll("\"","",);
       console.log('Bearer token:', token);
@@ -270,6 +278,10 @@
 
       const packageid = document.getElementById("packageid").value;
 
+      if (ID == undefined) {
+        const responseBox = document.getElementById("updateResponse");
+        responseBox.innerText = "Error: Provide an ID";
+      }
       const headers = new Headers();
       const token = localStorage.getItem("token").replaceAll("\"","",);
       console.log('Bearer token:', token);
@@ -295,6 +307,10 @@
 
       const packageid = document.getElementById("packageid").value;
 
+      if (ID == undefined) {
+        const responseBox = document.getElementById("updateResponse");
+        responseBox.innerText = "Error: Provide an ID";
+      }
       const headers = new Headers();
       const token = localStorage.getItem("token").replaceAll("\"","",);
       console.log('Bearer token:', token);
