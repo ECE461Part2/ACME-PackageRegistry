@@ -75,14 +75,8 @@ app.post('/packages', auth, (req, res) => {
       return;
     } else {
       console.log(rows)
-      if (rows.length > 50) {
-        console.log("[/packages POST] [413] Too many entries\n")
-        res.status(413).send(JSON.stringify(rows.slice(0,50)))
-        return
-      }
-      // const filteredRows = rows.map(row => ({ version: row.version, name: row.name }));
       console.log("[/packages POST] [200]\n")
-      res.status(200).send(JSON.stringify(rows))
+      res.status(200).send(JSON.stringify(rows.slice(0+(50*(offset-1)),50+(50*offset-1))))
 }
   })
 
@@ -316,7 +310,8 @@ app.get('/package/:id', auth, (req, res) => {
   if (id == undefined) {  //check to see if package id is defined
     console.log("[/package/id GET] [ 400 ] ID undefined\n")
     res.status(400).send(JSON.stringify("There is missing field(s) in the PackageID/AuthenticationToken or it is formed improperly, or the AuthenticationToken is invalid."))
-  } else{  // Check if package id is in the database
+  }
+  else{  // Check if package id is in the database
     db.get('SELECT * FROM packages WHERE id = ?', id, function(err, row) {
       if (err) { 
         console.log("[/package/id GET] [ 400 ] Could not get package matching ID\n")
@@ -331,7 +326,8 @@ app.get('/package/:id', auth, (req, res) => {
             console.log("[/package/id GET] [ 400 ] File download error\n")
             console.error(err)
             send400(res, err)
-          } else {  // convert file to base 64 encoded version and send as body in response
+          }
+          else {  // convert file to base 64 encoded version and send as body in response
             console.log('Bucket Object: '+ fileName + ', downloaded to zips folder')
             const zipBuff = fs.readFileSync('./rating/' + fileName)
             const base64Content = zipBuff.toString('base64')
@@ -371,22 +367,16 @@ app.delete('/package/:id', auth, (req, res) => {
     res.status(401).send(JSON.stringify("You do not have permission for this action."))
     return
   }
-
-  // get id of package to be deleted
-  const id = req.params.id
-  if (id == undefined){
+  const id = req.params.id // get package id
+  console.log("Package ID: " + id)
+  if (id == undefined){  // check for valid id
     console.log("[/package/id DELETE] [ 400 ] ID undefined\n")
     send400(res, err)
-  } else{
-    console.log("Package ID: " + id)
-
-    // get filename of zip to be deleted
-    const fileName = id + '.zip'
+  } 
+  else{
+    const fileName = id + '.zip'  // get filename of zip to be deleted
     console.log("Package Zip File: " + fileName)
-
-    // Check if package id is in the database
-    const sql1 = 'SELECT * FROM packages WHERE id = ?'
-    db.get(sql1, id, function(err, row) {
+    db.get('SELECT * FROM packages WHERE id = ?', id, function(err, row) {  // Check if package id is in the database
       // if error, return 400
       if (err) {
         console.error(err)
@@ -395,13 +385,7 @@ app.delete('/package/:id', auth, (req, res) => {
       // if exists, delete from database and bucket
       } else if (row) {
         console.log('Package with ID: ' + id +', exists in the database.')
-        
-        // delete package from database
-        const sql = 'DELETE FROM packages WHERE id = ?'
-
-        // Execute the deletion query
-        db.run(sql, id, (err) => {
-          // if error, return 400
+        db.run('DELETE FROM packages WHERE id = ?', id, (err) => { // Execute the deletion query
           if (err) {
             console.error(err)
             console.log("[/package/id DELETE] [ 400 ] Deletion error\n")
@@ -409,19 +393,13 @@ app.delete('/package/:id', auth, (req, res) => {
           // else delete package from bucket
           } else {
             console.log('Package with id: ' + id + ', deleted successfully.')
-
-            // file in bucket
-            const file = bucket.file(fileName)
-
-            // Delete the file
-            file.delete((err) => {
-              // if error return 400
+            const file = bucket.file(fileName)  // file in bucket
+            file.delete((err) => {  // Delete the file
               if (err) {
                 console.error(err)
                 console.log("[/package/id DELETE] [ 400 ] Bucket delete error\n")
                 send400(res, err)
-                // if successful return 200
-              } else {
+              } else { //successful deletion
                 console.log('Bucket Object: '+ fileName +' deleted successfully.')
                 console.log("[/package/id DELETE] [ 200 ] \n")
                 res.status(200).send(JSON.stringify("Package is deleted."))
@@ -429,8 +407,8 @@ app.delete('/package/:id', auth, (req, res) => {
             })
           }
         })
-      // if file does not exist, return 404
-      } else {
+      }
+      else {  // if file does not exist, return 404
         console.log('Package with ID: ' + id + ', does not exist in the database.')
         console.log("[/package/id GET] [ 404 ] Package does not exist\n")
         res.status(404).send(JSON.stringify("Package does not exist."))
@@ -480,8 +458,6 @@ app.get('/package/:id/rate', auth, (req, res) => {
 
 app.post('/package', auth, (req, res) => {
   console.log("\n[/package POST]")
-  console.log("\nPackage Upload Request")
-
   if ((req.permissions & (1 << 2)) == 0) { /// check for permission
     console.log("[/package POST] [ 401 ] Not allowed\n")
     res.status(401).send(JSON.stringify("You do not have permission for this action."))
@@ -581,26 +557,25 @@ app.post('/package', auth, (req, res) => {
         }
         console.log("URL: ", url, "\nVersion: ", version, "\nPackage Name: ", packageName)
 
-      // check to see if package already exists
-
-      // zip package
-      const zip2 = new AdmZip();
-      const files = fs.readdirSync(currentDir);
-      console.log("Zipping package");
-
-      files.forEach((file) => {
-        const filePath = path.join(currentDir, file);
-        const fileStats = fs.statSync(filePath);
-      
-        if (fileStats.isFile()) {
-          const fileData = fs.readFileSync(filePath);
-          const relativePath = path.relative(currentDir, filePath);
-          zip2.addFile(relativePath, fileData);
-        } else if (fileStats.isDirectory()) {
-          const relativePath = path.relative(currentDir, filePath);
-          zip2.addLocalFolder(filePath, relativePath);
-        }
-      });
+        // zip package
+        const zip2 = new AdmZip()
+        const files = fs.readdirSync(currentDir)
+        console.log("Zipping package")
+        files.forEach((file) => {
+          const filePath = path.join(currentDir, file)
+          const fileStats = fs.statSync(filePath)
+        
+          if (fileStats.isFile()) {
+            const fileData = fs.readFileSync(filePath)
+            const relativePath = path.relative(currentDir, filePath)
+            zip2.addFile(relativePath, fileData)
+          } else if (fileStats.isDirectory()) {
+            const relativePath = path.relative(currentDir, filePath)
+            zip2.addLocalFolder(filePath, relativePath)
+          }
+        })
+        zip2.writeZip(outputFile) // wrote zip
+        console.log("Zip created ")
 
         //run rating algorithm
         process.chdir('./rating')
