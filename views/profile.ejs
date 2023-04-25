@@ -145,6 +145,7 @@
       const token = localStorage.getItem("token").replaceAll("\"","",);
       console.log('Bearer token:', token);
       headers.append("X-Authorization", token);
+      headers.append("authorization", token);
       headers.append("Content-Type", "application/json")
 
       const packagesArray = packageQuery.split(',').map(package => {
@@ -182,6 +183,7 @@
       const token = localStorage.getItem("token").replaceAll("\"","",);
       console.log('Bearer token:', token);
       headers.append("X-Authorization", token);
+      headers.append("authorization", token);
       headers.append("Content-Type", "application/json")
 
       const options = {
@@ -215,6 +217,7 @@
       const token = localStorage.getItem("token").replaceAll("\"","",);
       console.log('Bearer token:', token);
       headers.append("X-Authorization", token);
+      headers.append("authorization", token);
       headers.append("Content-Type", "application/json")
 
       const options = {method: 'GET', headers: headers};
@@ -250,6 +253,7 @@
       const token = localStorage.getItem("token").replaceAll("\"","",);
       console.log('Bearer token:', token);
       headers.append("X-Authorization", token);
+      headers.append("authorization", token);
       headers.append("Content-Type", "application/json")
 
       const options = {
@@ -286,6 +290,7 @@
       const token = localStorage.getItem("token").replaceAll("\"","",);
       console.log('Bearer token:', token);
       headers.append("X-Authorization", token);
+      headers.append("authorization", token);
       headers.append("Content-Type", "application/json")
 
       const options = {method: 'DELETE', headers: headers};
@@ -315,6 +320,7 @@
       const token = localStorage.getItem("token").replaceAll("\"","",);
       console.log('Bearer token:', token);
       headers.append("X-Authorization", token);
+      headers.append("authorization", token);
       headers.append("Content-Type", "application/json")
 
       const options = {method: 'GET', headers: headers};
@@ -340,6 +346,7 @@
       const token = localStorage.getItem("token").replaceAll("\"","",);
       console.log('Bearer token:', token);
       headers.append("X-Authorization", token);
+      headers.append("authorization", token);
       headers.append("Content-Type", "application/json")
 
       const options = {
@@ -374,6 +381,7 @@
       const token = localStorage.getItem("token").replaceAll("\"","",);
       console.log('Bearer token:', token);
       headers.append("X-Authorization", token);
+      headers.append("authorization", token);
       headers.append("Content-Type", "application/json")
 
       var permissions = 0
@@ -412,6 +420,7 @@
       const token = localStorage.getItem("token").replaceAll("\"","",);
       console.log('Bearer token:', token);
       headers.append("X-Authorization", token);
+      headers.append("authorization", token);
       headers.append("Content-Type", "application/json")
 
       const options = {
@@ -439,6 +448,7 @@
       const token = localStorage.getItem("token").replaceAll("\"","",);
       console.log('Bearer token:', token);
       headers.append("X-Authorization", token);
+      headers.append("authorization", token);
       // headers.append("Content-Type", "application/json")
 
       const options = {
