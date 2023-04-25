@@ -92,7 +92,7 @@ app.put('/package/:id', auth, (req, res) => {
   else{
     const id = req.params.id;
     const name = req.body.metadata.Name
-    const version = req.body.metadata.Version
+    var version = req.body.metadata.Version
     const reqID = req.body.metadata.ID
     const content = req.body.data.Content
     var jsprogram = req.body.data.JSPROGRAM
@@ -126,7 +126,7 @@ app.put('/package/:id', auth, (req, res) => {
           } 
           else if (row) {
             console.log(JSON.stringify(row))
-            if (content != undefined){ //perform content type update
+            if (content != undefined && content != ""){ //perform content type update
               console.log("Content type update")
               url = ""
               tempFile = outputFile  // temporary zip to get zip from content
@@ -249,7 +249,7 @@ app.put('/package/:id', auth, (req, res) => {
                 process.chdir('..') // move directories
                 console.log("Updating package in database.") //insert package into databased
                 //update package in database
-                db.run('UPDATE packages SET name = ?, version = ?, url = ?, stars = ?, rating = ?, downloads = ?, JSProgram = ? WHERE id = ?', [name, version, url, 0, rating, 0, jsprogram, id], function(err) {
+                db.run('UPDATE packages SET name = ?, version = ?, url = ?, stars = ?, rating = ?, downloads = ?, JSProgram = ? WHERE id = ?', [name, version, packageUrl, 0, rating, 0, jsprogram, id], function(err) {
                   if (err){
                     console.log("[/package/id PUT] [ 400 ] Package update failed\n")
                     send400(res, err)
