@@ -10,7 +10,10 @@ function auth(req, res, next) {
   var timestamp = Math.floor(Date.now() / 1000)
   var date = new Date().toLocaleString('en-US', {timeZone: 'America/New_York'})
   console.log("[", date, "]")
-  const authHeader = req.headers['x-authorization']
+  var authHeader = req.headers['x-authorization']
+  if (authHeader == undefined) {
+    authHeader = req.headers['authorization']
+  }
   const hash = authHeader && authHeader.split(' ')[1];
   // console.log("authHeader: "+authHeader)
   console.log("hash: " + hash)

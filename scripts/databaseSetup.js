@@ -42,7 +42,7 @@ function setupDatabase() {
    db.run(`
      CREATE TABLE IF NOT EXISTS users (
        id INTEGER PRIMARY KEY,
-       username TEXT NOT NULL,
+       username TEXT NOT NULL UNIQUE,
        passHash TEXT NOT NULL,
        hash TEXT UNIQUE,
        timestamp INTEGER,
@@ -54,12 +54,12 @@ function setupDatabase() {
  
    var passHash =crypto.createHash('sha256').update("correcthorsebatterystaple123(!__+@**(A'\"`;DROP TABLE packages;").digest('hex')
  
-   db.run('INSERT OR IGNORE INTO users (username, admin, permissions, passHash) VALUES (?, ?, ?, ?)', 
+   db.run("INSERT OR IGNORE INTO users (username, admin, permissions, passHash) VALUES (?, ?, ?, ?)", 
    ['ece30861defaultadminuser', true, 7, passHash]
    );
  
-   db.run('INSERT OR IGNORE INTO packages (id, name, version, url, stars, rating, downloads, JSProgram) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', ["underscore", "Underscore", "1.6.9", '', 0, 0, 0, " "])
-   db.run('INSERT OR IGNORE INTO packages (id, name, version, url, stars, rating, downloads, JSProgram) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', ["lodash", "Lodash", "1.1.0", '', 0, 0, 0, " "])
+  //  db.run('INSERT OR IGNORE INTO packages (id, name, version, url, stars, rating, downloads, JSProgram) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', ["underscore", "Underscore", "1.6.9", '', 0, 0, 0, " "])
+  //  db.run('INSERT OR IGNORE INTO packages (id, name, version, url, stars, rating, downloads, JSProgram) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', ["lodash", "Lodash", "1.1.0", '', 0, 0, 0, " "])
    
  })
   

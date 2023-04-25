@@ -48,6 +48,7 @@
         // window.location.href = '/profile';
         const headers = new Headers();
         headers.append("X-Authorization", token);
+        headers.append("authorization", token);
         window.localStorage.setItem('token', token);
         const options = {
           method: 'GET',
