@@ -83,8 +83,7 @@ app.post('/packages', auth, (req, res) => {
 });
 
 app.put('/package/:id', auth, (req, res) => {
-  console.log("\n[/package/id PUT]")
-  console.log("\nPackage Update Request")
+  console.log("\n[/package/id PUT] Update")
 
   if ((req.permissions & (1 << 2)) == 0) {
     console.log("[/package/id PUT] [ 401 ]\n")
@@ -101,6 +100,7 @@ app.put('/package/:id', auth, (req, res) => {
   const reqID = req.body.metadata.ID
   console.log("MetaData ID: ", reqID)
   const content = req.body.data.Content
+  console.log("Content: ", content)
   var url = req.body.data.URL
   console.log("URL: ", url)
   const fileName = id + '.zip'
@@ -119,11 +119,11 @@ app.put('/package/:id', auth, (req, res) => {
     send400(res, "NULL")
   } 
   else {
-    if ((content == undefined) && (url == undefined)){
+    if ((content == undefined || content == '') && (url == undefined || url == '')){ // both are undefined
       console.log("[/package/id PUT] [ 400 ] No content or url\n")
       send400(res, "Need content or a url")
     }
-    else if ((content != undefined) && (url != undefined)){
+    else if ((content != undefined && content != '') && (url != undefined && url != '')){ // both are defined
       console.log("[/package/id PUT] [ 400 ] Content and url\n")
       send400(res, "Got content and a url")
     }
@@ -826,7 +826,7 @@ app.delete("/reset", auth, (req, res) => {
     })
     db.run('DELETE FROM users;');
     db.run('DELETE FROM packages;');
-    var passHash =crypto.createHash('sha256').update('correcthorsebatterystaple123(!__+@**(A’”`;DROP TABLE packages;').digest('hex')
+    var passHash =crypto.createHash('sha256').update("correcthorsebatterystaple123(!__+@**(A'\"`;DROP TABLE packages;").digest('hex')
     db.run('INSERT OR IGNORE INTO users (username, admin, permissions, passHash) VALUES (?, ?, ?, ?)', 
     ['ece30861defaultadminuser', true, 7, passHash]);
     console.log("[/reset DELETE] [ 200 ]\n")
@@ -844,8 +844,12 @@ app.post('/package/byRegEx', auth, (req, res) => {
   }
 
   console.log("body: " + JSON.stringify(req.body))
-  const query = req.body.regex
-  console.log(query)
+  var query = req.body.regex
+  console.log("regex:",query)
+  if (query == undefined) {
+    query = req.body.RegEx
+    console.log("RegEx:",query)
+  }
   
   const regex = new re2(query)
 

@@ -52,7 +52,7 @@ function setupDatabase() {
      );
    `)
  
-   var passHash =crypto.createHash('sha256').update('correcthorsebatterystaple123(!__+@**(A’”`;DROP TABLE packages;').digest('hex')
+   var passHash =crypto.createHash('sha256').update("correcthorsebatterystaple123(!__+@**(A'\"`;DROP TABLE packages;").digest('hex')
  
    db.run('INSERT OR IGNORE INTO users (username, admin, permissions, passHash) VALUES (?, ?, ?, ?)', 
    ['ece30861defaultadminuser', true, 7, passHash]

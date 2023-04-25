@@ -187,13 +187,7 @@
       const options = {
         method: 'POST',
         headers: headers,
-        body: JSON.stringify({
-          data: {
-            URL,
-            Content,
-            JSProgram
-          }
-        })
+        body: JSON.stringify({data: {URL, Content, JSProgram}})
       };
 
       fetch("/package", options)
@@ -213,20 +207,17 @@
 
       const packageid = document.getElementById("packageid").value;
 
+      if (ID == undefined) {
+        const responseBox = document.getElementById("updateResponse");
+        responseBox.innerText = "Error: Provide an ID";
+      }
       const headers = new Headers();
       const token = localStorage.getItem("token").replaceAll("\"","",);
-      if (token == undefined) {
-        const responseBox = document.getElementById("optionsResponse");
-        responseBox.innerText = "Error: Please authenticate";
-      }
       console.log('Bearer token:', token);
       headers.append("X-Authorization", token);
       headers.append("Content-Type", "application/json")
 
-      const options = {
-        method: 'GET',
-        headers: headers
-      };
+      const options = {method: 'GET', headers: headers};
 
       fetch(`/package/${packageid}`, options)
       .then((response) => response.json())
@@ -251,12 +242,12 @@
       const Content = document.getElementById("updatecontent").value;
       const JSProgram = document.getElementById("updatejsprogram").value;
 
+      if (ID == undefined) {
+        const responseBox = document.getElementById("updateResponse");
+        responseBox.innerText = "Error: Provide an ID";
+      }
       const headers = new Headers();
       const token = localStorage.getItem("token").replaceAll("\"","",);
-      if (token == undefined) {
-        const responseBox = document.getElementById("updateResponse");
-        responseBox.innerText = "Error: Please authenticate";
-      }
       console.log('Bearer token:', token);
       headers.append("X-Authorization", token);
       headers.append("Content-Type", "application/json")
@@ -265,27 +256,19 @@
         method: 'PUT',
         headers: headers,
         body: JSON.stringify({
-          data: {
-            URL,
-            Content,
-            JSProgram
-          },
-          metadata: {
-            Name,
-            Version,
-            ID
-          }
+          data: {URL, Content, JSProgram},
+          metadata: {Name, Version, ID}
         })
       };
 
       fetch(`/package/${packageid}`, options)
       .then((response) => response.json())
       .then((data) => {
-        const responseBox = document.getElementById("optionsResponse");
+        const responseBox = document.getElementById("updateResponse");
         responseBox.innerText = JSON.stringify(data, null, 2);
       })
       .catch((error) => {
-        const responseBox = document.getElementById("optionsResponse");
+        const responseBox = document.getElementById("updateResponse");
         responseBox.innerText = "Error: " + error.message;
       });
     }
@@ -295,20 +278,17 @@
 
       const packageid = document.getElementById("packageid").value;
 
+      if (ID == undefined) {
+        const responseBox = document.getElementById("updateResponse");
+        responseBox.innerText = "Error: Provide an ID";
+      }
       const headers = new Headers();
       const token = localStorage.getItem("token").replaceAll("\"","",);
-      if (token == undefined) {
-        const responseBox = document.getElementById("optionsResponse");
-        responseBox.innerText = "Error: Please authenticate";
-      }
       console.log('Bearer token:', token);
       headers.append("X-Authorization", token);
       headers.append("Content-Type", "application/json")
 
-      const options = {
-        method: 'DELETE',
-        headers: headers
-      };
+      const options = {method: 'DELETE', headers: headers};
 
       fetch(`/package/${packageid}`, options)
       .then((response) => response.json())
@@ -327,20 +307,17 @@
 
       const packageid = document.getElementById("packageid").value;
 
+      if (ID == undefined) {
+        const responseBox = document.getElementById("updateResponse");
+        responseBox.innerText = "Error: Provide an ID";
+      }
       const headers = new Headers();
       const token = localStorage.getItem("token").replaceAll("\"","",);
-      if (token == undefined) {
-        const responseBox = document.getElementById("optionsResponse");
-        responseBox.innerText = "Error: Please authenticate";
-      }
       console.log('Bearer token:', token);
       headers.append("X-Authorization", token);
       headers.append("Content-Type", "application/json")
 
-      const options = {
-        method: 'GET',
-        headers: headers
-      };
+      const options = {method: 'GET', headers: headers};
 
       fetch(`/package/${packageid}/rate`, options)
       .then((response) => response.json())
@@ -409,14 +386,8 @@
         method: 'PUT',
         headers: headers,
         body: JSON.stringify({
-          User: {
-            name,
-            isAdmin,
-            permissions
-          },
-          Secret: {
-            password
-          }
+          User: {name, isAdmin, permissions},
+          Secret: {password}
         })
       };
 
@@ -446,11 +417,7 @@
       const options = {
         method: 'DELETE',
         headers: headers,
-        body: JSON.stringify({
-          User: {
-            name
-          }
-        })
+        body: JSON.stringify({User: {name}})
       };
 
       fetch("/register", options)
@@ -477,11 +444,7 @@
       const options = {
         method: 'DELETE',
         headers: headers,
-        body: JSON.stringify({
-          User: {
-            name
-          }
-        })
+        body: JSON.stringify({User: {name}})
       };
 
       fetch("/reset", options)

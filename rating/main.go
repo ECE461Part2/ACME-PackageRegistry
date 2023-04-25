@@ -38,7 +38,7 @@ func main() {
 	logLevel, err := strconv.Atoi(os.Getenv("LOG_LEVEL"))
 
 	if err != nil {
-		fmt.Println("Error during string to int conversion")
+		fmt.Println("Error during string to int conversion:", err)
 		return
 	}
 
