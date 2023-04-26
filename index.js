@@ -100,8 +100,8 @@ app.put('/package/:id', auth, (req, res) => {
     console.log("ID:", id, "\nPackage Name: ", name, "\nVersion: ", version, "\nMetadata ID: ", reqID, "\nURL: ", url)
     console.log("Content: ", content)
     const fileName = id + '.zip'
-    const currentDir = "./rating/" + id  // where files will be extracted
-    const outputFile = './rating/' + id +'.zip'  // file that is zipped and uploaded
+    const currentDir = __dirname + "/rating/" + id  // where files will be extracted
+    const outputFile = __dirname + '/rating/' + id +'.zip'  // file that is zipped and uploaded
     if ((jsprogram == undefined) || (jsprogram == "")){
       jsprogram = " "
     }
@@ -175,16 +175,16 @@ app.put('/package/:id', auth, (req, res) => {
             }
             // remove .git and access package.json
             try {
-              fs.rmSync('./rating/' + packageLocation + ".git", {recursive: true, force: true})
+              fs.rmSync(__dirname + '/rating/' + packageLocation + ".git", {recursive: true, force: true})
               console.log('Removed .git')
-              fs.accessSync('./rating/' + packageLocation + 'package.json', )
+              fs.accessSync(__dirname + '/rating/' + packageLocation + 'package.json', )
               console.log('Package.json found')
             } catch (err) {
               console.log('Package.json not found')
             }
 
             // find url, find name, find version # 
-            json = JSON.parse(fs.readFileSync('./rating/' + packageLocation + 'package.json', 'utf8'))
+            json = JSON.parse(fs.readFileSync(__dirname + '/rating/' + packageLocation + 'package.json', 'utf8'))
             version = json.version
             packageName = json.name
             if (url == undefined || url == ''){ // if url not defined, find url
@@ -219,9 +219,9 @@ app.put('/package/:id', auth, (req, res) => {
             console.log("Zip created ")
 
             //run rating algorithm
-            process.chdir('./rating')
+            process.chdir(__dirname + '/rating')
             console.log("Rating Algorithm running.")
-            exec('go run main.go ' + url + ' ' + packageLocation, (err, stdout, stderr) => {
+            exec('/usr/local/go/bin/go run main.go ' + url + ' ' + packageLocation, (err, stdout, stderr) => {
               if (err){ // rating is -1
                 console.error(err)
                 rating = -1
@@ -334,7 +334,7 @@ app.get('/package/:id', auth, (req, res) => {
         db.run('UPDATE packages SET downloads = downloads + 1 WHERE id = ?', id, function(err) {}) // add one to downloads
         console.log(JSON.stringify(row))
         const file = bucket.file(fileName)  // get file from bucket and download to zips folder
-        file.download({ destination: './rating/' + fileName }, function(err) { // download file to location
+        file.download({ destination: __dirname + '/rating/' + fileName }, function(err) { // download file to location
           if (err) {
             console.log("[/package/id GET] [ 400 ] File download error\n")
             console.error(err)
@@ -342,10 +342,10 @@ app.get('/package/:id', auth, (req, res) => {
           }
           else {  // convert file to base 64 encoded version and send as body in response
             console.log('Bucket Object: '+ fileName + ', downloaded to zips folder')
-            const zipBuff = fs.readFileSync('./rating/' + fileName)
+            const zipBuff = fs.readFileSync(__dirname + '/rating/' + fileName)
             const base64Content = zipBuff.toString('base64')
             //console.log(base64Content)
-            fs.rmSync('./rating/' + fileName, {recursive: true, force: true})  //delete zip files
+            fs.rmSync(__dirname + '/rating/' + fileName, {recursive: true, force: true})  //delete zip files
             //output
             const packageName = row.name
             const version = row.version
@@ -484,8 +484,8 @@ app.post('/package', auth, (req, res) => {
       res.status(400).send(JSON.stringify("There is missing field(s) in the PackageData/AuthenticationToken or it is formed improperly (e.g. Content and URL are both set), or the AuthenticationToken is invalid."))
     } 
     else {
-      const currentDir = "./rating/" + id  // where files will be extracted
-      const outputFile = './rating/' + id +'.zip'  // file that is zipped and uploaded
+      const currentDir = __dirname + "/rating/" + id  // where files will be extracted
+      const outputFile = __dirname + '/rating/' + id +'.zip'  // file that is zipped and uploaded
       var url = data.URL  // from data get the URL
       console.log("URL: ", url, " (could be empty if not defined)")
       const content = data.Content  // from data get the content
@@ -549,16 +549,16 @@ app.post('/package', auth, (req, res) => {
         }
         // remove .git and access package.json
         try {
-          fs.rmSync('./rating/' + packageLocation + ".git", {recursive: true, force: true})
+          fs.rmSync(__dirname + '/rating/' + packageLocation + ".git", {recursive: true, force: true})
           console.log('Removed .git')
-          fs.accessSync('./rating/' + packageLocation + 'package.json', )
+          fs.accessSync(__dirname + '/rating/' + packageLocation + 'package.json', )
           console.log('Package.json found')
         } catch (err) {
           console.log('Package.json not found')
         }
 
         // find url, find name, find version # 
-        json = JSON.parse(fs.readFileSync('./rating/' + packageLocation + 'package.json', 'utf8'))
+        json = JSON.parse(fs.readFileSync(__dirname + '/rating/' + packageLocation + 'package.json', 'utf8'))
         version = json.version
         packageName = json.name
         if (url == undefined || url == ''){ // if url not defined, find url
@@ -593,9 +593,9 @@ app.post('/package', auth, (req, res) => {
         console.log("Zip created ")
 
         //run rating algorithm
-        process.chdir('./rating')
+        process.chdir(__dirname + '/rating')
         console.log("Rating Algorithm running.")
-        exec('go run main.go ' + url + ' ' + packageLocation, (err, stdout, stderr) => {
+        exec('/usr/local/go/bin/go run main.go ' + url + ' ' + packageLocation, (err, stdout, stderr) => {
           if (err){ // rating is -1
             console.error(err)
             rating = -1
@@ -645,7 +645,7 @@ app.post('/package', auth, (req, res) => {
                 fs.rmSync(currentDir, {recursive: true, force: true}) // clear directory
                 if (url != ""){
                   const fileName = id + '.zip'  // get filename of zip to be deleted
-                  const zipBuff = fs.readFileSync('./rating/' + fileName)
+                  const zipBuff = fs.readFileSync(__dirname + '/rating/' + fileName)
                   const base64Content = zipBuff.toString('base64')
                   console.log("[/package POST] [ 201 ]\n")
                   res.status(201).send(JSON.stringify({"metadata":{"Name":packageName, "Version":version, "ID":id}, "data":{"URL":data.url, "Content":base64Content, "JSProgram":data.JSProgam}}))  // return status code
