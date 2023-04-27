@@ -147,7 +147,7 @@ app.put('/package/:id', auth, (req, res) => {
             else{ // url type update
               console.log("URL type update")
               if (!fs.existsSync(currentDir)){              // clone url somewhere on file system
-                fs.mkdirSync(currentDir)
+                fs.mkdirSync(currentDir, {recursive: true})
               }
               try { // clone repository
                 shell.exec('git clone ' + url + " " + currentDir + '/temp/')
@@ -193,13 +193,13 @@ app.put('/package/:id', auth, (req, res) => {
             packageName = json.name
             if (url == undefined || url == ''){ // if url not defined, find url
               url = json.homepage
+              if (url.includes("github") == false){
+                url = json.repository.url;
+              }
             }
             url = url.replace(".git","") // fixes .git urls
             url = url.replace("git:","https:") //fixes git: urls
             url = url.replace("#readme","")
-            if (url == ""){
-              url = json.repository.url;
-            }
             console.log("URL: ", url, "\nVersion: ", version, "\nPackage Name: ", packageName)
     
             // zip package
@@ -226,6 +226,7 @@ app.put('/package/:id', auth, (req, res) => {
             process.chdir('./rating')
             console.log("Rating Algorithm running.")
             exec('/usr/local/go/bin/go run main.go ' + url + ' ' + packageLocation, (err, stdout, stderr) => {
+              process.chdir('..') // move directories
               if (err){ // rating is -1
                 console.error(err)
                 rating = -1
@@ -250,7 +251,6 @@ app.put('/package/:id', auth, (req, res) => {
                 res.status(424).send(JSON.stringify("Package is not updated due to the disqualified rating.")) 
               } 
               else{
-                process.chdir('..') // move directories
                 console.log("Updating package in database.") //insert package into databased
                 //update package in database
                 db.run('UPDATE packages SET name = ?, version = ?, url = ?, stars = ?, rating = ?, downloads = ?, JSProgram = ? WHERE id = ?', [name, version, packageUrl, 0, rating, 0, jsprogram, id], function(err) {
@@ -525,7 +525,7 @@ app.post('/package', auth, (req, res) => {
         } 
         else { // url is defined
           if (!fs.existsSync(currentDir)){  // makes directory
-            fs.mkdirSync(currentDir)
+            fs.mkdirSync(currentDir, {recursive: true})
           }
           try {  // clone repository
             shell.exec('git clone ' + url + " " + currentDir + '/temp/')            
@@ -571,13 +571,13 @@ app.post('/package', auth, (req, res) => {
         packageName = json.name
         if (url == undefined || url == ''){ // if url not defined, find url
           url = json.homepage
+          if (url.includes("github") == false){
+            url = json.repository.url;
+          }
         }
         url = url.replace(".git","") // fixes .git urls
         url = url.replace("git:","https:") //fixes git: urls
         url = url.replace("#readme","")
-        if (url == ""){
-          url = json.repository.url;
-        }
         console.log("URL: ", url, "\nVersion: ", version, "\nPackage Name: ", packageName)
 
         // zip package
@@ -604,6 +604,7 @@ app.post('/package', auth, (req, res) => {
         process.chdir('./rating')
         console.log("Rating Algorithm running.")
         exec('/usr/local/go/bin/go run main.go ' + url + ' ' + packageLocation, (err, stdout, stderr) => {
+          process.chdir('..') // move directories
           if (err){ // rating is -1
             console.error(err)
             rating = -1
@@ -638,7 +639,6 @@ app.post('/package', auth, (req, res) => {
               else{
                 console.log("Inserting package into database.") //insert package into databased
                 db.run('INSERT INTO packages (id, name, version, url, stars, rating, downloads, JSProgram) VALUES (?, ?, ?, ?, ? ,?, ?, ?)', [id, packageName, version, packageUrl, 0, rating, 0, " "], function(err) {})    
-                process.chdir('..') // move directories
                 //upload zip file into bucket storage
                 bucket.upload(outputFile, {contentType: 'application/x-zip-compressed'}, function(err, file){
                   if (err) {
