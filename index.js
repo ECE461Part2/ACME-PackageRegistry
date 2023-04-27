@@ -907,7 +907,7 @@ app.post('/package/byRegEx', auth, (req, res) => {
     console.log(matchedNames)
 
     // Get package details for matched names
-    db.all(`SELECT DISTINCT name, version FROM Packages WHERE Name IN (${matchedNames.map(() => '?').join(',')})`, matchedNames, (err, rows) => {
+    db.all(`SELECT DISTINCT name, version, id FROM Packages WHERE Name IN (${matchedNames.map(() => '?').join(',')})`, matchedNames, (err, rows) => {
       if (err) {
         console.log("[/regex POST] [ 400 ] Error searching with regex\n")
         error(res, err)
