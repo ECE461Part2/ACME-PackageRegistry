@@ -29,8 +29,8 @@ const upload = multer();
 
 var app=express();
 app.set("view engine", "ejs");
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.json({type:'application/json'}));
+app.use(bodyParser.urlencoded({ limit: "50mb", extended: true, parameterLimit: 50000 }));
+app.use(express.json({type:'application/json', limit: '50mb'}));
 app.use(function(req, res, next) {
   res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
   res.setHeader('Pragma', 'no-cache');
