@@ -6,7 +6,7 @@ const db = new sqlite3.Database(dbPath);
 function auth(req, res, next) {
   console.log("\n[AUTH MIDDLEWARE]")
   console.log("Auth headers: " + JSON.stringify(req.headers))
-  console.log("Auth body: " + JSON.stringify(req.body))
+  console.log("Auth body: " + JSON.stringify(req.body).slice(0,500))
   var timestamp = Math.floor(Date.now() / 1000)
   var date = new Date().toLocaleString('en-US', {timeZone: 'America/New_York'})
   console.log("[", date, "]")
@@ -17,6 +17,11 @@ function auth(req, res, next) {
   const hash = authHeader && authHeader.split(' ')[1];
   // console.log("authHeader: "+authHeader)
   console.log("hash: " + hash)
+
+  function error(res, err) {
+    console.error(err);
+    res.status(500).send("Internal error: "+err)
+  }
 
   if (!hash) {
     res.status(400).send()
